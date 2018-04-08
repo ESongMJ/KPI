@@ -1,0 +1,21 @@
+#spring
+spring:
+  application:
+    name: system-manage-consumer
+#server
+server:
+  port: 8081
+#dubbo
+dubbo:
+  application:
+    id: system-manage-consumer
+    name: system-manage-consumer
+    owner: songmj
+#服务注册配置
+  registry:
+    id: kpi-dubbo
+    address: zookeeper://localhost:2181
+#dubbo健康监控
+management:
+  port: 9092
+debug: true

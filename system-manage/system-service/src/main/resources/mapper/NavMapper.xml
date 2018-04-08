@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.songmj.kpi.mapper.NavMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.Nav">
+        <id column="nav_id" property="navId" />
+        <result column="nav_name" property="navName" />
+        <result column="nav_url" property="navUrl" />
+        <result column="nav_type" property="navType" />
+        <result column="nav_ico" property="navIco" />
+        <result column="nav_parent" property="navParent" />
+        <result column="nav_status" property="navStatus" />
+        <result column="nav_tips" property="navTips" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        nav_id AS navId, nav_name AS navName, nav_url AS navUrl, nav_type AS navType, nav_ico AS navIco, nav_parent AS navParent, nav_status AS navStatus, nav_tips AS navTips
+    </sql>
+
+</mapper>
