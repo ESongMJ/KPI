@@ -2,6 +2,10 @@
 spring:
   application:
     name: system-manage-consumer
+  thymeleaf:
+    suffix: .html
+    cache: false
+    mode: LEGACYHTML5
 #server
 server:
   port: 8081
@@ -18,4 +22,5 @@ dubbo:
 #dubbo健康监控
 management:
   port: 9092
-debug: true
+#启动日志
+#debug: true

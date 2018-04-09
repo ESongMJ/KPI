@@ -1,7 +1,10 @@
 package cn.songmj.kpi.facade.impl;
 
+import cn.songmj.kpi.entity.Nav;
 import cn.songmj.kpi.facade.NavFacade;
+import cn.songmj.kpi.mapper.NavMapper;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,5 +18,5 @@ import com.alibaba.dubbo.config.annotation.Service;
         protocol = "${dubbo.protocol.id}",
         registry = "${dubbo.registry.id}"
 )
-public class NavFacadeImpl implements NavFacade {
+public class NavFacadeImpl  extends ServiceImpl<NavMapper, Nav> implements NavFacade {
 }

@@ -16,7 +16,7 @@ import javax.annotation.Resource;
  * @since 2018-03-23
  */
 @RestController
-@RequestMapping("/sys//navPower")
+@RequestMapping("/sys/navPower")
 public class NavPowerController extends BaseController {
     @Resource
     private NavPowerService navPowerService;

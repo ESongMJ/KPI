@@ -17,6 +17,8 @@
         <ibeetl.version>2.7.28</ibeetl.version>
         <beetl-framework.version>1.1.45.RELEASE</beetl-framework.version>
         <common-uitls.version>1.0.0-SNAPSHOT</common-uitls.version>
+        <thymeleaf-layout-dialect.version>2.0.5</thymeleaf-layout-dialect.version>
+        <nekohtml.version>1.9.22</nekohtml.version>
     </properties>
 
     <dependencies>
@@ -61,28 +63,27 @@
             <artifactId>common-utils</artifactId>
             <version>${common-uitls.version}</version>
         </dependency>
-        <!--视图解析器-->
-        <dependency>
-            <groupId>com.ibeetl</groupId>
-            <artifactId>beetl</artifactId>
-            <version>${ibeetl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ibeetl</groupId>
-            <artifactId>beetl-framework-starter</artifactId>
-            <version>${beetl-framework.version}</version>
-        </dependency>
-        <!-- 热部署工具 -->
+        <!-- thymeleaf模板引擎 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>${nekohtml.version}</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--以下配置是热部署java代码-->
+                <!--<configuration>-->
+                    <!--<fork>true</fork>-->
+                <!--</configuration>-->
             </plugin>
         </plugins>
     </build>

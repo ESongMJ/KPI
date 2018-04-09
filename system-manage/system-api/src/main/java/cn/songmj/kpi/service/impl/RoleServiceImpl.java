@@ -1,14 +1,11 @@
 package cn.songmj.kpi.service.impl;
 
-import cn.songmj.kpi.dto.RoleDto;
 import cn.songmj.kpi.facade.RoleFacade;
 import cn.songmj.kpi.param.RoleParam;
 import cn.songmj.kpi.service.RoleService;
 import com.alibaba.dubbo.config.annotation.Reference;
-import org.springframework.beans.BeanUtils;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * <p>
@@ -27,10 +24,22 @@ public class RoleServiceImpl implements RoleService {
     private RoleFacade roleFacade;
 
     @Override
-    public List<RoleDto> list(RoleParam roleParam) {
-        RoleDto roleDto = new RoleDto();
-        BeanUtils.copyProperties(roleParam, roleDto);
+    public Page<RoleParam> page(RoleParam roleParam) {
+        return roleFacade.list(roleParam);
+    }
 
-        return roleFacade.list(roleDto);
+    @Override
+    public Integer insert(RoleParam roleParam) {
+        return roleFacade.insert(roleParam);
+    }
+
+    @Override
+    public Integer update(RoleParam roleParam) {
+        return roleFacade.update(roleParam);
+    }
+
+    @Override
+    public Integer delete(Long roleId) {
+        return roleFacade.delete(roleId);
     }
 }

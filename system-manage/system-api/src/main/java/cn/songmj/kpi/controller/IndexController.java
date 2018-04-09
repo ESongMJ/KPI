@@ -2,6 +2,7 @@ package cn.songmj.kpi.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,8 +13,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class IndexController {
 
-    @GetMapping("/sys/index")
-    public String index() {
+    @GetMapping("/sys/{path}")
+    public String indexSys(@PathVariable("path") String path) {
+        return path;
+    }
+
+    @GetMapping("/")
+    public String route() {
         return "index";
+    }
+
+    @GetMapping("/{path}")
+    public String route(@PathVariable("path") String path) {
+        return path;
+    }
+    @GetMapping("/admin/{path}")
+    public String routeAdmin(@PathVariable("path") String path) {
+        return "admin/"+path;
     }
 }

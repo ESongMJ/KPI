@@ -13,5 +13,4 @@
     <sql id="Base_Column_List">
         role_id AS roleId, role_name AS roleName, role_description AS roleDescription
     </sql>
-
 </mapper>

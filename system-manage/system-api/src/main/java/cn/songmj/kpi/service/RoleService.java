@@ -1,10 +1,8 @@
 package cn.songmj.kpi.service;
 
 
-import cn.songmj.kpi.dto.RoleDto;
 import cn.songmj.kpi.param.RoleParam;
-
-import java.util.List;
+import com.baomidou.mybatisplus.plugins.Page;
 
 /**
  * <p>
@@ -20,5 +18,28 @@ public interface RoleService {
      * @param roleParam
      * @return
      */
-    List<RoleDto> list(RoleParam roleParam);
+    Page<RoleParam> page(RoleParam roleParam);
+    /**
+     * 增加角色
+     *
+     * @param roleParam
+     * @return
+     */
+    Integer insert(RoleParam roleParam);
+
+    /**
+     * 更新角色信息
+     *
+     * @param roleParam
+     * @return
+     */
+    Integer update(RoleParam roleParam);
+
+    /**
+     * 删除角色
+     *
+     * @param roleId
+     * @return
+     */
+    Integer delete(Long roleId);
 }

@@ -4,10 +4,10 @@ spring:
     name: system-manage-provider
   datasource:
       type: com.zaxxer.hikari.HikariDataSource
-      # 云服务器 118.24.15.181
-      url: jdbc:mysql://localhost:3306/kpi?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      # 云服务器118.24.15.181
+      url: jdbc:mysql://118.24.15.181:3306/kpi?useUnicode=true&characterEncoding=UTF-8&useSSL=false
       username: root
-      password: song52406
+      password: Song0828_root
       driver-class-name: com.mysql.jdbc.Driver
       hikari:
         max-lifetime: 6000
