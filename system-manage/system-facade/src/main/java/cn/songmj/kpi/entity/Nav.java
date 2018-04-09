@@ -33,7 +33,7 @@ public class Nav extends Model<Nav> implements Serializable {
      * 版块类型 1.标题 2.导向
      */
     @TableField("nav_type")
-    private String navType;
+    private Boolean navType;
     /**
      * 字体图标名称
      */
@@ -43,12 +43,17 @@ public class Nav extends Model<Nav> implements Serializable {
      * 父级版块
      */
     @TableField("nav_parent")
-    private Integer navParent;
+    private Long navParent;
+    /**
+     * 父级版块名称
+     */
+    @TableField(exist = false)
+    private String parentName;
     /**
      * 状态
      */
     @TableField("nav_status")
-    private String navStatus;
+    private Boolean navStatus;
     /**
      * 版块备注
      */

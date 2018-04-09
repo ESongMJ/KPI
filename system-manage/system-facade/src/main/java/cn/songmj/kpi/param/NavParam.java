@@ -28,7 +28,7 @@ public class NavParam extends PageParam implements Serializable {
     /**
      * 版块类型 1.标题 2.导向
      */
-    private String navType;
+    private Boolean navType;
     /**
      * 字体图标名称
      */
@@ -36,11 +36,12 @@ public class NavParam extends PageParam implements Serializable {
     /**
      * 父级版块
      */
-    private Integer navParent;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long navParent;
     /**
      * 状态
      */
-    private String navStatus;
+    private Boolean navStatus;
     /**
      * 版块备注
      */

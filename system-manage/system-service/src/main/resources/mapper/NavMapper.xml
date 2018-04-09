@@ -4,19 +4,42 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.Nav">
-        <id column="nav_id" property="navId" />
-        <result column="nav_name" property="navName" />
-        <result column="nav_url" property="navUrl" />
-        <result column="nav_type" property="navType" />
-        <result column="nav_ico" property="navIco" />
-        <result column="nav_parent" property="navParent" />
-        <result column="nav_status" property="navStatus" />
-        <result column="nav_tips" property="navTips" />
+        <id column="navId" property="navId"/>
+        <result column="navName" property="navName"/>
+        <result column="navUrl" property="navUrl"/>
+        <result column="navType" property="navType"/>
+        <result column="navIco" property="navIco"/>
+        <result column="navParent" property="navParent"/>
+        <result column="navStatus" property="navStatus"/>
+        <result column="navTips" property="navTips"/>
+        <result column="parentName" property="parentName"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        nav_id AS navId, nav_name AS navName, nav_url AS navUrl, nav_type AS navType, nav_ico AS navIco, nav_parent AS navParent, nav_status AS navStatus, nav_tips AS navTips
+        a.nav_id AS navId,
+        a.nav_name AS navName,
+        a.nav_url AS navUrl,
+        a.nav_type AS navType,
+        a.nav_ico AS navIco,
+        a.nav_parent AS navParent,
+        a.nav_status AS navStatus,
+        a.nav_tips AS navTips,
+        b.nav_name AS parentName
     </sql>
 
+    <select id="selectPageParent" parameterType="cn.songmj.kpi.entity.Nav" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM nav
+        LEFT JOIN nav b on a.nav_id=b.nav_parent
+        <where>
+            <if test="#{navName} != null">
+                or nav_name like concat('%', #{navName}, '%')
+            </if>
+            <if test="#{navTips} != null">
+                or nav_tips like concat('%, #{navTips}, '%')
+            </if>
+        </where>
+    </select>
 </mapper>

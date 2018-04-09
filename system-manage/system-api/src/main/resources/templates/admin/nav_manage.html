@@ -13,149 +13,136 @@
 
 </head>
 <body class="gray-bg">
-<div class="ibox float-e-margins animated fadeInRight" id="app">
-    <div class="ibox-title">
-        <h5>版块管理</h5>
-    </div>
-    <div class="ibox-content">
-        <div class="row">
-            <div class="col-sm-2 m-l-sm pull-left">
-                <button class="btn btn-primary btn-sm" type="button" @click="modal()"><i class="fa fa-plus"></i> 新增
-                </button>
-            </div>
-            <div class="col-sm-3 pull-right">
-                <div class="input-group">
-                    <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control">
-                    <span class="input-group-btn">
+<section id="app">
+    <div class="ibox float-e-margins animated fadeInRight">
+        <div class="ibox-title">
+            <h5>版块管理</h5>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-2 m-l-sm pull-left">
+                    <button class="btn btn-primary btn-sm" type="button" @click="modal()"><i class="fa fa-plus"></i> 新增
+                    </button>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <div class="input-group">
+                        <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control">
+                        <span class="input-group-btn">
                         <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
                     </span>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th width="8%">编号</th>
+                        <th width="12%">名称</th>
+                        <th width="12%">URL</th>
+                        <th width="12%">类型</th>
+                        <th width="12%">父级</th>
+                        <th width="12%">状态</th>
+                        <th width="20%">备注</th>
+                        <th width="16%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-if="navPage.records.length === 0">
+                        <td colspan="8" class="text-center">暂时没有数据</td>
+                    </tr>
+                    <tr v-for="nav in navPage.records" :id="nav.navId">
+                        <td>{{nav.navId}}</td>
+                        <td>{{nav.navName}}</td>
+                        <td>{{nav.navUrl}}</td>
+                        <td v-if="nav.navType === false">标题</td>
+                        <td v-if="nav.navType === true">导向</td>
+                        <td>
+                            <span v-if="nav.navParent === '0'">无</span>
+                        </td>
+                        <td v-if="nav.navStatus === false">禁用</td>
+                        <td v-if="nav.navStatus === true">可用</td>
+                        <td>{{nav.navTips}}</td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-xs" @click="edit(nav)">
+                                <i class="fa fa-edit">编辑</i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs" @click="remove(nav)">
+                                <i class="fa fa-trash">删除</i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="navModal">
+        <div class="modal-dialog">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalTitle">新增/修改版块</h4>
+                </div>
+                <div class="modal-body">
+                    <table style="font-size: 14px">
+                        <tr>
+                            <td align="right" height="40px" width="60px"> 编号:</td>
+                            <td><input type="text" disabled class="form-control m-l-md" style="width: 420px" v-model="navParam.navId"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 名称:</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px" v-model="navParam.navName"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> URL:</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px" v-model="navParam.navUrl"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 类型:</td>
+                            <td>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="navParam.navType">
+                                    <option value="0">标题</option>
+                                    <option value="1">导向</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 父级:</td>
+                            <td>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="navParam.navParent">
+                                    <option value="0">无</option>
+                                    <option v-for="nav in navList" :value="nav.navId">{{nav.navName}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 状态:</td>
+                            <td>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="navParam.navStatus">
+                                    <option value="0">禁用</option>
+                                    <option value="1">可用</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 备注:</td>
+                            <td><textarea class="form-control m-l-md" style="width: 420px" cols="30"
+                                          rows="3" v-model="navParam.navTips"></textarea></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="save()">保存</button>
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th width="8%">编号</th>
-                    <th width="12%">名称</th>
-                    <th width="12%">URL</th>
-                    <th width="12%">类型</th>
-                    <th width="12%">父级</th>
-                    <th width="12%">状态</th>
-                    <th width="20%">备注</th>
-                    <th width="16%">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>版块管理</td>
-                    <td>admin/nav_manage.html</td>
-                    <td>导向</td>
-                    <td>系统设置</td>
-                    <td>可用</td>
-                    <td>板块控制管理</td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs" @click="modal()">
-                            <i class="fa fa-edit">查看</i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash">删除</i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>系统设置</td>
-                    <td>无</td>
-                    <td>标题</td>
-                    <td>无</td>
-                    <td>可用</td>
-                    <td>系统管理</td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs" @click="modal()">
-                            <i class="fa fa-edit">查看</i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash">删除</i>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
-</div>
-<div class="modal fade" id="navModal">
-    <div class="modal-dialog">
-        <div class="modal-content animated fadeIn">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span
-                        aria-hidden="true">&times;</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="modalTitle">新增/修改版块</h4>
-            </div>
-            <div class="modal-body">
-                <table style="font-size: 14px">
-                    <tr>
-                        <td align="right" height="40px" width="60px"> 编号:</td>
-                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 名称:</td>
-                        <td><input type="text" class="form-control m-l-md" style="width: 420px"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> URL:</td>
-                        <td><input type="text" class="form-control m-l-md" style="width: 420px"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 类型:</td>
-                        <td>
-                            <select class="form-control m-l-md" style="width: 420px">
-                                <option value="0">--选择类型--</option>
-                                <option value="1">导向</option>
-                                <option value="2">标题</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 父级:</td>
-                        <td>
-                            <select class="form-control m-l-md" style="width: 420px">
-                                <option value="0">--选择父级--</option>
-                                <option value="1">无</option>
-                                <option value="2">系统设置</option>
-                                <option value="3">站内信</option>
-                                <option value="4">信息管理</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 状态:</td>
-                        <td>
-                            <select class="form-control m-l-md" style="width: 420px">
-                                <option value="0">--选择状态--</option>
-                                <option value="1">禁用</option>
-                                <option value="2">可用</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 备注:</td>
-                        <td><textarea class="form-control m-l-md" style="width: 420px" cols="30"
-                                      rows="3"></textarea></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" @click="save()">保存</button>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 <script src="../../js/jquery.min63b9.js?v=2.1.4"></script>
 <script src="../../js/bootstrap.min14ed.js?v=3.3.6"></script>
 <script src="../../js/plugins/iCheck/icheck.min.js"></script>
@@ -165,34 +152,62 @@
 <script>
     var vm;
     vm = new Vue({
-        "el": "#app",
-        "data": {
-            "searchField": ""
+        el: "#app",
+        data: {
+            searchField: "",
+            navParam: {
+                "navId": "",
+                "navUrl": "",
+                "navType": "",
+                "navIco": "",
+                "navParent": "",
+                "navStatus": "",
+                "navTips": "",
+                "pageSize": 10,
+                "currentPage": 1
+            },
+            navPage: [],
+            navList: []
         },
         methods: {
             modal: function () {
+                this.initParam();
+                this.navParam.navId = "自动生成";
                 $("#navModal").modal("show");
             },
             search: function () {
 
             },
-            list: function (param) {
+            page: function (param) {
                 $.ajax({
                     type: 'POST',
-                    url: '/user/list',
-                    contentType: "application/json",
-                    data: JSON.stringify(param),
+                    url: '/sys/nav/page',
+                    data: param,
                     success: function (res) {
                         if (res.code === '0') {
-                            vm.users = res.dataList;
+                            vm.navPage = res.pageData;
                         }
                     },
                     error: function (e) {
-                        swal("请求异常", "You clicked the button!", "warning")
+                        swal("系统错误", e.msg, "error");
                     }
                 });
             },
-            remove: function (user) {
+            list: function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '/sys/nav/list',
+                    success: function (res) {
+                        if (res.code === '0') {
+                            vm.navList = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", e.msg, "error");
+                    }
+                });
+            },
+            remove: function (nav) {
                 swal({
                     title: "你确定？",
                     text: "您将无法恢复数据！",
@@ -204,14 +219,15 @@
                 }, function () {
                     $.ajax({
                         type: 'POST',
-                        url: '/user/delete',
+                        url: '/sys/nav/delete',
                         data: {
-                            userId: user.userId
+                            userId: nav.navId
                         },
                         success: function (res) {
                             if (res.code === "0") {
                                 swal("删除成功", "", "success");
-                                vm.initList();
+                                vm.initParam();
+                                vm.page(this.navParam);
                             }
                         },
                         error: function (e) {
@@ -220,12 +236,46 @@
                     });
                 })
             },
-            initList: function () {
-                this.list({});
+            edit: function (nav) {
+                this.navParam = nav;
+                $("#navModal").modal("show");
+            },
+            save: function () {
+                if (this.navParam.navId === "自动生成") {
+                    this.navParam.navId = "-1";
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/nav/save",
+                    data: this.navParam,
+                    success: function (res) {
+                        if (res.code === "0") {
+                            swal("保存成功", res.msg, "success");
+                            $("#navModal").modal("hide");
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", e.msg, "error");
+                    }
+                });
+            },
+            initParam: function () {
+                this.navParam = {
+                    "navId": "",
+                    "navUrl": "",
+                    "navType": "",
+                    "navIco": "",
+                    "navParent": "",
+                    "navStatus": "",
+                    "navTips": "",
+                    "pageSize": 10,
+                    "currentPage": 1
+                };
             }
         },
         created: function () {
-            // this.initList();
+            this.page(this.navParam);
+            this.list();
         }
     });
 </script>

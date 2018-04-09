@@ -17,12 +17,12 @@ import com.baomidou.mybatisplus.service.IService;
 public interface RoleFacade extends IService<Role> {
 
     /**
-     * 获取角色列表
+     * 分页获取角色列表
      *
      * @param roleParam
      * @return
      */
-    Page<RoleParam> list(RoleParam roleParam);
+    Page<RoleParam> page(RoleParam roleParam);
 
     /**
      * 增加角色

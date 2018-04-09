@@ -25,7 +25,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Page<RoleParam> page(RoleParam roleParam) {
-        return roleFacade.list(roleParam);
+        return roleFacade.page(roleParam);
     }
 
     @Override

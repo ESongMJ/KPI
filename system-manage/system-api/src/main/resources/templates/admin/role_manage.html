@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Order-Manager</title>
+    <meta charset="utf-8">
     <link rel="shortcut icon" href="jsp/admin/favicon.ico">
     <link href="../../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
     <link href="../../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
@@ -41,7 +42,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th width="8%">编号</th>
+                        <th width="8%" style="display: none">编号</th>
                         <th width="16%">名称</th>
                         <th width="60%">描述</th>
                         <th width="16%">操作</th>
@@ -49,7 +50,7 @@
                     </thead>
                     <tbody>
                     <tr v-for="(role, index) in roles" :key="role.roleId">
-                        <td>{{role.roleId}}</td>
+                        <td style="display: none">{{role.roleId}}</td>
                         <td>{{role.roleName}}</td>
                         <td>{{role.roleDescription}}</td>
                         <td>

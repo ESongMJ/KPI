@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 )
 public class RoleFacadeImpl extends ServiceImpl<RoleMapper, Role> implements RoleFacade {
     @Override
-    public Page<RoleParam> list(RoleParam roleParam) {
+    public Page<RoleParam> page(RoleParam roleParam) {
         Page<Role> page = new Page<>();
         EntityWrapper<Role> ew = new EntityWrapper<>();
         if (roleParam.getRoleName() != null) {
