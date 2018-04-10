@@ -2,6 +2,7 @@ package cn.songmj.kpi.mapper;
 
 import cn.songmj.kpi.entity.NavPower;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 
 import java.util.List;
 
@@ -17,8 +18,9 @@ public interface NavPowerMapper extends BaseMapper<NavPower> {
     /**
      * 分页查询权限列表
      * 联合查询出nav和role名称
+     * @param page
      * @param navPower
      * @return
      */
-    List<NavPower> selectJoinPage(NavPower navPower);
+    List<NavPower> selectJoinPage(Pagination page, NavPower navPower);
 }

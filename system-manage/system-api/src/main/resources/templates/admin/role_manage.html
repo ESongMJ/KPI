@@ -69,7 +69,21 @@
                     </tbody>
                 </table>
             </div>
-
+            <div class="row" style="height: 50px">
+                <div class="col-sm-6">
+                    <div class="dataTables_info" style="margin-top: 10px">
+                        显示 {{pageInfo.dataBegin}} 到 {{pageInfo.dataEnd}} 项，共 {{pageInfo.total}} 项
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="btn-group" style="float: right">
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(rolePage.current-1)">上一页
+                        </button>
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(rolePage.current+1)">下一页
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="roleModal">
@@ -135,7 +149,13 @@
                 "roleName": "",
                 "roleDescription": ""
             },
-            searchField: ""
+            searchField: "",
+            pageInfo: {
+                dataBegin: 1,
+                dataEnd: 10,
+                total: 10,
+                pages: 1
+            }
         },
         methods: {
             modal: function () {
@@ -157,6 +177,7 @@
                     success: function (res) {
                         if (res.code === '0') {
                             vm.rolePage = res.pageData;
+                            vm.computePage();
                         }
                     },
                     error: function (e) {
@@ -223,7 +244,20 @@
                 this.searchField = "";
                 this.page(this.roleParam);
             },
+            computePage: function () {
+                var size = this.rolePage.size;
+                var current = this.rolePage.current;
+                var total = this.rolePage.total;
+                var pages = this.rolePage.pages;
+                this.pageInfo.dataBegin = (current - 1) * size + 1;
+                this.pageInfo.dataEnd = (current - 1) * size + this.rolePage.records.length;
+                this.pageInfo.total = total;
+                this.pageInfo.peges = pages;
+            },
             pageClick: function (current) {
+                if (current < 1 || current > this.rolePage.pages) {
+                    return;
+                }
                 this.roleParam.currentPage = current;
                 this.page(this.roleParam);
             },

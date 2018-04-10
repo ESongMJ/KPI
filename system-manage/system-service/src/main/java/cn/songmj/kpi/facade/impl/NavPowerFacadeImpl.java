@@ -30,16 +30,18 @@ public class NavPowerFacadeImpl extends ServiceImpl<NavPowerMapper, NavPower> im
     public Page<NavPowerParam> page(NavPowerParam navPowerParam) {
         NavPower np1 = new NavPower();
         BeanUtils.copyProperties(navPowerParam, np1);
-        List<NavPower> npList = baseMapper.selectJoinPage(np1);
+        Page<NavPower> npPage = new Page<>();
+        npPage.setSize(navPowerParam.getPageSize());
+        npPage.setCurrent(navPowerParam.getCurrentPage());
+        npPage.setRecords(baseMapper.selectJoinPage(npPage, np1));
+        List<NavPower> npList = npPage.getRecords();
         List<NavPowerParam> npParamList = npList.stream().map(np2 -> {
             NavPowerParam npParam = new NavPowerParam();
             BeanUtils.copyProperties(np2, npParam);
             return npParam;
         }).collect(Collectors.toList());
         Page<NavPowerParam> npParamPage = new Page<>();
-        npParamPage.setSize(navPowerParam.getPageSize());
-        npParamPage.setCurrent(navPowerParam.getCurrentPage());
-        npParamPage.setTotal(npParamList.size());
+        BeanUtils.copyProperties(npPage, npParamPage);
         npParamPage.setRecords(npParamList);
         return npParamPage;
     }

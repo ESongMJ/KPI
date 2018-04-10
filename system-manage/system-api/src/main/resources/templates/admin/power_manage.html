@@ -61,6 +61,21 @@
                     </tbody>
                 </table>
             </div>
+            <div class="row" style="height: 50px">
+                <div class="col-sm-6">
+                    <div class="dataTables_info" style="margin-top: 10px">
+                        显示 {{pageInfo.dataBegin}} 到 {{pageInfo.dataEnd}} 项，共 {{pageInfo.total}} 项
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="btn-group" style="float: right">
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(npPage.current-1)">上一页
+                        </button>
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(npPage.current+1)">下一页
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" id="navModal">
@@ -132,6 +147,12 @@
                 "npId": "",
                 "navId": "",
                 "roleId": ""
+            },
+            pageInfo: {
+                dataBegin: 1,
+                dataEnd: 10,
+                total: 10,
+                pages: 1
             }
         },
         methods: {
@@ -148,6 +169,7 @@
                     success: function (res) {
                         if (res.code === '0') {
                             vm.npPage = res.pageData;
+                            vm.computePage();
                         }
                     },
                     error: function (e) {
@@ -208,6 +230,23 @@
                         }
                     }
                 });
+            },
+            computePage: function () {
+                var size = this.npPage.size;
+                var current = this.npPage.current;
+                var total = this.npPage.total;
+                var pages = this.npPage.pages;
+                this.pageInfo.dataBegin = (current - 1) * size + 1;
+                this.pageInfo.dataEnd = (current - 1) * size + this.npPage.records.length;
+                this.pageInfo.total = total;
+                this.pageInfo.peges = pages;
+            },
+            pageClick: function (current) {
+                if (current < 1 || current > this.npPage.pages) {
+                    return;
+                }
+                this.npParam.currentPage = current;
+                this.page(this.npParam);
             },
             listRole: function () {
                 $.ajax({
