@@ -53,6 +53,25 @@ public class RoleFacadeImpl extends ServiceImpl<RoleMapper, Role> implements Rol
     }
 
     @Override
+    public List<RoleParam> list(RoleParam roleParam) {
+        EntityWrapper<Role> ew = new EntityWrapper<>();
+        if (roleParam.getRoleName() != null) {
+            ew.or();
+            ew.like("role_name", roleParam.getRoleName());
+        }
+        if (roleParam.getRoleDescription() != null) {
+            ew.or();
+            ew.like("role_description", roleParam.getRoleDescription());
+        }
+        List<Role> roleList = baseMapper.selectList(ew);
+        return roleList.stream().map(role -> {
+            RoleParam rp = new RoleParam();
+            BeanUtils.copyProperties(role, rp);
+            return rp;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
     public Integer insert(RoleParam roleParam) {
         Role role = new Role();
         BeanUtils.copyProperties(roleParam, role);

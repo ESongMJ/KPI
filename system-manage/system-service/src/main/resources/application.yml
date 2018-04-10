@@ -50,7 +50,7 @@ management:
 #mybatis-plus
 mybatis-plus:
   #mapper扫描
-  mapper-locations: calsspath:/mapper/*Mapper.xml
+  mapper-locations: classpath:/mapper/*Mapper.xml
   #实体扫描
   type-aliases-package: cn.songmj.kpi.entity
   global-config:

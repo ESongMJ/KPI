@@ -4,9 +4,11 @@ package cn.songmj.kpi.service;
 import cn.songmj.kpi.param.RoleParam;
 import com.baomidou.mybatisplus.plugins.Page;
 
+import java.util.List;
+
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author songmj123
@@ -15,10 +17,20 @@ import com.baomidou.mybatisplus.plugins.Page;
 public interface RoleService {
     /**
      * 查询角色列表
+     *
      * @param roleParam
      * @return
      */
     Page<RoleParam> page(RoleParam roleParam);
+
+    /**
+     * 列表查询
+     *
+     * @param roleParam
+     * @return
+     */
+    List<RoleParam> list(RoleParam roleParam);
+
     /**
      * 增加角色
      *

@@ -26,9 +26,10 @@ public interface NavFacade extends IService<Nav> {
 
     /**
      * 列表查询
+     * @param navParam
      * @return
      */
-    List<NavParam> list();
+    List<NavParam> list(NavParam navParam);
     /**
      * 增加版块
      *

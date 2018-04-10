@@ -26,10 +26,11 @@
                 </div>
                 <div class="col-sm-3 pull-right">
                     <div class="input-group">
-                        <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control">
+                        <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control" v-model="searchField">
                         <span class="input-group-btn">
-                        <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
-                    </span>
+                            <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
+                            <button type="button" class="btn btn-sm btn-info" @click="reset()"> 重置</button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -37,7 +38,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th width="8%">编号</th>
+                        <th width="8%" style="display: none">编号</th>
                         <th width="12%">名称</th>
                         <th width="12%">URL</th>
                         <th width="12%">类型</th>
@@ -48,20 +49,29 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-if="navPage.records.length === 0">
-                        <td colspan="8" class="text-center">暂时没有数据</td>
+                    <tr v-if="navPage.records.length < 1">
+                        <td colspan="8" class="text-center">没有此类数据~</td>
                     </tr>
                     <tr v-for="nav in navPage.records" :id="nav.navId">
-                        <td>{{nav.navId}}</td>
+                        <td style="display: none">{{nav.navId}}</td>
                         <td>{{nav.navName}}</td>
                         <td>{{nav.navUrl}}</td>
-                        <td v-if="nav.navType === false">标题</td>
-                        <td v-if="nav.navType === true">导向</td>
+                        <td>
+                            <span v-if="nav.navType === false">标题</span>
+                            <span v-if="nav.navType === true">导向</span>
+                        </td>
                         <td>
                             <span v-if="nav.navParent === '0'">无</span>
+                            <span v-if="nav.navParent !== '0'">
+                                <span v-for="nav1 in navList">
+                                    <span v-if="nav.navParent === nav1.navId">{{nav1.navName}}</span>
+                                </span>
+                            </span>
                         </td>
-                        <td v-if="nav.navStatus === false">禁用</td>
-                        <td v-if="nav.navStatus === true">可用</td>
+                        <td>
+                            <span v-if="nav.navStatus === false">禁用</span>
+                            <span v-if="nav.navStatus === true">可用</span>
+                        </td>
                         <td>{{nav.navTips}}</td>
                         <td>
                             <button type="button" class="btn btn-info btn-xs" @click="edit(nav)">
@@ -74,6 +84,21 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="row" style="height: 50px">
+                <div class="col-sm-6">
+                    <div class="dataTables_info" style="margin-top: 10px">
+                        显示 {{pageInfo.dataBegin}} 到 {{pageInfo.dataEnd}} 项，共 {{pageInfo.total}} 项
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="btn-group" style="float: right">
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(navPage.current-1)">上一页
+                        </button>
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(navPage.current+1)">下一页
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -90,30 +115,33 @@
                     <table style="font-size: 14px">
                         <tr>
                             <td align="right" height="40px" width="60px"> 编号:</td>
-                            <td><input type="text" disabled class="form-control m-l-md" style="width: 420px" v-model="navParam.navId"/>
+                            <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalNav.navId"/>
                             </td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 名称:</td>
-                            <td><input type="text" class="form-control m-l-md" style="width: 420px" v-model="navParam.navName"/></td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalNav.navName"/></td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> URL:</td>
-                            <td><input type="text" class="form-control m-l-md" style="width: 420px" v-model="navParam.navUrl"/></td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalNav.navUrl"/></td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 类型:</td>
                             <td>
-                                <select class="form-control m-l-md" style="width: 420px" v-model="navParam.navType">
-                                    <option value="0">标题</option>
-                                    <option value="1">导向</option>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="modalNav.navType">
+                                    <option value="false">标题</option>
+                                    <option value="true">导向</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 父级:</td>
                             <td>
-                                <select class="form-control m-l-md" style="width: 420px" v-model="navParam.navParent">
+                                <select class="form-control m-l-md" style="width: 420px" v-model="modalNav.navParent">
                                     <option value="0">无</option>
                                     <option v-for="nav in navList" :value="nav.navId">{{nav.navName}}</option>
                                 </select>
@@ -122,16 +150,16 @@
                         <tr>
                             <td align="right" height="40px"> 状态:</td>
                             <td>
-                                <select class="form-control m-l-md" style="width: 420px" v-model="navParam.navStatus">
-                                    <option value="0">禁用</option>
-                                    <option value="1">可用</option>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="modalNav.navStatus">
+                                    <option value="false">禁用</option>
+                                    <option value="true">可用</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 备注:</td>
                             <td><textarea class="form-control m-l-md" style="width: 420px" cols="30"
-                                          rows="3" v-model="navParam.navTips"></textarea></td>
+                                          rows="3" v-model="modalNav.navTips"></textarea></td>
                         </tr>
                     </table>
                 </div>
@@ -157,6 +185,7 @@
             searchField: "",
             navParam: {
                 "navId": "",
+                "navName": "",
                 "navUrl": "",
                 "navType": "",
                 "navIco": "",
@@ -166,17 +195,35 @@
                 "pageSize": 10,
                 "currentPage": 1
             },
+            modalNav: {
+                "navId": "",
+                "navName": "",
+                "navUrl": "",
+                "navType": "",
+                "navIco": "",
+                "navParent": "",
+                "navStatus": "",
+                "navTips": ""
+            },
             navPage: [],
-            navList: []
+            navList: [],
+            pageInfo: {
+                dataBegin: 1,
+                dataEnd: 10,
+                total: 10,
+                pages: 1
+            }
         },
         methods: {
             modal: function () {
-                this.initParam();
-                this.navParam.navId = "自动生成";
+                this.initModal();
+                this.modalNav.navId = "自动生成";
                 $("#navModal").modal("show");
             },
             search: function () {
-
+                this.navParam.navName = this.searchField;
+                this.navParam.navTips = this.searchField;
+                this.page(this.navParam);
             },
             page: function (param) {
                 $.ajax({
@@ -186,6 +233,7 @@
                     success: function (res) {
                         if (res.code === '0') {
                             vm.navPage = res.pageData;
+                            vm.computePage();
                         }
                     },
                     error: function (e) {
@@ -194,9 +242,12 @@
                 });
             },
             list: function () {
+                this.initParam();
+                this.navParam.navType = false;
                 $.ajax({
                     type: 'POST',
                     url: '/sys/nav/list',
+                    data: this.navParam,
                     success: function (res) {
                         if (res.code === '0') {
                             vm.navList = res.dataList;
@@ -221,13 +272,13 @@
                         type: 'POST',
                         url: '/sys/nav/delete',
                         data: {
-                            userId: nav.navId
+                            "navId": nav.navId
                         },
                         success: function (res) {
                             if (res.code === "0") {
                                 swal("删除成功", "", "success");
                                 vm.initParam();
-                                vm.page(this.navParam);
+                                vm.page(vm.navParam);
                             }
                         },
                         error: function (e) {
@@ -237,20 +288,23 @@
                 })
             },
             edit: function (nav) {
-                this.navParam = nav;
+                this.modalNav = nav;
                 $("#navModal").modal("show");
             },
             save: function () {
-                if (this.navParam.navId === "自动生成") {
-                    this.navParam.navId = "-1";
+                if (this.modalNav.navId === "自动生成") {
+                    this.modalNav.navId = "-1";
                 }
                 $.ajax({
                     type: "POST",
                     url: "/sys/nav/save",
-                    data: this.navParam,
+                    data: this.modalNav,
                     success: function (res) {
                         if (res.code === "0") {
                             swal("保存成功", res.msg, "success");
+                            vm.initParam();
+                            vm.page(vm.navParam);
+                            vm.list();
                             $("#navModal").modal("hide");
                         }
                     },
@@ -259,9 +313,32 @@
                     }
                 });
             },
+            reset: function () {
+                this.initParam();
+                this.searchField = "";
+                this.page(this.navParam);
+            },
+            computePage: function () {
+                var size = this.navPage.size;
+                var current = this.navPage.current;
+                var total = this.navPage.total;
+                var pages = this.navPage.pages;
+                this.pageInfo.dataBegin = (current - 1) * size + 1;
+                this.pageInfo.dataEnd = (current - 1) * size + this.navPage.records.length;
+                this.pageInfo.total = total;
+                this.pageInfo.peges = pages;
+            },
+            pageClick: function (current) {
+                if (current < 1 || current > this.navPage.pages) {
+                    return;
+                }
+                this.navParam.currentPage = current;
+                this.page(this.navParam);
+            },
             initParam: function () {
                 this.navParam = {
                     "navId": "",
+                    "navName": "",
                     "navUrl": "",
                     "navType": "",
                     "navIco": "",
@@ -271,6 +348,18 @@
                     "pageSize": 10,
                     "currentPage": 1
                 };
+            },
+            initModal: function () {
+                this.modalNav = {
+                    "navId": "",
+                    "navName": "",
+                    "navUrl": "",
+                    "navType": "",
+                    "navIco": "",
+                    "navParent": "",
+                    "navStatus": "",
+                    "navTips": ""
+                }
             }
         },
         created: function () {

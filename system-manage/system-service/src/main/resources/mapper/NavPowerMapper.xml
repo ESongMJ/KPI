@@ -4,14 +4,27 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.NavPower">
-        <id column="np_id" property="npId" />
-        <result column="role_id" property="roleId" />
-        <result column="nav_id" property="navId" />
+        <id column="npId" property="npId"/>
+        <result column="roleId" property="roleId"/>
+        <result column="navId" property="navId"/>
+        <result column="roleName" property="roleName"/>
+        <result column="navName" property="navName"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        np_id AS npId, role_id AS roleId, nav_id AS navId
+        np.np_id AS npId, np.role_id AS roleId, np.nav_id AS navId, n.nav_name AS navName, r.role_name AS roleName
     </sql>
 
+    <select id="selectJoinPage" parameterType="cn.songmj.kpi.entity.NavPower"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from nav_power np
+        LEFT JOIN nav n ON np.nav_id=n.nav_id
+        LEFT JOIN role r ON np.role_id=r.role_id
+        <if test="roleId != null and roleId != 0">
+            WHERE np.role_id = #{roleId}
+        </if>
+    </select>
 </mapper>

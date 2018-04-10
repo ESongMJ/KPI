@@ -24,9 +24,10 @@ public interface NavService {
 
     /**
      * 列表查询
+     * @param navParam
      * @return
      */
-    List<NavParam> list();
+    List<NavParam> list(NavParam navParam);
     /**
      * 保存版块
      * 1.当navId不为null或者-1时调用插入接口

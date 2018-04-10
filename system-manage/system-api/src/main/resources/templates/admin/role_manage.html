@@ -33,8 +33,9 @@
                     <div class="input-group">
                         <input type="text" placeholder="请输入角色名" class="input-sm form-control" v-model="searchField">
                         <span class="input-group-btn">
-                        <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
-                    </span>
+                            <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
+                            <button type="button" class="btn btn-sm btn-info" @click="reset()"> 重置</button>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -49,7 +50,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(role, index) in roles" :key="role.roleId">
+                    <tr v-if="rolePage.records.length < 1">
+                        <td colspan="3" class="text-center">没有此类数据~</td>
+                    </tr>
+                    <tr v-for="(role, index) in rolePage.records" :key="role.roleId">
                         <td style="display: none">{{role.roleId}}</td>
                         <td>{{role.roleName}}</td>
                         <td>{{role.roleDescription}}</td>
@@ -116,42 +120,43 @@
 <script>
     var vm;
     vm = new Vue({
-        "el": "#app",
-        "data": {
-            "roles": [],
-            "modalRole": {
+        el: "#app",
+        data: {
+            rolePage: [],
+            roleParam: {
+                "roleId": "",
+                "roleName": "",
+                "roleDescription": "",
+                "pageSize": 10,
+                "currentPage": 1
+            },
+            modalRole: {
                 "roleId": "",
                 "roleName": "",
                 "roleDescription": ""
             },
-            "searchField": ""
+            searchField: ""
         },
         methods: {
             modal: function () {
-                this.modalRole = {
-                    "roleId": "自动生成",
-                    "roleName": "",
-                    "roleDescription": ""
-                };
+                this.initModal();
+                this.modalRole.roleId = "自动生成";
                 $('#roleModal').modal('show');
             },
             search: function () {
-                this.list({
-                    "roleId": "",
-                    "roleName": this.searchField,
-                    "roleDescription": this.searchField,
-                    "pageSize": 10,
-                    "currentPage": 1
-                });
+                this.initParam();
+                this.roleParam.roleName = this.searchField;
+                this.roleParam.roleDescription = this.searchField;
+                this.page(this.roleParam);
             },
-            list: function (param) {
+            page: function (param) {
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: '/sys/role/page',
                     data: param,
                     success: function (res) {
                         if (res.code === '0') {
-                            vm.roles = res.pageData.records;
+                            vm.rolePage = res.pageData;
                         }
                     },
                     error: function (e) {
@@ -182,7 +187,7 @@
                         success: function (res) {
                             if (res.code === "0") {
                                 swal("删除成功", "", "success");
-                                vm.initList();
+                                vm.initParam();
                             }
                         },
                         error: function (e) {
@@ -204,7 +209,8 @@
                             swal("保存成功", res.msg, "success");
                             $('#roleModal').modal('hide');
                             //刷新页面
-                            vm.initList();
+                            vm.initParam();
+                            vm.page(vm.roleParam);
                         }
                     },
                     error: function () {
@@ -212,18 +218,30 @@
                     }
                 });
             },
-            initList: function () {
-                this.list({
-                    "roleId": "",
-                    "roleName": "",
-                    "roleDescription": "",
-                    "pageSize": 10,
-                    "currentPage": 1
-                });
+            reset: function () {
+                this.initParam();
+                this.searchField = "";
+                this.page(this.roleParam);
+            },
+            pageClick: function (current) {
+                this.roleParam.currentPage = current;
+                this.page(this.roleParam);
+            },
+            initParam: function () {
+                this.roleParam.roleId = "";
+                this.roleParam.roleName = "";
+                this.roleParam.roleDescription = "";
+                this.roleParam.pageSize = 10;
+                this.roleParam.currentPage = 1;
+            },
+            initModal: function () {
+                this.modalRole.roleId = "";
+                this.modalRole.roleName = "";
+                this.modalRole.roleDescription = "";
             }
         },
         created: function () {
-            this.initList();
+            this.page(this.roleParam);
         }
     });
 </script>

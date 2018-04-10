@@ -25,15 +25,25 @@ public class NavPower extends Model<NavPower> implements Serializable {
     @TableId("np_id")
     private Long npId;
     /**
-     * 角色
+     * 角色id
      */
     @TableField("role_id")
-    private Integer roleId;
+    private Long roleId;
     /**
-     * 版块
+     * 版块id
      */
     @TableField("nav_id")
-    private Integer navId;
+    private Long navId;
+    /**
+     * 角色名称
+     */
+    @TableField(exist = false)
+    private String roleName;
+    /**
+     * 版块名称
+     */
+    @TableField(exist = false)
+    private String navName;
 
     @Override
     protected Serializable pkVal() {

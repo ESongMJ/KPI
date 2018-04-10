@@ -5,6 +5,8 @@ import cn.songmj.kpi.param.RoleParam;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.util.List;
+
 
 /**
  * <p>
@@ -24,6 +26,12 @@ public interface RoleFacade extends IService<Role> {
      */
     Page<RoleParam> page(RoleParam roleParam);
 
+    /**
+     * 列表查询
+     * @param roleParam
+     * @return
+     */
+    List<RoleParam> list(RoleParam roleParam);
     /**
      * 增加角色
      *

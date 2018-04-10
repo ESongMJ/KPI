@@ -30,4 +30,12 @@ public class NavPowerParam extends PageParam implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long navId;
+    /**
+     * 角色名称
+     */
+    private String roleName;
+    /**
+     * 版块名称
+     */
+    private String navName;
 }

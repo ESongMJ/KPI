@@ -31,8 +31,8 @@ public class NavServiceImpl implements NavService {
     }
 
     @Override
-    public List<NavParam> list() {
-        return navFacade.list();
+    public List<NavParam> list(NavParam navParam) {
+        return navFacade.list(navParam);
     }
 
     @Override

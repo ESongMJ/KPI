@@ -31,10 +31,10 @@ public class NavFacadeImpl extends ServiceImpl<NavMapper, Nav> implements NavFac
         Page<Nav> page = new Page<>();
         EntityWrapper<Nav> ew = new EntityWrapper<>();
         if (navParam.getNavName() != null) {
-            ew.or().like("nva_name", navParam.getNavName());
+            ew.or().like("nav_name", navParam.getNavName());
         }
         if (navParam.getNavTips() != null) {
-            ew.or().like("nva_tips", navParam.getNavTips());
+            ew.or().like("nav_tips", navParam.getNavTips());
         }
         page.setSize(navParam.getPageSize());
         page.setCurrent(navParam.getCurrentPage());
@@ -51,12 +51,16 @@ public class NavFacadeImpl extends ServiceImpl<NavMapper, Nav> implements NavFac
     }
 
     @Override
-    public List<NavParam> list() {
-        List<Nav> navList = baseMapper.selectList(new EntityWrapper<>());
+    public List<NavParam> list(NavParam navParam) {
+        EntityWrapper<Nav> ew = new EntityWrapper<>();
+        if (!navParam.getNavType()) {
+            ew.eq("nav_type", 0);
+        }
+        List<Nav> navList = baseMapper.selectList(ew);
         return navList.stream().map(nav -> {
-            NavParam navParam = new NavParam();
-            BeanUtils.copyProperties(nav, navParam);
-            return navParam;
+            NavParam navP = new NavParam();
+            BeanUtils.copyProperties(nav, navP);
+            return navP;
         }).collect(Collectors.toList());
     }
 

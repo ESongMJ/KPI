@@ -33,8 +33,8 @@ public class NavController extends BaseController {
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), paramPage);
     }
     @PostMapping("/list")
-    public Result list() {
-        List<NavParam> list = navService.list();
+    public Result list(NavParam navParam) {
+        List<NavParam> list = navService.list(navParam);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), list);
     }
     @PostMapping("/save")

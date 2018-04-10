@@ -7,6 +7,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务实现类
@@ -26,6 +28,11 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Page<RoleParam> page(RoleParam roleParam) {
         return roleFacade.page(roleParam);
+    }
+
+    @Override
+    public List<RoleParam> list(RoleParam roleParam) {
+        return roleFacade.list(roleParam);
     }
 
     @Override

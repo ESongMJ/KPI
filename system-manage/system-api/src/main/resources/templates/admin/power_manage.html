@@ -13,123 +13,99 @@
 
 </head>
 <body class="gray-bg">
-<div class="ibox float-e-margins animated fadeInRight" id="app">
-    <div class="ibox-title">
-        <h5>权限管理</h5>
+<section id="app">
+    <div class="ibox float-e-margins animated fadeInRight">
+        <div class="ibox-title">
+            <h5>权限管理</h5>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-1 m-l-sm pull-left">
+                    <button class="btn btn-primary btn-sm" type="button" @click="modal()"><i class="fa fa-plus"></i> 新增
+                    </button>
+                </div>
+                <div class="col-sm-3 pull-right">
+                    <select class="form-control" v-model="searchField">
+                        <option value="0">--选择角色--</option>
+                        <option v-for="role in roleList" :value="role.roleId">{{role.roleName}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th width="8%" style="display: none">编号</th>
+                        <th width="12%">角色</th>
+                        <th width="12%">版块</th>
+                        <th width="16%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-if="npPage.records.length < 1">
+                        <td colspan="3" class="text-center">没有此类数据~</td>
+                    </tr>
+                    <tr v-for="np in npPage.records">
+                        <td style="display: none">{{np.npId}}</td>
+                        <td>{{np.roleName}}</td>
+                        <td>{{np.navName}}</td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-xs" @click="edit(np)">
+                                <i class="fa fa-edit">编辑</i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs" @click="remove(np)">
+                                <i class="fa fa-trash">删除</i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="ibox-content">
-        <div class="row">
-            <div class="col-sm-1 m-l-sm pull-left">
-                <button class="btn btn-primary btn-sm" type="button" @click="modal()"><i class="fa fa-plus"></i> 新增
-                </button>
-            </div>
-            <div class="col-sm-3 m-l-sm">
-                <select class="form-control">
-                    <option value="0">--选择角色--</option>
-                    <option value="1">普通用户</option>
-                    <option value="2">管理员</option>
-                    <option value="3">超级管理员</option>
-                </select>
-            </div>
-            <div class="col-sm-3 pull-right">
-                <div class="input-group">
-                    <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
-                    </span>
+    <div class="modal fade" id="navModal">
+        <div class="modal-dialog">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalTitle">新增/修改权限</h4>
+                </div>
+                <div class="modal-body">
+                    <table style="font-size: 14px">
+                        <tr>
+                            <td align="right" height="40px" width="60px"> 编号:</td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px" v-model="modalNP.npId"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 角色:</td>
+                            <td>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="modalNP.roleId">
+                                    <option v-for="role in roleList" :value="role.roleId">{{role.roleName}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 版块:</td>
+                            <td>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="modalNP.navId">
+                                    <option v-for="nav in navList" :value="nav.navId">{{nav.navName}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="save()">保存</button>
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th width="8%">编号</th>
-                    <th width="12%">角色</th>
-                    <th width="12%">版块</th>
-                    <th width="16%">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>管理员</td>
-                    <td>版块管理</td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs" @click="modal()">
-                            <i class="fa fa-edit">修改</i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash">删除</i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>普通用户</td>
-                    <td>教学绩效</td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs" @click="modal()">
-                            <i class="fa fa-edit">修改</i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash">删除</i>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
-</div>
-<div class="modal fade" id="navModal">
-    <div class="modal-dialog">
-        <div class="modal-content animated fadeIn">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span
-                        aria-hidden="true">&times;</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="modalTitle">新增/修改权限</h4>
-            </div>
-            <div class="modal-body">
-                <table style="font-size: 14px">
-                    <tr>
-                        <td align="right" height="40px" width="60px"> 编号:</td>
-                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 角色:</td>
-                        <td>
-                            <select class="form-control m-l-md" style="width: 420px">
-                                <option value="0">--选择角色--</option>
-                                <option value="1">普通用户</option>
-                                <option value="2">管理员</option>
-                                <option value="3">超级管理员</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 版块:</td>
-                        <td>
-                            <select class="form-control m-l-md" style="width: 420px">
-                                <option value="0">--选择版块--</option>
-                                <option value="1">角色管理</option>
-                                <option value="2">系统设置</option>
-                                <option value="3">站内信</option>
-                                <option value="4">信息管理</option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" @click="save()">保存</button>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 <script src="../../js/jquery.min63b9.js?v=2.1.4"></script>
 <script src="../../js/bootstrap.min14ed.js?v=3.3.6"></script>
 <script src="../../js/plugins/iCheck/icheck.min.js"></script>
@@ -139,34 +115,47 @@
 <script>
     var vm;
     vm = new Vue({
-        "el": "#app",
-        "data": {
-            "searchField": ""
+        el: "#app",
+        data: {
+            searchField: 0,
+            roleList: [],
+            navList: [],
+            npPage: {},
+            npParam: {
+                "npId": "",
+                "navId": "",
+                "roleId": "",
+                "pageSize": 10,
+                "currentPage": 1
+            },
+            modalNP: {
+                "npId": "",
+                "navId": "",
+                "roleId": ""
+            }
         },
         methods: {
             modal: function () {
+                this.initModal();
+                this.modalNP.npId = "自动生成";
                 $("#navModal").modal("show");
             },
-            search: function () {
-
-            },
-            list: function (param) {
+            page: function (param) {
                 $.ajax({
                     type: 'POST',
-                    url: '/user/list',
-                    contentType: "application/json",
-                    data: JSON.stringify(param),
+                    url: '/sys/np/page',
+                    data: param,
                     success: function (res) {
                         if (res.code === '0') {
-                            vm.users = res.dataList;
+                            vm.npPage = res.pageData;
                         }
                     },
                     error: function (e) {
-                        swal("请求异常", "You clicked the button!", "warning")
+                        swal("系统错误", e.msg, "error")
                     }
                 });
             },
-            remove: function (user) {
+            remove: function (npId) {
                 swal({
                     title: "你确定？",
                     text: "您将无法恢复数据！",
@@ -178,30 +167,119 @@
                 }, function () {
                     $.ajax({
                         type: 'POST',
-                        url: '/user/delete',
+                        url: '/sys/np/delete',
                         data: {
-                            userId: user.userId
+                            "npId": npId
                         },
                         success: function (res) {
                             if (res.code === "0") {
-                                swal("删除成功","","success");
-                                vm.initList();
+                                swal("删除成功", "", "success");
+                                vm.initParam();
+                                vm.page(vm.npParam);
                             }
                         },
                         error: function (e) {
-                            swal("系统错误",e,"error");
+                            swal("系统错误", e, "error");
                         }
                     });
                 })
             },
-            initList: function () {
-                this.list({
-
+            edit: function (np) {
+                this.modalNP = np;
+                $("#navModal").modal("show");
+            },
+            save: function () {
+                if (this.modalNP.npId === "自动生成") {
+                    this.modalNP.npId = -1;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/np/save",
+                    data: this.modalNP,
+                    success: function (res) {
+                        if (res.code === "0") {
+                            swal("保存成功", res.msg, "success");
+                            $("#navModal").modal("hide");
+                            vm.initParam();
+                            vm.page(vm.npParam);
+                        } else if (res.code === "1") {
+                            vm.modalNP.npId = "自动生成";
+                            swal(res.msg, "请修改角色权限", "error");
+                        }
+                    }
                 });
+            },
+            listRole: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/role/list",
+                    data: {
+                        "roleId": "",
+                        "roleName": "",
+                        "roleDescription": ""
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.roleList = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", e.msg, "error");
+                    }
+                });
+            },
+            listNav: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/nav/list",
+                    data: {
+                        "navId": "",
+                        "navName": "",
+                        "navUrl": "",
+                        "navType": true,
+                        "navIco": "",
+                        "navParent": "",
+                        "navStatus": "",
+                        "navTips": ""
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.navList = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", e.msg, "error");
+                    }
+                });
+            },
+            initParam: function () {
+                this.npParam = {
+                    "npId": "",
+                    "navId": "",
+                    "roleId": "",
+                    "pageSize": 10,
+                    "currentPage": 1
+                };
+            },
+            initModal: function () {
+                this.modalNP = {
+                    "npId": "",
+                    "navId": "",
+                    "roleId": ""
+                };
             }
         },
         created: function () {
-            // this.initList();
+            this.page(this.npParam);
+            this.listRole();
+            this.listNav();
+        },
+        watch: {
+            // 监听searchField字段值得变化，来更新Page
+            searchField: function () {
+                this.npParam.roleId = this.searchField;
+                this.page(this.npParam);
+            }
         }
     });
 </script>
