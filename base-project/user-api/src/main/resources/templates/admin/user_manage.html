@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order-Manager</title>
+    <link href="../../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../../css/animate.min.css" rel="stylesheet">
+    <link href="../../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="../../css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="../../css/plugins/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link href="../../css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
+
+</head>
+<body class="gray-bg">
+<div class="ibox float-e-margins animated fadeInRight" id="app">
+    <div class="ibox-title">
+        <h5>用户管理</h5>
+    </div>
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-3 m-l-sm">
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-sm" type="button" @click="modal()"><i class="fa fa-plus"></i> 新增
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-3" style="float: right">
+                <div class="input-group">
+                    <input type="text" placeholder="请输入用户名或登录名" class="input-sm form-control" v-model="searchField">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th width="8%">编号</th>
+                    <th width="12%">用户名</th>
+                    <th width="12%">登录名</th>
+                    <th width="12%">角色</th>
+                    <th width="44%">介绍</th>
+                    <th width="16%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="(user, index) in users" :key="user.userId">
+                    <td>{{user.userId}}</td>
+                    <td>{{user.userName}}</td>
+                    <td>{{user.userNumber}}</td>
+                    <td>{{user.role.roleName}}</td>
+                    <td>{{user.userIntroduce}}</td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs" @click="edit(user)">
+                            <i class="fa fa-edit">编辑</i>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-xs" @click="remove(user)">
+                            <i class="fa fa-trash">删除</i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="userModal">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span
+                                class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="modalTitle">用户添加</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table style="font-size: 14px; width: 100%" border="0">
+                            <tr>
+                                <td align="right" height="40px"> 编号:</td>
+                                <td><input type="text" disabled class="form-control m-l-md" style="width: 420px" v-model="modalUser.userId"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" height="40px"> 用户名:</td>
+                                <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                           v-model="modalUser.userName"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" height="40px"> 登录名:</td>
+                                <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                           v-model="modalUser.userNumber"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" height="40px"> 角色:</td>
+                                <td>
+                                    <select class="form-control m-l-md" style="width: 420px" v-model="modalUser.roleId">
+                                        <option :value="role.roleId" v-for="role in roles">{{role.roleName}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" height="40px"> 介绍:</td>
+                                <td>
+                                    <textarea class="form-control m-l-md" style="width: 420px" cols="30" rows="3" v-model="modalUser.userIntroduce"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" @click="save()">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../js/jquery.min63b9.js?v=2.1.4"></script>
+<script src="../../js/bootstrap.min14ed.js?v=3.3.6"></script>
+<script src="../../js/plugins/iCheck/icheck.min.js"></script>
+<script src="../../js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var vm;
+    vm = new Vue({
+        "el": "#app",
+        "data": {
+            "users": [],
+            "roles": [],
+            "modalUser": {
+                "userId": "",
+                "userName": "",
+                "userNumber": "",
+                "userIntroduce": "",
+                "roleId": ""
+            },
+            "searchField": "",
+            "status": false
+        },
+        methods: {
+            modal: function () {
+                if (!this.status) {
+                    this.status = true;
+                    this.listRole();
+                }
+                this.modalUser = {
+                    "userId": "自动生成",
+                    "userName": "",
+                    "userNumber": "",
+                    "userIntroduce": "",
+                    "roleId": ""
+                };
+                $('#userModal').modal('show');
+            },
+            search: function () {
+                this.list({
+                    "userId": "",
+                    "userName": this.searchField,
+                    "userNumber": this.searchField,
+                    "userIntroduce": "",
+                    "roleId": ""
+                });
+            },
+            list: function (param) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/list',
+                    contentType: "application/json",
+                    data: JSON.stringify(param),
+                    success: function (res) {
+                        if (res.code === '0') {
+                            vm.users = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("请求异常", "You clicked the button!", "warning")
+                    }
+                });
+            },
+            listRole: function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/role/list',
+                    data: {
+                        "roleId": "",
+                        "roleName": "",
+                        "roleDescription": ""
+                    },
+                    success: function (res) {
+                        if (res.code === '0') {
+                            vm.roles = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("请求异常", "You clicked the button!", "warning")
+                    }
+                });
+            },
+            edit: function (user) {
+                this.modalUser.userId = user.userId;
+                this.modalUser.userName = user.userName;
+                this.modalUser.userNumber = user.userNumber;
+                this.modalUser.userIntroduce = user.userIntroduce;
+                this.modalUser.roleId = user.role.roleId;
+                if (!this.status) {
+                    this.status = true;
+                    this.listRole();
+                }
+                $('#userModal').modal('show');
+            },
+            remove: function (user) {
+                swal({
+                    title: "你确定？",
+                    text: "您将无法恢复数据！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "是的，删除！",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/delete',
+                        data: {
+                            userId: user.userId
+                        },
+                        success: function (res) {
+                            if (res.code === "0") {
+                                swal("删除成功","","success");
+                                vm.initList();
+                            }
+                        },
+                        error: function (e) {
+                            swal("系统错误",e,"error");
+                        }
+                    });
+                })
+            },
+            save: function () {
+                if (this.modalUser.userId === "自动生成") {
+                    this.modalUser.userId = -1;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/save',
+                    data: this.modalUser,
+                    success: function (res) {
+                        if (res.code === "0") {
+                            swal("保存成功", res.msg, "success");
+                            $('#userModal').modal('hide');
+                            //刷新页面
+                            vm.initList();
+                        }
+                    },
+                    error: function () {
+                        swal("系统错误", "", "error");
+                    }
+                });
+            },
+            initList: function () {
+                this.list({
+                    "userId": "",
+                    "userName": "",
+                    "userNumber": "",
+                    "userIntroduce": "",
+                    "roleId": ""
+                });
+            }
+        },
+        created: function () {
+            // this.initList();
+        }
+    });
+</script>
+</body>
+</html>
