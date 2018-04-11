@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order-Manager</title>
+    <link href="../../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../../css/animate.min.css" rel="stylesheet">
+    <link href="../../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="../../css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="../../css/plugins/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link href="../../css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
+
+</head>
+<body class="gray-bg">
+<section id="app">
+    <div class="ibox float-e-margins animated fadeInRight">
+        <div class="ibox-title">
+            <h5>岗位等级管理</h5>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-3 m-l-sm">
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm" type="button" @click="modal()"><i class="fa fa-plus"></i>
+                            新增
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-3" style="float: right">
+                    <div class="input-group">
+                        <input type="text" placeholder="请输入用户名或登录名" class="input-sm form-control" v-model="searchField">
+                        <span class="input-group-btn">
+                        <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="display: none">编号</th>
+                        <th width="12%">岗位类型</th>
+                        <th width="12%">技术等级</th>
+                        <th width="12%">教学要求</th>
+                        <th width="20%">科研要求</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-if="kbrPage.records.length < 1">
+                        <td colspan="8" class="text-center">暂时没有数据~</td>
+                    </tr>
+                    <tr v-for="kbr in kbrPage.records" :key="kbr.kbrId">
+                        <td>{{kbr.kbrType}}</td>
+                        <td>{{kbr.kbrLevel}}</td>
+                        <td>{{kbr.kbrTeach}}</td>
+                        <td>{{kbr.kbrResearch}}</td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-xs" @click="edit(kbr)">
+                                <i class="fa fa-edit">编辑</i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs" @click="remove(kbr)">
+                                <i class="fa fa-trash">删除</i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="KBRModal">
+        <div class="modal-dialog">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalTitle">岗位等级添加</h4>
+                </div>
+                <div class="modal-body">
+                    <table style="font-size: 14px; width: 100%" border="0">
+                        <tr>
+                            <td align="right" height="40px"> 编号:</td>
+                            <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKBR.kbrId"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 岗位类型:</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKBR.kbrType"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 技术等级:</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKBR.kbrLevel"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 要学要求(分数):</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKBR.kbrTeach"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 科研要求(分数):</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKBR.kbrResearch"/></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="save()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<script src="../../js/jquery.min63b9.js?v=2.1.4"></script>
+<script src="../../js/bootstrap.min14ed.js?v=3.3.6"></script>
+<script src="../../js/plugins/iCheck/icheck.min.js"></script>
+<script src="../../js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var vm;
+    vm = new Vue({
+        el: "#app",
+        data: {
+            KBRPage: [],
+            modalKBR: {
+                "kbrId": "",
+                "kbrType": "",
+                "kbrLevel": "",
+                "kbrTeach": "",
+                "kbrResearch": ""
+            },
+            KBRParam: {
+                "kbrId": "",
+                "kbrType": "",
+                "kbrLevel": "",
+                "kbrTeach": "",
+                "kbrResearch": "",
+                "pageSize": 10,
+                "currentPage": 1
+            },
+            searchField: ""
+        },
+        methods: {
+            modal: function () {
+                this.initModal();
+                this.modalKBR.kbrId = '自动生成';
+                $('#KBRModal').modal('show');
+            },
+            search: function () {
+                this.KBRParam.kbrType = this.searchField;
+                this.page(this.KBRParam);
+            },
+            page: function (param) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/sys/kbr/page',
+                    data: param,
+                    success: function (res) {
+                        if (res.code === '0') {
+                            vm.KBRPage = res.pageData;
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", "请重试", "error");
+                    }
+                });
+            },
+            edit: function (user) {
+                this.modalKBR = user;
+                $('#KBRModal').modal('show');
+            },
+            remove: function (kbr) {
+                swal({
+                    title: "你确定？",
+                    text: "您将无法恢复数据！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "是的，删除！",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/sys/kbr/delete',
+                        data: {
+                            userId: kbr.kbrId
+                        },
+                        success: function (res) {
+                            if (res.code === "0") {
+                                swal("删除成功", "", "success");
+                                vm.initParam();
+                                vm.page(vm.KBRParam);
+                            }
+                        },
+                        error: function (e) {
+                            swal("系统错误", e, "error");
+                        }
+                    });
+                })
+            },
+            save: function () {
+                if (this.modalKBR.kbrId === "自动生成") {
+                    this.modalKBR.kbrId = -1;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/sys/kbr/save',
+                    data: this.modalKBR,
+                    success: function (res) {
+                        if (res.code === "0") {
+                            swal("保存成功", res.msg, "success");
+                            //刷新页面
+                            vm.initParam();
+                            vm.page(vm.KBRParam);
+                            $('#KBRModal').modal('hide');
+                        }
+                    },
+                    error: function () {
+                        swal("系统错误", "", "error");
+                    }
+                });
+            },
+            initParam: function () {
+                this.userParam = {
+                    "kbrId": "",
+                    "kbrType": "",
+                    "kbrLevel": "",
+                    "kbrTeach": "",
+                    "kbrResearch": "",
+                    "pageSize": 10,
+                    "currentPage": 1
+                };
+            },
+            initModal: function () {
+                this.modalUser = {
+                    "kbrId": "",
+                    "kbrType": "",
+                    "kbrLevel": "",
+                    "kbrTeach": "",
+                    "kbrResearch": ""
+                };
+            }
+        },
+        created: function () {
+            this.page(this.KBRParam);
+        }
+    });
+</script>
+</body>
+</html>

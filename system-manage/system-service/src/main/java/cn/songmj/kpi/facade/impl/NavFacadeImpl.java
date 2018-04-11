@@ -53,7 +53,7 @@ public class NavFacadeImpl extends ServiceImpl<NavMapper, Nav> implements NavFac
     @Override
     public List<NavParam> list(NavParam navParam) {
         EntityWrapper<Nav> ew = new EntityWrapper<>();
-        if (!navParam.getNavType()) {
+        if (navParam.getNavType()== null || !navParam.getNavType()) {
             ew.eq("nav_type", 0);
         }
         List<Nav> navList = baseMapper.selectList(ew);

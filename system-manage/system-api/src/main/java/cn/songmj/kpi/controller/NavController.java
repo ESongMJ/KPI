@@ -6,6 +6,7 @@ import cn.songmj.kpi.param.NavParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.NavService;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,7 @@ public class NavController extends BaseController {
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), paramPage);
     }
     @PostMapping("/list")
+    @CrossOrigin
     public Result list(NavParam navParam) {
         List<NavParam> list = navService.list(navParam);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), list);

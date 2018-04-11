@@ -6,10 +6,7 @@ import cn.songmj.kpi.param.RoleParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.RoleService;
 import com.baomidou.mybatisplus.plugins.Page;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,6 +32,7 @@ public class RoleController extends BaseController {
     }
 
     @PostMapping("/list")
+    @CrossOrigin
     public Result list(RoleParam roleParam) {
         List<RoleParam> roles = roleService.list(roleParam);
 
