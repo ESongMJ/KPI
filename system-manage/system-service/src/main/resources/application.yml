@@ -17,7 +17,7 @@ spring:
         connection-timeout: 60000
 #server
 server:
-  port: 9090
+  port: 9100
 #dubbo
 dubbo:
   application:
@@ -26,8 +26,8 @@ dubbo:
     owner: songmj
   #协议配置
   protocol:
-    id: dubbo
-    name: dubbo
+    id: rmi
+    name: rmi
     port: 20880 #替换默认20880端口
   #服务注册配置
   registry:
@@ -46,7 +46,7 @@ management:
       status:
         defaults: memory
         extras: load,threadpool
-  port: 9091
+  port: 9200
 #mybatis-plus
 mybatis-plus:
   #mapper扫描

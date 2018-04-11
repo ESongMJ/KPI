@@ -1,6 +1,7 @@
 package cn.songmj.kpi.param;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -12,7 +13,8 @@ import java.io.Serializable;
  * @author meijie.song
  * @date 2018/4/9
  **/
-@Data
+@Getter
+@Setter
 public class PageParam implements Serializable{
     private Integer currentPage;
 

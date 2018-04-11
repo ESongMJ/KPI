@@ -8,7 +8,7 @@ spring:
     mode: LEGACYHTML5
 #server
 server:
-  port: 8081
+  port: 9300
 #dubbo
 dubbo:
   application:
@@ -21,6 +21,6 @@ dubbo:
     address: zookeeper://localhost:2181
 #dubbo健康监控
 management:
-  port: 9092
+  port: 9400
 #启动日志
 #debug: true
