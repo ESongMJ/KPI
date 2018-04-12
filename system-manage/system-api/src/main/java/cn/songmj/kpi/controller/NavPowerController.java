@@ -2,15 +2,18 @@ package cn.songmj.kpi.controller;
 
 
 import cn.songmj.kpi.enums.StatusCode;
+import cn.songmj.kpi.param.NavParam;
 import cn.songmj.kpi.param.NavPowerParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.NavPowerService;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -43,6 +46,16 @@ public class NavPowerController extends BaseController {
     public Result delete(Long npId) {
         navPowerService.delete(npId);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
+    }
+
+    @PostMapping("/power")
+    @CrossOrigin
+    public Result getPower(Long roleId) {
+        if (roleId == null || roleId == -1L) {
+            return view(StatusCode.FAIL.getCode(), "权限不足");
+        }
+        List<NavParam> navParamList = navPowerService.getPower(roleId);
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), navParamList);
     }
 }
 

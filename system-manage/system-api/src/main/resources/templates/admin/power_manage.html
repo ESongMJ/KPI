@@ -177,7 +177,7 @@
                     }
                 });
             },
-            remove: function (npId) {
+            remove: function (np) {
                 swal({
                     title: "你确定？",
                     text: "您将无法恢复数据！",
@@ -191,7 +191,7 @@
                         type: 'POST',
                         url: '/sys/np/delete',
                         data: {
-                            "npId": npId
+                            "npId": np.npId
                         },
                         success: function (res) {
                             if (res.code === "0") {

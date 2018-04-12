@@ -27,19 +27,4 @@
         a.nav_tips AS navTips,
         b.nav_name AS parentName
     </sql>
-
-    <select id="selectPageParent" parameterType="cn.songmj.kpi.entity.Nav" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM nav
-        LEFT JOIN nav b on a.nav_id=b.nav_parent
-        <where>
-            <if test="#{navName} != null">
-                or nav_name like concat('%', #{navName}, '%')
-            </if>
-            <if test="#{navTips} != null">
-                or nav_tips like concat('%, #{navTips}, '%')
-            </if>
-        </where>
-    </select>
 </mapper>

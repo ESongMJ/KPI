@@ -1,6 +1,7 @@
 package cn.songmj.kpi.service.impl;
 
 import cn.songmj.kpi.facade.NavPowerFacade;
+import cn.songmj.kpi.param.NavParam;
 import cn.songmj.kpi.param.NavPowerParam;
 import cn.songmj.kpi.service.NavPowerService;
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -53,5 +54,10 @@ public class NavPowerServiceImpl implements NavPowerService {
     @Override
     public Integer delete(Long npId) {
         return navPowerFacade.delete(npId);
+    }
+
+    @Override
+    public List<NavParam> getPower(Long roleId) {
+        return navPowerFacade.listNav(roleId);
     }
 }

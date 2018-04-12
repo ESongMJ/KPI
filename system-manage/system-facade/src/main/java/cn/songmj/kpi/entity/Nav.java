@@ -40,7 +40,7 @@ public class Nav extends Model<Nav> implements Serializable {
     @TableField("nav_ico")
     private String navIco;
     /**
-     * 父级版块
+     * 父级版块id
      */
     @TableField("nav_parent")
     private Long navParent;

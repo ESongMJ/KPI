@@ -17,6 +17,7 @@
         <common-uitls.version>1.0.0-SNAPSHOT</common-uitls.version>
         <thymeleaf-layout-dialect.version>2.0.5</thymeleaf-layout-dialect.version>
         <nekohtml.version>1.9.22</nekohtml.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
     </properties>
 
     <dependencies>
@@ -71,7 +72,12 @@
             <artifactId>nekohtml</artifactId>
             <version>${nekohtml.version}</version>
         </dependency>
-
+        <!--验证码-->
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>${kaptcha.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

@@ -41,21 +41,22 @@
                     <thead>
                     <tr>
                         <th style="display: none">编号</th>
-                        <th width="12%">岗位类型</th>
-                        <th width="12%">技术等级</th>
-                        <th width="12%">教学要求</th>
+                        <th width="25%">岗位类型</th>
+                        <th width="20%">技术等级</th>
+                        <th width="20%">教学要求</th>
                         <th width="20%">科研要求</th>
+                        <th width="15%">操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-if="kbrPage.records.length < 1">
+                    <tr v-if="KBRPage.records.length < 1">
                         <td colspan="8" class="text-center">暂时没有数据~</td>
                     </tr>
-                    <tr v-for="kbr in kbrPage.records" :key="kbr.kbrId">
+                    <tr v-for="kbr in KBRPage.records" :key="kbr.kbrId">
                         <td>{{kbr.kbrType}}</td>
-                        <td>{{kbr.kbrLevel}}</td>
-                        <td>{{kbr.kbrTeach}}</td>
-                        <td>{{kbr.kbrResearch}}</td>
+                        <td>{{kbr.kbrLevel}}级</td>
+                        <td>{{kbr.kbrTeach}}分</td>
+                        <td>{{kbr.kbrResearch}}分</td>
                         <td>
                             <button type="button" class="btn btn-info btn-xs" @click="edit(kbr)">
                                 <i class="fa fa-edit">编辑</i>
@@ -162,6 +163,7 @@
                 $.ajax({
                     type: 'POST',
                     url: '/sys/kbr/page',
+                    dataType: "json",
                     data: param,
                     success: function (res) {
                         if (res.code === '0') {
@@ -191,7 +193,7 @@
                         type: 'POST',
                         url: '/sys/kbr/delete',
                         data: {
-                            userId: kbr.kbrId
+                            "kbrId": kbr.kbrId
                         },
                         success: function (res) {
                             if (res.code === "0") {
@@ -229,7 +231,7 @@
                 });
             },
             initParam: function () {
-                this.userParam = {
+                this.KBRParam = {
                     "kbrId": "",
                     "kbrType": "",
                     "kbrLevel": "",
@@ -240,7 +242,7 @@
                 };
             },
             initModal: function () {
-                this.modalUser = {
+                this.modalKBR = {
                     "kbrId": "",
                     "kbrType": "",
                     "kbrLevel": "",

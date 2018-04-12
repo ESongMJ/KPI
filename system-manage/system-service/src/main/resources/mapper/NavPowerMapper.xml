@@ -10,6 +10,26 @@
         <result column="roleName" property="roleName"/>
         <result column="navName" property="navName"/>
     </resultMap>
+    <resultMap id="PowerMap" type="cn.songmj.kpi.entity.Nav">
+        <id column="navId" property="navId"/>
+        <result column="navName" property="navName"/>
+        <result column="navUrl" property="navUrl"/>
+        <result column="navType" property="navType"/>
+        <result column="navIco" property="navIco"/>
+        <result column="navParent" property="navParent"/>
+        <result column="navStatus" property="navStatus"/>
+        <result column="navTips" property="navTips"/>
+    </resultMap>
+    <sql id="Power_SQL_LIST">
+        n.nav_id AS navId,
+        n.nav_name AS navName,
+        n.nav_url AS navUrl,
+        n.nav_type AS navType,
+        n.nav_ico AS navIco,
+        n.nav_parent AS navParent,
+        n.nav_status AS navStatus,
+        n.nav_tips AS navTips
+    </sql>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
@@ -26,5 +46,14 @@
         <if test="roleId != null and roleId != 0">
             WHERE np.role_id = #{roleId}
         </if>
+    </select>
+    <select id="selectPower" parameterType="java.lang.Long" resultMap="PowerMap">
+        select
+        <include refid="Power_SQL_LIST"/>
+        from nav_power np
+        left join nav n on np.nav_id = n.nav_id
+        <where>
+            np.role_id = #{roleId}
+        </where>
     </select>
 </mapper>

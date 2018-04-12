@@ -26,7 +26,11 @@ public enum StatusCode implements Serializable {
     /**
      * 系统错误状态
      */
-    ERROR("2", "内部错误");
+    ERROR("2", "内部错误"),
+    /**
+     * 用户未登录状态
+     */
+    LOGOUT("3", "用户未登录");
 
     @Getter
     @Setter

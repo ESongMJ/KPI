@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>KPI - 登录</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min.css" rel="stylesheet">
+    <link href="../css/login.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
+</head>
+
+<body class="signin">
+<div class="signinpanel" id="app">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="signin-info">
+                <div class="logopanel m-b">
+                    <h1>[ CUIT KPI系统 ]</h1>
+                </div>
+                <div class="m-b"></div>
+                <h4>欢迎使用 <strong>计算机学院KPI系统</strong></h4>
+                <ul class="m-b">
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 后端采用spring-boot+mybatis-plus开发</li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 前端用H+框架做页面布局,vue.js处理请求和数据</li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 整体采用dubbo+zookeeper做集群部署</li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 项目分成多个功能模块开发,采用"热插拔"方式集成在一起</li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 此项目做学习使用,请联系我<a href="#"><i
+                            class="fa fa-qq"></i>1041746117</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <p class="m-t-md">登录到KPI系统</p>
+            <input type="text" class="form-control uname" placeholder="用户名" v-model="userParam.userName" minlength="4" required/>
+            <input type="password" class="form-control pword" placeholder="密码" v-model="userParam.userPassword" minlength="6" required/>
+            <div class="input-group m-b">
+                <input class="form-control uname" type="text" v-model="userParam.code" style="width: 80%" placeholder="验证码" minlength="5" maxlength="5" required/>
+                <span class="input-group-btn">
+                    <img src="/sys/user/verifyCode" onclick="this.src='/sys/user/verifyCode'" style="width: 120px; height: 35px; margin-top: 12px"/>
+                </span>
+            </div>
+            <a href="#">忘记密码了？</a>
+            <button class="btn btn-success btn-block" @click="login()">登录</button>
+        </div>
+    </div>
+    <div class="signup-footer">
+        <div class="pull-left">
+            &copy; 2017 for <a href="https://github.com/ESongMJ" target="_blank"><i class="fa fa-github"></i>ESongMJ</a>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../../js/jquery.min63b9.js?v=2.1.4"></script>
+<script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            userParam: {
+                "userName": "admin",
+                "userPassword": "123456",
+                "code": ""
+            }
+        },
+        methods: {
+            login: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/user/login",
+                    data: this.userParam,
+                    success: function (res) {
+                        if (res.code === "0") {
+                            window.location.href = "/index";
+                        } else if (res.code === "1") {
+                            swal(res.msg, "请重新输入", "warning");
+                            vm.userParam.userPassword = "";
+                            vm.userParam.code = "";
+                        }
+                    }
+                });
+            },
+            forgetPwd: function () {
+                swal("暂未开放此功能", "敬请期待~", "info");
+            }
+        }
+    });
+</script>
+</html>

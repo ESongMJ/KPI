@@ -1,5 +1,7 @@
 package cn.songmj.kpi.param;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +18,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 public class KpiBasicRequireParam extends PageParam implements Serializable {
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long kbrId;
     /**
      * 岗位类型

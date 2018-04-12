@@ -7,7 +7,6 @@
  * Under MIT License
  */
 ;(function($, window, document, undefined) {
-
     var pluginName = "metisMenu",
         defaults = {
             toggle: true,

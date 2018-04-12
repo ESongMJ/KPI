@@ -66,7 +66,11 @@
                                 <span v-if="role.roleId == user.roleId">{{role.roleName}}</span>
                             </span>
                         </td>
-                        <td>{{user.kbrId}}</td>
+                        <td>
+                            <span v-for="kbr in kbrList">
+                                <span v-if="kbr.kbrId == user.kbrId">{{kbr.kbrType}},{{kbr.kbrLevel}}级</span>
+                            </span>
+                        </td>
                         <td>
                             <button type="button" class="btn btn-info btn-xs" @click="edit(user)">
                                 <i class="fa fa-edit">编辑</i>
@@ -154,7 +158,7 @@
                             <td align="right" height="40px"> 岗位等级:</td>
                             <td>
                                 <select class="form-control m-l-md" style="width: 420px" v-model="modalUser.kbrId">
-                                    <option :value="kbr.kbrList" v-for="kbr in kbrList">123</option>
+                                    <option :value="kbr.kbrId" v-for="kbr in kbrList">{{kbr.kbrType}},{{kbr.kbrLevel}}级</option>
                                 </select>
                             </td>
                         </tr>
@@ -272,6 +276,20 @@
                     }
                 });
             },
+            listKBR: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/kbr/list",
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.kbrList = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", e.msg, "error");
+                    }
+                });
+            },
             edit: function (user) {
                 this.modalUser = user;
                 $('#userModal').modal('show');
@@ -320,6 +338,8 @@
                             //刷新页面
                             vm.initParam();
                             vm.page(vm.userParam);
+                        } else if (res.code === "1") {
+                            swal(res.msg, "请重新输入", "warning");
                         }
                     },
                     error: function () {
@@ -369,6 +389,7 @@
         created: function () {
             this.page(this.userParam);
             this.listRole();
+            this.listKBR();
         }
     });
 </script>

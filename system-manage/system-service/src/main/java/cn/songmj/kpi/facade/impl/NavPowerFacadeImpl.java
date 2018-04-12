@@ -1,8 +1,10 @@
 package cn.songmj.kpi.facade.impl;
 
+import cn.songmj.kpi.entity.Nav;
 import cn.songmj.kpi.entity.NavPower;
 import cn.songmj.kpi.facade.NavPowerFacade;
 import cn.songmj.kpi.mapper.NavPowerMapper;
+import cn.songmj.kpi.param.NavParam;
 import cn.songmj.kpi.param.NavPowerParam;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -81,5 +83,15 @@ public class NavPowerFacadeImpl extends ServiceImpl<NavPowerMapper, NavPower> im
     @Override
     public Integer delete(Long npId) {
         return baseMapper.deleteById(npId);
+    }
+
+    @Override
+    public List<NavParam> listNav(Long roleId) {
+        List<Nav> navList = baseMapper.selectPower(roleId);
+        return navList.stream().map(nav -> {
+            NavParam navParam = new NavParam();
+            BeanUtils.copyProperties(nav, navParam);
+            return navParam;
+        }).collect(Collectors.toList());
     }
 }

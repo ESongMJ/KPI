@@ -1,6 +1,7 @@
 package cn.songmj.kpi.facade;
 
 import cn.songmj.kpi.entity.NavPower;
+import cn.songmj.kpi.param.NavParam;
 import cn.songmj.kpi.param.NavPowerParam;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
@@ -9,7 +10,7 @@ import java.util.List;
 
 /**
  * <p>
- *  版块权限接口
+ * 版块权限接口
  * </p>
  *
  * @author meijie.song
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public interface NavPowerFacade extends IService<NavPower> {
     /**
-     * 分页获取角色列表
+     * 分页获取权限列表
      *
      * @param navPowerParam
      * @return
@@ -26,10 +27,12 @@ public interface NavPowerFacade extends IService<NavPower> {
 
     /**
      * 查询指定数据
+     *
      * @param navPowerParam
      * @return
      */
     List<NavPowerParam> list(NavPowerParam navPowerParam);
+
     /**
      * 增加角色
      *
@@ -53,5 +56,13 @@ public interface NavPowerFacade extends IService<NavPower> {
      * @return
      */
     Integer delete(Long npId);
+
+    /**
+     * 获取权限列表
+     *
+     * @param roleId
+     * @return
+     */
+    List<NavParam> listNav(Long roleId);
 
 }

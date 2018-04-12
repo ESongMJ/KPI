@@ -1,11 +1,15 @@
 package cn.songmj.kpi.service;
 
+import cn.songmj.kpi.entity.NavPower;
+import cn.songmj.kpi.param.NavParam;
 import cn.songmj.kpi.param.NavPowerParam;
 import com.baomidou.mybatisplus.plugins.Page;
 
+import java.util.List;
+
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author songmj123
@@ -22,14 +26,17 @@ public interface NavPowerService {
 
     /**
      * 验证保存数据的唯一性
+     *
      * @param navPowerParam
      * @return 1.true 重复  2.false 没重复
      */
     boolean checkRepeat(NavPowerParam navPowerParam);
+
     /**
      * 保存版块
      * 1.当npId不为null或者-1时调用插入接口
      * 2.反之调用更新接口
+     *
      * @param navPowerParam
      * @return
      */
@@ -42,4 +49,12 @@ public interface NavPowerService {
      * @return
      */
     Integer delete(Long npId);
+
+    /**
+     * 根绝角色获取权限列表
+     *
+     * @param roleId
+     * @return
+     */
+    List<NavParam> getPower(Long roleId);
 }
