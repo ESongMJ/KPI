@@ -76,7 +76,7 @@
                     data: this.userParam,
                     success: function (res) {
                         if (res.code === "0") {
-                            window.location.href = "/index";
+                            window.location.href = "/";
                         } else if (res.code === "1") {
                             swal(res.msg, "请重新输入", "warning");
                             vm.userParam.userPassword = "";

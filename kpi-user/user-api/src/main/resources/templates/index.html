@@ -16,6 +16,7 @@
     <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="../css/animate.min.css" rel="stylesheet">
     <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/metismenu/dist/metisMenu.min.css">
     <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
 </head>
 
@@ -26,53 +27,8 @@
         <div class="nav-close"><i class="fa fa-times-circle"></i>
         </div>
         <div class="sidebar-collapse">
-            <ul class="nav" id="side-menu">
-                <li class='nav-header'>
-                    <div class='dropdown profile-element'><span><img alt='image' class='img-circle' src='../img/profile_small.jpg'/></span><a
-                            data-toggle='dropdown' class='dropdown-toggle' href='#'><span class='clear'><span
-                            class='block m-t-xs'><strong class='font-bold'>CUIT - KPI</strong></span><span
-                            class='text-muted text-xs block'>超级管理员<b class='caret'></b></span></span></a>
-                        <ul class='dropdown-menu animated fadeInRight m-t-xs'>
-                            <li><a class='J_menuItem' href='../form_avatar.html'>修改头像</a></li>
-                            <li><a class='J_menuItem' href='../profile.html'>个人资料</a></li>
-                            <li><a class='J_menuItem' href='mailbox.html'>信箱</a></li>
-                            <li class='divider'></li>
-                            <li><a href='../login.html'>安全退出</a></li>
-                        </ul>
-                    </div>
-                    <div class='logo-element'>KPI</div>
-                </li>
-                <li><a class='J_menuItem' href='profile.html'><i class='fa fa-user'></i> <span
-                        class='nav-label'>个人中心</span></a></li>
-                <li><a class='J_menuItem' href=' '><span class='nav-label'>个人中心</span></a></li>
-                <li><a class='J_menuItem' href='null'><span class='nav-label'>教学绩效</span></a></li>
-                <li><a class='J_menuItem' href='null'><span class='nav-label'>科研绩效</span></a></li>
-                <li><a href='#'><span class='nav-label'>站内信</span><span class='fa arrow'></span></a>
-                    <ul class='nav nav-second-level'>
-                        <li><a class='J_menuItem' href='null'><span class='nav-label'>写信</span></a></li>
-                        <li><a class='J_menuItem' href='null'><span class='nav-label'>收件箱</span></a></li>
-                    </ul>
-                </li>
-                <li><a href='#'><span class='nav-label'>信息管理</span><span class='fa arrow'></span></a>
-                    <ul class='nav nav-second-level'>
-                        <li><a class='J_menuItem' href='null'><span class='nav-label'>用户管理</span></a></li>
-                        <li><a href='#'><span class='nav-label'>绩效管理</span><span class='fa arrow'></span></a>
-                            <ul class='nav nav-third-level'>
-                                <li><a class='J_menuItem' href='null'><span class='nav-label'>类别管理</span></a></li>
-                                <li><a class='J_menuItem' href='null'><span class='nav-label'>内容管理</span></a></li>
-                                <li><a class='J_menuItem' href='null'><span class='nav-label'>审核管理</span></a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li><a class='J_menuItem' href='null'><span class='nav-label'>站内信管理</span></a></li>
-                <li><a href='#'><span class='nav-label'>系统管理</span><span class='fa arrow'></span></a>
-                    <ul class='nav nav-second-level'>
-                        <li><a class='J_menuItem' href='null'><span class='nav-label'>版块管理</span></a></li>
-                        <li><a class='J_menuItem' href='null'><span class='nav-label'>角色管理</span></a></li>
-                        <li><a class='J_menuItem' href='null'><span class='nav-label'>权限管理</span></a></li>
-                    </ul>
-                </li>
+            <ul class="nav metismenu" id="side-menu">
+
             </ul>
         </div>
     </nav>
@@ -276,7 +232,6 @@
 </div>
 <script src="../js/jquery.min63b9.js?v=2.1.4"></script>
 <script src="../js/bootstrap.min14ed.js?v=3.3.6"></script>
-<script src="../js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="../js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="../js/plugins/layer/layer.min.js"></script>
 <script src="../js/hplus.min862f.js?v=4.1.0"></script>
@@ -284,6 +239,7 @@
 <script src="../js/plugins/pace/pace.min.js"></script>
 <script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/metismenu"></script>
 </body>
 <script>
     var vm = new Vue({
@@ -311,6 +267,7 @@
              * @param roleId
              */
             getPower: function (roleId) {
+                var $this = $(this);
                 $.ajax({
                     type: "POST",
                     url: "http://127.0.0.1:9300/sys/np/power",
@@ -320,6 +277,7 @@
                     success: function (res) {
                         if (res.code === "0") {
                             vm.navList = res.dataList;
+                            $('#side-menu').metisMenu('dispose');
                             vm.powerNavLi = "<li class='nav-header'>" +
                                 "<div class='dropdown profile-element'>" +
                                 "<span><img alt='image' class='img-circle' src='../img/profile_small.jpg'/></span>" +
@@ -348,7 +306,9 @@
                                 "<a class='J_menuItem' href='profile.html'><i class='fa fa-user'></i> <span\n" +
                                 "class='nav-label'>个人中心</span></a>" +
                                 "</li>" + vm.createMenu(vm.navList, 0, 2);
-                            console.log(vm.powerNavLi);
+                            $("#side-menu").append(vm.powerNavLi);
+                            $('#side-menu').metisMenu();
+                            $this.attr('disabled', 'disabled');
                         } else if (res.code === "1") {
                             swal("权限未分配", "请联系管理员\r\nQQ:1041746114", "error");
                         }
@@ -371,7 +331,7 @@
                             }
                             tmp += "<span class='nav-label'>" + nav.navName + "</span></a></li>";
                         } else {
-                            tmp += "<li><a href='#'>";
+                            tmp += "<li><a href='#' data-toggle='collapse'>";
                             if (nav.navIco != null) {
                                 tmp += "<i class='fa " + nav.navIco + "'></i>";
                             }
@@ -379,9 +339,9 @@
                             tmp += "<span class='fa arrow'></span>"
                             tmp += "</a>";
                             if (count === 2) {
-                                tmp += "<ul class='nav nav-second-level'>";
+                                tmp += "<ul class='nav nav-second-level' id='"+nav.navId+"'>";
                             } else if (count === 3) {
-                                tmp += "<ul class='nav nav-third-level'>";
+                                tmp += "<ul class='nav nav-third-level' id='"+nav.navId+"'>";
                             }
                             tmp += this.createMenu(param, nav.navId, count + 1);
                             tmp += "</ul></li>";
