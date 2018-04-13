@@ -73,6 +73,8 @@ public class User extends Model<User> implements Serializable {
      */
     @TableField("role_id")
     private Long roleId;
+    @TableField(exist = false)
+    private String roleName;
     /**
      * 岗位
      */

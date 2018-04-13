@@ -39,13 +39,14 @@
                     <thead>
                     <tr>
                         <th width="8%" style="display: none">编号</th>
-                        <th width="12%">名称</th>
-                        <th width="12%">URL</th>
-                        <th width="12%">类型</th>
+                        <th width="10%">名称</th>
+                        <th width="28%">URL</th>
+                        <th width="8%">Ico(图标)</th>
+                        <th width="8%">类型</th>
                         <th width="12%">父级</th>
-                        <th width="12%">状态</th>
+                        <th width="6%">状态</th>
                         <th width="20%">备注</th>
-                        <th width="16%">操作</th>
+                        <th width="8%">操作</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -56,6 +57,7 @@
                         <td style="display: none">{{nav.navId}}</td>
                         <td>{{nav.navName}}</td>
                         <td>{{nav.navUrl}}</td>
+                        <td><i :class="'fa ' + nav.navIco"></i></td>
                         <td>
                             <span v-if="nav.navType === false">标题</span>
                             <span v-if="nav.navType === true">导向</span>
@@ -128,6 +130,11 @@
                             <td align="right" height="40px"> URL:</td>
                             <td><input type="text" class="form-control m-l-md" style="width: 420px"
                                        v-model="modalNav.navUrl"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> Ico:</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalNav.navIco"/></td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 类型:</td>
@@ -315,6 +322,7 @@
             },
             reset: function () {
                 this.initParam();
+                this.initPage();
                 this.searchField = "";
                 this.page(this.navParam);
             },
@@ -336,18 +344,18 @@
                 this.page(this.navParam);
             },
             initParam: function () {
-                this.navParam = {
-                    "navId": "",
-                    "navName": "",
-                    "navUrl": "",
-                    "navType": "",
-                    "navIco": "",
-                    "navParent": "",
-                    "navStatus": "",
-                    "navTips": "",
-                    "pageSize": 10,
-                    "currentPage": 1
-                };
+                this.navParam.navId = "";
+                this.navParam.navName = "";
+                this.navParam.navUrl = "";
+                this.navParam.navType = "";
+                this.navParam.navIco = "";
+                this.navParam.navParent = "";
+                this.navParam.navStatus = "";
+                this.navParam.navTips = "";
+            },
+            initPage: function() {
+                this.navParam.pageSize = 10;
+                this.navParam.currentPage = 1;
             },
             initModal: function () {
                 this.modalNav = {

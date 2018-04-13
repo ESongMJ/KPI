@@ -49,4 +49,9 @@ public class RoleServiceImpl implements RoleService {
     public Integer delete(Long roleId) {
         return roleFacade.delete(roleId);
     }
+
+    @Override
+    public RoleParam selectById(Long roleId) {
+        return roleFacade.selectById(roleId);
+    }
 }

@@ -73,7 +73,13 @@
             <artifactId>nekohtml</artifactId>
             <version>${nekohtml.version}</version>
         </dependency>
-
+         <!--热部署工具-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+            <!--<optional>true</optional>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
     </dependencies>
     <build>
         <plugins>

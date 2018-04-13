@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * <p>
- *  角色接口
+ * 角色接口
  * </p>
  *
  * @author meijie.song
@@ -28,10 +28,12 @@ public interface RoleFacade extends IService<Role> {
 
     /**
      * 列表查询
+     *
      * @param roleParam
      * @return
      */
     List<RoleParam> list(RoleParam roleParam);
+
     /**
      * 增加角色
      *
@@ -55,4 +57,12 @@ public interface RoleFacade extends IService<Role> {
      * @return
      */
     Integer delete(Long roleId);
+
+    /**
+     * 根据id查找角色
+     *
+     * @param roleId
+     * @return
+     */
+    RoleParam selectById(Long roleId);
 }

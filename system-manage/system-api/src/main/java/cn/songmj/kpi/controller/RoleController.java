@@ -57,5 +57,12 @@ public class RoleController extends BaseController {
 
         return view(StatusCode.SUCCESS.getCode(),StatusCode.SUCCESS.getMsg());
     }
+    @PostMapping("/get/one")
+    @CrossOrigin
+    public Result getRole(Long roleId) {
+        RoleParam roleParam = roleService.selectById(roleId);
+
+        return view(StatusCode.SUCCESS.getCode(),StatusCode.SUCCESS.getMsg(), roleParam);
+    }
 }
 

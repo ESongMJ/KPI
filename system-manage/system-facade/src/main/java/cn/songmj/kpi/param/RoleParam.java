@@ -16,6 +16,7 @@ import java.io.Serializable;
  **/
 @Data
 public class RoleParam extends PageParam implements Serializable {
+    private static final long serialVersionUID = 1L;
     @JsonSerialize(using = ToStringSerializer.class)
     private Long roleId;
     private String roleName;

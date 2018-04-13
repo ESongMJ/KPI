@@ -54,4 +54,11 @@ public interface RoleService {
      * @return
      */
     Integer delete(Long roleId);
+
+    /**
+     * 根据id查找角色
+     * @param roleId
+     * @return
+     */
+    RoleParam selectById(Long roleId);
 }

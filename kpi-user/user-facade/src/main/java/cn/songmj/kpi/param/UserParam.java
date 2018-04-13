@@ -57,6 +57,7 @@ public class UserParam extends PageParam implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long roleId;
+    private String roleName;
     /**
      * 岗位基本要求
      */

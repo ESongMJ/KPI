@@ -91,4 +91,12 @@ public class RoleFacadeImpl extends ServiceImpl<RoleMapper, Role> implements Rol
     public Integer delete(Long roleId) {
         return baseMapper.deleteById(roleId);
     }
+
+    @Override
+    public RoleParam selectById(Long roleId) {
+        Role role = baseMapper.selectById(roleId);
+        RoleParam roleParam = new RoleParam();
+        BeanUtils.copyProperties(role, roleParam);
+        return roleParam;
+    }
 }
