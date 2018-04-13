@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order-Manager</title>
+    <link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="../css/plugins/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link href="../css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
+
+</head>
+<body class="gray-bg">
+<div class="ibox float-e-margins animated fadeInRight" id="app">
+    <div class="ibox-title">
+        <h5>科研绩效申请</h5>
+    </div>
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-2 m-l-sm pull-left">
+                <select class="form-control input-sm" style="font-size: 13px">
+                    <option value="0">--选择年度--</option>
+                    <option value="1">2013-2014年度</option>
+                    <option value="2">2014-2015年度</option>
+                    <option value="3">2015-2016年度</option>
+                    <option value="4">2016-2017年度</option>
+                </select>
+            </div>
+            <div class="col-sm-3 pull-right">
+                <div class="input-group">
+                    <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th width="16%">编号</th>
+                    <th width="20%">年度</th>
+                    <th width="44%">名称</th>
+                    <th width="10%">状态</th>
+                    <th width="10%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2016-2017年度</td>
+                    <td>xxxxxxx教学科研申请</td>
+                    <td>
+                        <span class="label label-primary">进行中</span>
+                    </td>
+                    <td>
+                        <a href="kpi_list.html?type=research&id=12312424" class="btn btn-info btn-xs">
+                            <i class="fa fa-edit">申请</i>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2014-2015年度</td>
+                    <td>xxxxxxx教学科研申请</td>
+                    <td>
+                        <span class="label label-default">已结束</span>
+                    </td>
+                    <td>
+                        <a href="kpi_detail.html?id=124124" class="btn btn-info btn-xs">
+                            <i class="fa fa-edit">查看</i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.min63b9.js?v=2.1.4"></script>
+<script src="../js/bootstrap.min14ed.js?v=3.3.6"></script>
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+<script src="../js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var vm;
+    vm = new Vue({
+        "el": "#app",
+        "data": {
+            "searchField": ""
+        },
+        methods: {
+            search: function () {
+
+            },
+            list: function (param) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/list',
+                    contentType: "application/json",
+                    data: JSON.stringify(param),
+                    success: function (res) {
+                        if (res.code === '0') {
+                            vm.users = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("请求异常", "You clicked the button!", "warning")
+                    }
+                });
+            },
+            remove: function (user) {
+                swal({
+                    title: "你确定？",
+                    text: "您将无法恢复数据！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "是的，删除！",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/delete',
+                        data: {
+                            userId: user.userId
+                        },
+                        success: function (res) {
+                            if (res.code === "0") {
+                                swal("删除成功","","success");
+                                vm.initList();
+                            }
+                        },
+                        error: function (e) {
+                            swal("系统错误",e,"error");
+                        }
+                    });
+                })
+            },
+            initList: function () {
+                this.list({
+
+                });
+            }
+        },
+        created: function () {
+            // this.initList();
+        }
+    });
+</script>
+</body>
+</html>

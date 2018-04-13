@@ -1,0 +1,26 @@
+#spring
+spring:
+  application:
+    name: kpi-sys-consumer
+  thymeleaf:
+    suffix: .html
+    cache: false
+    mode: LEGACYHTML5
+#server
+server:
+  port: 9302
+#dubbo
+dubbo:
+  application:
+    id: kpi-sys-consumer
+    name: kpi-sys-consumer
+    owner: songmj
+#服务注册配置
+  registry:
+    id: kpi-dubbo
+    address: zookeeper://localhost:2181
+#dubbo健康监控
+management:
+  port: 9402
+#启动日志
+#debug: true

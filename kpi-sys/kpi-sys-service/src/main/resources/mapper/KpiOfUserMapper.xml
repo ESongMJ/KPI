@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.songmj.kpi.mapper.KpiOfUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.KpiOfUser">
+        <id column="ku_id" property="kuId" />
+        <result column="user_id" property="userId" />
+        <result column="kf_id" property="kfId" />
+        <result column="ku_status" property="kuStatus" />
+        <result column="ku_finish_date" property="kuFinishDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ku_id AS kuId, user_id AS userId, kf_id AS kfId, ku_status AS kuStatus, ku_finish_date AS kuFinishDate
+    </sql>
+
+</mapper>

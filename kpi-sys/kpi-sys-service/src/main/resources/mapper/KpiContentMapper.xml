@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.songmj.kpi.mapper.KpiContentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.KpiContent">
+        <id column="kcId" property="kcId" />
+        <result column="kcName" property="kcName" />
+        <result column="kcDescription" property="kcDescription" />
+        <result column="kcStandard" property="kcStandard" />
+        <result column="kpId" property="kpId" />
+        <result column="kpName" property="kpName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        kc.kc_id AS kcId,
+        kc.kc_name AS kcName,
+        kc.kc_description AS kcDescription,
+        kc.kc_standar AS kcStandard,
+        kc.kp_id AS kpId,
+        kp.kp_name AS kpName
+    </sql>
+
+    <select id="selectJoinPage" parameterType="cn.songmj.kpi.entity.KpiContent" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from kpi_content kc
+        left join kpi_point kp on kc.kp_id = kp.kp_id
+        <where>
+            <if test="kcName != null">
+                or kc.kc_name like conact('%', kcName, '%')
+            </if>
+            <if test="kcDescription != null">
+                or kc.kc_description like conact('%', kcDescription, '%')
+            </if>
+            <if test="kcStandard != null">
+                or kc.kc_standard like conact('%', kcStandard, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

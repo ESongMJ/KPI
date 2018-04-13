@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order-Manager</title>
+    <link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="../css/plugins/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link href="../css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
+
+</head>
+<body class="gray-bg">
+<div class="ibox float-e-margins animated fadeInRight" id="app">
+    <div class="ibox-title">
+        <h5>2014-2015年度xxx绩效申请详情</h5>
+        <a href="kpi_teach.html" class="label label-default pull-right m-r-xs">
+            <i class="fa fa-mail-reply">返回</i>
+        </a>
+    </div>
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-2 m-l-sm pull-left">
+                <select class="form-control input-sm" style="font-size: 13px">
+                    <option value="0">--选择类型--</option>
+                    <option value="1">类型1</option>
+                    <option value="2">类型2</option>
+                    <option value="3">类型3</option>
+                    <option value="4">类型4</option>
+                </select>
+            </div>
+            <div class="col-sm-3 pull-right">
+                <div class="input-group">
+                    <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th width="12%">编号</th>
+                    <th width="10%">类型</th>
+                    <th width="20%">KPI指标</th>
+                    <th width="30%">申请理由</th>
+                    <th width="8%">绩效分</th>
+                    <th width="10%">状态</th>
+                    <th width="10%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>个人</td>
+                    <td>xxx教学</td>
+                    <td>在xx月完成了xx教学目标</td>
+                    <td>10</td>
+                    <td>
+                        <span class="label label-primary">申请通过</span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs" @click="modal()">
+                            <i class="fa fa-edit">查看</i>
+                        </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>团体</td>
+                    <td>xxx教学</td>
+                    <td>在xx月完成了xx教学目标</td>
+                    <td>20</td>
+                    <td>
+                        <span class="label label-danger">申请驳回</span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info btn-xs" @click="modal()">
+                            <i class="fa fa-edit">查看</i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="kpiModal">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span
+                        aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="modalTitle">绩效申请</h4>
+            </div>
+            <div class="modal-body">
+                <table style="font-size: 14px">
+                    <tr>
+                        <td align="right" height="40px" width="60px"> 编号:</td>
+                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" height="40px"> KPI类型:</td>
+                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right" height="40px"> KPI指标:</td>
+                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right" height="40px"> KPI描述:</td>
+                        <td>
+                                <textarea class="form-control m-l-md" disabled style="width: 420px" cols="30"
+                                          rows="3"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <hr/>
+                <table style="font-size: 14px">
+                    <tr>
+                        <td align="right" height="40px" width="60px"> 申请人:</td>
+                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right" height="40px"> 申请分数:</td>
+                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right" height="40px"> 受益人:</td>
+                        <td>
+                            <ul>
+                                <li><span class="font-bold">张三</span> 5 分</li>
+                                <li><span class="font-bold">Admin</span> 10 分</li>
+                                <li><span class="font-bold">李四</span> 5 分</li>
+                                <li><span class="font-bold">王麻子</span> 5 分</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" height="40px"> 申请理由:</td>
+                        <td>
+                                <textarea disabled class="form-control m-l-md" style="width: 420px" cols="30"
+                                          rows="3"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <hr/>
+                <table style="font-size: 14px">
+                    <tr>
+                        <td align="right" height="40px" width="60px"> 审核结果:</td>
+                        <td>
+                            <div class="m-l-md" style="width: 420px">
+                                <span class="label label-primary">通过</span>
+                                <span class="label label-danger">驳回</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" height="40px"> 审核意见:</td>
+                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" @click="save()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min63b9.js?v=2.1.4"></script>
+<script src="../js/bootstrap.min14ed.js?v=3.3.6"></script>
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+<script src="../js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    var vm;
+    vm = new Vue({
+        "el": "#app",
+        "data": {
+            "searchField": ""
+        },
+        methods: {
+            modal: function () {
+                $("#kpiModal").modal('show');
+            },
+            search: function () {
+
+            },
+            list: function (param) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/list',
+                    contentType: "application/json",
+                    data: JSON.stringify(param),
+                    success: function (res) {
+                        if (res.code === '0') {
+                            vm.users = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("请求异常", "You clicked the button!", "warning")
+                    }
+                });
+            },
+            remove: function (user) {
+                swal({
+                    title: "你确定？",
+                    text: "您将无法恢复数据！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "是的，删除！",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/user/delete',
+                        data: {
+                            userId: user.userId
+                        },
+                        success: function (res) {
+                            if (res.code === "0") {
+                                swal("删除成功", "", "success");
+                                vm.initList();
+                            }
+                        },
+                        error: function (e) {
+                            swal("系统错误", e, "error");
+                        }
+                    });
+                })
+            },
+            initList: function () {
+                this.list({});
+            }
+        },
+        created: function () {
+            // this.initList();
+        }
+    });
+</script>
+</body>
+</html>
