@@ -16,4 +16,10 @@
         ku_id AS kuId, user_id AS userId, kf_id AS kfId, ku_status AS kuStatus, ku_finish_date AS kuFinishDate
     </sql>
 
+    <insert id="insertBatch">
+        insert into kpi_of_user(ku_id, user_id, kf_id, ku_status, ku_finish_date) values
+        <foreach collection="list" item="ku" separator=",">
+            (#{ku.kuId}, #{ku.userId},#{ku.kfId},#{ku.kuStatus},#{ku.kuFinishDate})
+        </foreach>
+    </insert>
 </mapper>

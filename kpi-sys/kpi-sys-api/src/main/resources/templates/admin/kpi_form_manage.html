@@ -16,7 +16,7 @@
 <section id="app">
     <div class="ibox float-e-margins animated fadeInRight">
         <div class="ibox-title">
-            <h5>KPI-内容管理</h5>
+            <h5>KPI-表单管理</h5>
         </div>
         <div class="ibox-content">
             <div class="row">
@@ -41,27 +41,28 @@
                     <thead>
                     <tr>
                         <th width="8%" style="display: none">编号</th>
-                        <th width="20%">KPI名</th>
-                        <th width="16%">类别</th>
-                        <th width="12%">标准</th>
-                        <th width="36%">描述</th>
+                        <th width="40%">表单名称</th>
+                        <th width="20%">开始时间</th>
+                        <th width="20%">结束时间</th>
                         <th width="16%">操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-if="kcPage.records.length < 1">
+                    <tr v-if="kfPage.records.length < 1">
                         <td colspan="5" class="text-center">没有此类数据~</td>
                     </tr>
-                    <tr v-for="kc in kcPage.records" :key="kc.kcId">
-                        <td>{{kc.kcName}}</td>
-                        <td>{{kc.kpName}}</td>
-                        <td>{{kc.kcStandard}}</td>
-                        <td>{{kc.kcDescription}}</td>
+                    <tr v-for="kf in kfPage.records" :key="kf.kfId">
+                        <td>{{kf.kfName}}</td>
+                        <td>{{kf.kfBeginDate}}</td>
+                        <td>{{kf.kfEndDate}}</td>
                         <td>
-                            <button type="button" class="btn btn-info btn-xs" @click="edit(kc)">
+                            <button type="button" class="btn btn-info btn-xs" @click="getUids(kf)">
+                                <i class="fa fa-send">分发</i>
+                            </button>
+                            <button type="button" class="btn btn-info btn-xs" @click="edit(kf)">
                                 <i class="fa fa-edit">编辑</i>
                             </button>
-                            <button type="button" class="btn btn-danger btn-xs" @click="remove(kc)">
+                            <button type="button" class="btn btn-danger btn-xs" @click="remove(kf)">
                                 <i class="fa fa-trash">删除</i>
                             </button>
                         </td>
@@ -77,16 +78,16 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="btn-group" style="float: right">
-                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(kcPage.current-1)">上一页
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(kfPage.current-1)">上一页
                         </button>
-                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(kcPage.current+1)">下一页
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(kfPage.current+1)">下一页
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="kcModal">
+    <div class="modal fade" id="kfModal">
         <div class="modal-dialog">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
@@ -100,34 +101,26 @@
                         <tr>
                             <td align="right" height="40px"> 编号:</td>
                             <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
-                                       v-model="modalKc.kcId"/>
+                                       v-model="modalKf.kfId"/>
                             </td>
                         </tr>
                         <tr>
-                            <td align="right" height="40px"> 名称:</td>
+                            <td align="right" height="40px"> 表单名称:</td>
                             <td><input type="text" class="form-control m-l-md" style="width: 420px"
-                                       v-model="modalKc.kcName"/></td>
+                                       v-model="modalKf.kfName"/></td>
                         </tr>
                         <tr>
-                            <td align="right" height="40px"> 观测点:</td>
-                            <td>
-                                <select class="form-control m-l-md" style="width: 420px" v-model="modalKc.kpId">
-                                    <option v-for="kp in kpList" :value="kp.kpId">{{kp.kpName}}</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right" height="40px"> 标准:</td>
+                            <td align="right" height="40px"> 开始时间:</td>
                             <td>
                                 <input type="text" class="form-control m-l-md" style="width: 420px"
-                                       v-model="modalKc.kcStandard"/>
+                                       v-model="modalKf.kfBeginDate"/>
                             </td>
                         </tr>
                         <tr>
-                            <td align="right" height="40px"> 描述:</td>
+                            <td align="right" height="40px"> 结束时间:</td>
                             <td>
-                                    <textarea class="form-control m-l-md" style="width: 420px" cols="30" rows="3"
-                                              v-model="modalKc.kcDescription"></textarea>
+                                <input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKf.kfEndDate"/>
                             </td>
                         </tr>
                     </table>
@@ -151,25 +144,20 @@
     vm = new Vue({
         el: "#app",
         data: {
-            kcPage: [],
-            kpList: [],
-            kcParam: {
-                "kcId": "",
-                "kcName": "",
-                "kcDescription": "",
-                "kcStandard": "",
-                "kpId": "",
-                "kpName": "",
+            kfPage: [],
+            kfParam: {
+                "kfId": "",
+                "kfName": "",
+                "kfBeginDate": "",
+                "kfEndDate": "",
                 "pageSize": 10,
                 "currentPage": 1
             },
-            modalKc: {
-                "kcId": "",
-                "kcName": "",
-                "kcDescription": "",
-                "kcStandard": "",
-                "kpId": "",
-                "kpName": ""
+            modalKf: {
+                "kfId": "",
+                "kfName": "",
+                "kfBeginDate": "",
+                "kfEndDate": ""
             },
             searchField: "",
             pageInfo: {
@@ -182,23 +170,21 @@
         methods: {
             modal: function () {
                 this.initModal();
-                this.modalKc.kcId = "自动生成";
-                $('#kcModal').modal('show');
+                this.modalKf.kfId = "自动生成";
+                $('#kfModal').modal('show');
             },
             search: function () {
-                this.kcParam.kcName = this.searchField;
-                this.kcParam.kcDescription = this.searchField;
-                this.kcParam.kcStandard = this.searchField;
-                this.page(this.kcParam);
+                this.kfParam.kfName = this.searchField;
+                this.page(this.kfParam);
             },
             page: function (param) {
                 $.ajax({
                     type: 'POST',
-                    url: '/sys/kc/page',
+                    url: '/sys/kf/page',
                     data: param,
                     success: function (res) {
                         if (res.code === '0') {
-                            vm.kcPage = res.pageData;
+                            vm.kfPage = res.pageData;
                             vm.computePage();
                         }
                     },
@@ -207,31 +193,69 @@
                     }
                 });
             },
-            listKp: function () {
+            getUids: function(kf) {
+                // 初始化参数
+                // 以备后续开发定向分发
+                var param = {
+                    "userId": "",
+                    "userName": "",
+                    "userNumber": "",
+                    "userPassword": "",
+                    "userSex": "",
+                    "userAge": "",
+                    "userBirthday": "",
+                    "userIntroduce": "",
+                    "userImg": "",
+                    "userCollege": "",
+                    "userRO": "",
+                    "userProTitle": "",
+                    "roleId": "",
+                    "kbrId": ""
+                };
                 $.ajax({
-                    type: 'POST',
-                    url: '/sys/kp/list',
-                    data: {
-                        "kpId": "",
-                        "kpName": "",
-                        "kpDescription": "",
-                        "kpType": ""
-                    },
+                    type: "POST",
+                    url: "http://127.0.0.1:9301/sys/user/uid/list",
+                    param: param,
                     success: function (res) {
-                        if (res.code === '0') {
-                            vm.kpList = res.dataList;
+                        if (res.code === "0") {
+                            vm.send(kf,res.dataList);
                         }
-                    },
-                    error: function (e) {
-                        swal("请求异常", "You clicked the button!", "warning")
                     }
                 });
             },
-            edit: function (kc) {
-                this.modalKc = kc;
-                $('#kcModal').modal('show');
+            send: function (kf,uids) {
+                swal({
+                    title: "你确定？",
+                    text: "您将把<"+kf.kfName+">表单分发给所有用户！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "是的",
+                    closeOnConfirm: false
+                }, function () {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/sys/ku/send',
+                        data: {
+                            "kfId": kf.kfId,
+                            "uids": uids
+                        },
+                        success: function (res) {
+                            if (res.code === "0") {
+                                swal("分发成功表单", "", "success");
+                            }
+                        },
+                        error: function (e) {
+                            swal("系统错误", e, "error");
+                        }
+                    });
+                })
             },
-            remove: function (kc) {
+            edit: function (kf) {
+                this.modalKf = kf;
+                $('#kfModal').modal('show');
+            },
+            remove: function (kf) {
                 swal({
                     title: "你确定？",
                     text: "您将无法恢复数据！",
@@ -243,15 +267,15 @@
                 }, function () {
                     $.ajax({
                         type: 'POST',
-                        url: '/sys/kc/delete',
+                        url: '/sys/kf/delete',
                         data: {
-                            "kcId": kc.kcId
+                            "kfId": kf.kfId
                         },
                         success: function (res) {
                             if (res.code === "0") {
                                 swal("删除成功", "", "success");
                                 vm.initParam();
-                                vm.page(vm.kcParam);
+                                vm.page(vm.kfParam);
                             }
                         },
                         error: function (e) {
@@ -261,20 +285,20 @@
                 })
             },
             save: function () {
-                if (this.modalKc.kcId === "自动生成") {
-                    this.modalKc.kcId = -1;
+                if (this.modalKf.kfId === "自动生成") {
+                    this.modalKf.kfId = -1;
                 }
                 $.ajax({
                     type: 'POST',
-                    url: '/sys/kc/save',
-                    data: this.modalKc,
+                    url: '/sys/kf/save',
+                    data: this.modalKf,
                     success: function (res) {
                         if (res.code === "0") {
                             swal("保存成功", res.msg, "success");
-                            $('#kcModal').modal('hide');
+                            $('#kfModal').modal('hide');
                             //刷新页面
                             vm.initParam();
-                            vm.page(vm.kcParam);
+                            vm.page(vm.kfParam);
                         }
                     },
                     error: function () {
@@ -283,44 +307,41 @@
                 });
             },
             computePage: function () {
-                var size = this.kcPage.size;
-                var current = this.kcPage.current;
-                var total = this.kcPage.total;
-                var pages = this.kcPage.pages;
+                var size = this.kfPage.size;
+                var current = this.kfPage.current;
+                var total = this.kfPage.total;
+                var pages = this.kfPage.pages;
                 this.pageInfo.dataBegin = (current - 1) * size + 1;
-                this.pageInfo.dataEnd = (current - 1) * size + this.kcPage.records.length;
+                this.pageInfo.dataEnd = (current - 1) * size + this.kfPage.records.length;
                 this.pageInfo.total = total;
                 this.pageInfo.peges = pages;
             },
             pageClick: function (current) {
-                if (current < 1 || current > this.kcPage.pages) {
+                if (current < 1 || current > this.kfPage.pages) {
                     return;
                 }
-                this.kcParam.currentPage = current;
-                this.page(this.kcParam);
+                this.kfParam.currentPage = current;
+                this.page(this.kfParam);
             },
             initParam: function () {
-                this.kcParam.kcId = "";
-                this.kcParam.kcName = "";
-                this.kcParam.kcDescription = "";
-                this.kcParam.kcStandard = "";
-                this.kcParam.kpId = "";
+                this.kfParam.kfId = "";
+                this.kfParam.kfName = "";
+                this.kfParam.kfBeginDate = "";
+                this.kfParam.kfEndDate = "";
             },
             initModal: function () {
-                this.modalKc.kcId = "";
-                this.modalKc.kcName = "";
-                this.modalKc.kcDescription = "";
-                this.modalKc.kcStandard = "";
-                this.modalKc.kpId = "";
+                this.modalKf.kfId = "";
+                this.modalKf.kfName = "";
+                this.modalKf.kfBeginDate = "";
+                this.modalKf.kfEndDate = "";
             },
             initPage: function () {
-                this.kcParam.pageSize = 10;
-                this.kcParam.currentPage = 1;
+                this.kfParam.pageSize = 10;
+                this.kfParam.currentPage = 1;
             }
         },
         created: function () {
-            this.page(this.kcParam);
-            this.listKp();
+            this.page(this.kfParam);
         }
     });
 </script>

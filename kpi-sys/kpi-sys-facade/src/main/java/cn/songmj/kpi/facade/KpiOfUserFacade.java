@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * <p>
- *  kpi of user 中间表接口
+ * kpi of user 中间表接口
  * </p>
  *
  * @author meijie.song
@@ -55,4 +55,14 @@ public interface KpiOfUserFacade extends IService<KpiOfUser> {
      * @return
      */
     Integer delete(Long kuId);
+
+    /**
+     * 批量插入
+     * 分发表单
+     *
+     * @param kfId
+     * @param userIdList
+     * @return
+     */
+    Integer send(Long kfId, List<Long> userIdList);
 }

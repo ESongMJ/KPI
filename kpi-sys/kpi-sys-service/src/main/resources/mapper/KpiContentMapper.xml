@@ -17,7 +17,7 @@
         kc.kc_id AS kcId,
         kc.kc_name AS kcName,
         kc.kc_description AS kcDescription,
-        kc.kc_standar AS kcStandard,
+        kc.kc_standard AS kcStandard,
         kc.kp_id AS kpId,
         kp.kp_name AS kpName
     </sql>
@@ -29,13 +29,13 @@
         left join kpi_point kp on kc.kp_id = kp.kp_id
         <where>
             <if test="kcName != null">
-                or kc.kc_name like conact('%', kcName, '%')
+                or kc.kc_name like CONCAT('%', #{kcName}, '%')
             </if>
             <if test="kcDescription != null">
-                or kc.kc_description like conact('%', kcDescription, '%')
+                or kc.kc_description like CONCAT('%', #{kcDescription}, '%')
             </if>
             <if test="kcStandard != null">
-                or kc.kc_standard like conact('%', kcStandard, '%')
+                or kc.kc_standard like CONCAT('%', #{kcStandard}, '%')
             </if>
         </where>
     </select>

@@ -2,8 +2,9 @@ package cn.songmj.kpi.mapper;
 
 import cn.songmj.kpi.entity.KpiContent;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,5 +22,5 @@ public interface KpiContentMapper extends BaseMapper<KpiContent> {
      * @param kpiContent
      * @return
      */
-    Page<KpiContent> selectJoinPage(Pagination pagination, KpiContent kpiContent);
+    List<KpiContent> selectJoinPage(Pagination pagination, KpiContent kpiContent);
 }

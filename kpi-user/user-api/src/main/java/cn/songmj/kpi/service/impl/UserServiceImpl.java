@@ -8,10 +8,11 @@ import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author songmj123
@@ -39,6 +40,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserParam> list(UserParam userParam) {
         return userFacade.list(userParam);
+    }
+
+    @Override
+    public List<Long> listUserIds(UserParam userParam) {
+        List<UserParam> userParamList = userFacade.list(userParam);
+        return userParamList.stream().map(UserParam::getUserId).collect(Collectors.toList());
     }
 
     @Override

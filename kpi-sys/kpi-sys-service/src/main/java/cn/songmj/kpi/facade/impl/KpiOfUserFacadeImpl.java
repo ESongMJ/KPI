@@ -8,11 +8,13 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author meijie.song123
@@ -49,5 +51,23 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
     @Override
     public Integer delete(Long kuId) {
         return null;
+    }
+
+    @Override
+    public Integer send(Long kfId, List<Long> userIdList) {
+        List<KpiOfUser> kuList = bindFormAndUser(kfId, userIdList);
+        return baseMapper.insertBatch(kuList);
+    }
+
+    private List<KpiOfUser> bindFormAndUser(Long kfId, List<Long> userIdList) {
+        return userIdList.stream().map(userId -> {
+            KpiOfUser ku = new KpiOfUser();
+            ku.setKuId(null);
+            ku.setUserId(userId);
+            ku.setKfId(kfId);
+            ku.setKuStatus(1);
+            ku.setKuFinishDate("----.--.--");
+            return ku;
+        }).collect(Collectors.toList());
     }
 }

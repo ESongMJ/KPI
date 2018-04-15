@@ -1,9 +1,13 @@
 package cn.songmj.kpi.service.impl;
 
 import cn.songmj.kpi.facade.KpiOfUserFacade;
+import cn.songmj.kpi.param.KpiOfUserParam;
 import cn.songmj.kpi.service.KpiOfUserService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,4 +25,28 @@ public class KpiOfUserServiceImpl implements KpiOfUserService {
     )
     private KpiOfUserFacade kpiOfUserFacade;
 
+    @Override
+    public Page<KpiOfUserParam> page(KpiOfUserParam kpiOfUserParam) {
+        return null;
+    }
+
+    @Override
+    public List<KpiOfUserParam> list(KpiOfUserParam kpiOfUserParam) {
+        return null;
+    }
+
+    @Override
+    public Integer save(KpiOfUserParam kpiOfUserParam) {
+        return null;
+    }
+
+    @Override
+    public Integer delete(Long kuId) {
+        return null;
+    }
+
+    @Override
+    public Integer send(Long kfId, List<Long> userIdList) {
+        return kpiOfUserFacade.send(kfId, userIdList);
+    }
 }

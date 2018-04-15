@@ -22,6 +22,12 @@ public interface UserService {
     Page<UserParam> page(UserParam userParam);
 
     /**
+     * 得到符合条件的所有用户的id
+     * @param userParam
+     * @return
+     */
+    List<Long> listUserIds(UserParam userParam);
+    /**
      * 列表查询数据
      * @param userParam
      * @return

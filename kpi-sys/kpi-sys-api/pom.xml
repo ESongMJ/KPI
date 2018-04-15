@@ -55,12 +55,6 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus</artifactId>
         </dependency>
-        <!--工具包-->
-        <dependency>
-            <groupId>cn.songmj.kpi</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>${common-uitls.version}</version>
-        </dependency>
         <!-- thymeleaf模板引擎 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -71,7 +65,12 @@
             <artifactId>nekohtml</artifactId>
             <version>${nekohtml.version}</version>
         </dependency>
-
+        <!--工具包-->
+        <dependency>
+            <groupId>cn.songmj.kpi</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>${common-uitls.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

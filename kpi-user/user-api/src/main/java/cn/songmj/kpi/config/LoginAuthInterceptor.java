@@ -30,6 +30,7 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String key = "user";
+        System.out.println("登录拦截器: "+ request.getSession().getAttribute(key));
         if (request.getSession().getAttribute(key) != null || checkLoginViews(request)) {
             return true;
         }
@@ -42,7 +43,11 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
         // 过滤掉登录页面请求和验证码请求
         String regexLogin = ".*login";
         String regexCode = ".*verifyCode";
-        if (Pattern.matches(regexLogin, uri) || Pattern.matches(regexCode, uri)) {
+        // 过滤跨域请求获取用户id列表
+        String regexUids = ".*uid/list";
+        if (Pattern.matches(regexLogin, uri)
+                || Pattern.matches(regexCode, uri)
+                || Pattern.matches(regexUids, uri)) {
             return true;
         }
         return false;
