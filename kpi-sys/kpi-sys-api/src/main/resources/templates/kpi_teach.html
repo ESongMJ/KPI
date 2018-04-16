@@ -93,6 +93,7 @@
 <script src="../js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
 <script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script type="text/javascript" src="../js/jquery.cookie.js"></script>
 <script>
     var vm;
     vm = new Vue({
@@ -121,6 +122,7 @@
 
             },
             page: function (param) {
+                param.userId = $.cookie('user_id');
                 $.ajax({
                     type: 'POST',
                     url: '/sys/ku/page',
@@ -152,6 +154,20 @@
                 }
                 this.kuParam.currentPage = current;
                 this.page(this.kuParam);
+            },
+            checkLogin: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9301/sys/user/checkLogin",
+                    success: function (res) {
+                        alert(JSON.stringify(res));
+                        if (res.code === "0") {
+
+                        } else if (res.code === "3") {
+                            window.location.href = "/login";
+                        }
+                    }
+                });
             },
             initParam: function () {
                 this.kuParam.kuId = "";

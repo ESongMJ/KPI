@@ -3,8 +3,10 @@ package cn.songmj.kpi.facade.impl;
 import cn.songmj.kpi.entity.KpiDetail;
 import cn.songmj.kpi.facade.KpiDetailFacade;
 import cn.songmj.kpi.mapper.KpiDetailMapper;
+import cn.songmj.kpi.param.KpiDetailParam;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 
 /**
  * <p>
@@ -22,4 +24,17 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 )
 public class KpiDetailFacadeImpl extends ServiceImpl<KpiDetailMapper, KpiDetail> implements KpiDetailFacade {
 
+    @Override
+    public Integer update(KpiDetailParam kpiDetailParam) {
+        KpiDetail kpiDetail = new KpiDetail();
+        BeanUtils.copyProperties(kpiDetailParam, kpiDetail);
+        return baseMapper.updateById(kpiDetail);
+    }
+
+    @Override
+    public Integer insert(KpiDetailParam kpiDetailParam) {
+        KpiDetail kpiDetail = new KpiDetail();
+        BeanUtils.copyProperties(kpiDetailParam, kpiDetail);
+        return baseMapper.insert(kpiDetail);
+    }
 }

@@ -8,7 +8,6 @@ import java.util.Map;
 
 /**
  * <p>
- * Cookie工具类
  * </p>
  *
  * @author meije.song

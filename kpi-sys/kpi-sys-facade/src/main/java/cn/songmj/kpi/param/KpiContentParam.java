@@ -34,4 +34,5 @@ public class KpiContentParam extends PageParam implements Serializable {
     private Long kpId;
     private String kpName;
     private Integer kpType;
+    private Long userId;
 }

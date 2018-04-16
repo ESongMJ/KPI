@@ -65,6 +65,7 @@ public class UserController extends BaseController {
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
     }
     @PostMapping("/checkLogin")
+    @CrossOrigin
     public Result checkLogin(HttpServletRequest request) {
         UserParam userParam = (UserParam) getSessionValue(request, "user");
         if (userParam == null) {

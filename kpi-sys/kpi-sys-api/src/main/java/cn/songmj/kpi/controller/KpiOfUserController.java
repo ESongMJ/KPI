@@ -38,9 +38,8 @@ public class KpiOfUserController extends BaseController {
     }
 
     @PostMapping("/page")
-    public Result pageByUser(HttpServletRequest request, KpiOfUserParam kpiOfUserParam) {
-        Long userId = Long.parseLong(CookieUtil.getCookie(request, "user_id"));
-        Page<KpiOfUserParam> kuPage = kpiOfUserService.pageByUser(userId, kpiOfUserParam);
+    public Result pageByUser(KpiOfUserParam kpiOfUserParam) {
+        Page<KpiOfUserParam> kuPage = kpiOfUserService.pageByUser(kpiOfUserParam.getUserId(), kpiOfUserParam);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), kuPage);
     }
 }

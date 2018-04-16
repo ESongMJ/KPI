@@ -259,7 +259,18 @@
                 $("#kpiModal").modal("show");
             },
             save: function () {
-
+                // 赋值kcId
+                this.modalKd.kcId = this.modalKc.kcId;
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/kd/save",
+                    data: this.modalKd,
+                    success: function (res) {
+                        if (res.code === "0") {
+                            swal("申请成功", res.msg, "success");
+                        }
+                    }
+                });
             },
             initList: function () {
                 this.list({});
