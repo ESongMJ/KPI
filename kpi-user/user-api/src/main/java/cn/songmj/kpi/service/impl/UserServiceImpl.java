@@ -5,6 +5,7 @@ import cn.songmj.kpi.param.UserParam;
 import cn.songmj.kpi.service.UserService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,5 +67,10 @@ public class UserServiceImpl implements UserService {
         }
         return userFacade.update(userParam);
     }
-
+    @Override
+    public UserParam getUserById(Long userId) {
+        UserParam userParam = new UserParam();
+        BeanUtils.copyProperties(userFacade.selectById(userId), userParam);
+        return userParam;
+    }
 }

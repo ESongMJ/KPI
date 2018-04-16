@@ -28,14 +28,19 @@
         from kpi_content kc
         left join kpi_point kp on kc.kp_id = kp.kp_id
         <where>
-            <if test="kcName != null">
-                or kc.kc_name like CONCAT('%', #{kcName}, '%')
+            (
+            <if test="kc.kcName != null">
+                kc.kc_name like CONCAT('%', #{kc.kcName}, '%')
             </if>
-            <if test="kcDescription != null">
-                or kc.kc_description like CONCAT('%', #{kcDescription}, '%')
+            <if test="kc.kcDescription != null">
+                or kc.kc_description like CONCAT('%', #{kc.kcDescription}, '%')
             </if>
-            <if test="kcStandard != null">
-                or kc.kc_standard like CONCAT('%', #{kcStandard}, '%')
+            <if test="kc.kcStandard != null">
+                or kc.kc_standard like CONCAT('%', #{kc.kcStandard}, '%')
+            </if>
+            )
+            <if test="kpType != null">
+                and kp.kp_type = #{kpType}
             </if>
         </where>
     </select>

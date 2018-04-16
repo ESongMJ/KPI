@@ -1,5 +1,6 @@
 package cn.songmj.kpi.config;
 
+import cn.songmj.kpi.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,31 +31,15 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String key = "user";
-        if (request.getSession().getAttribute(key) != null || checkLoginViews(request)) {
-            return true;
-        }
-        response.sendRedirect("/login");
-        return false;
+//        String key = "user_id";
+//        if (CookieUtil.getCookie(request,key) != null) {
+//            return true;
+//        }
+//        response.sendRedirect("http://127.0.0.1:9301/login");
+//        return false;
+        return true;
     }
-    private boolean checkLoginViews(HttpServletRequest request) {
-        String uri = request.getRequestURI();
-        log.debug("uri:  " + uri);
-        // 过滤掉登录页面请求和验证码请求
-        String regexLogin = ".*login";
-        String regexCode = ".*verifyCode";
-        // 过滤跨域请求获取用户id列表
-        String regexUids = ".*uid/list";
-        // 过滤获取登录用户请求
-        String regexUser = ".*getUser";
-        if (Pattern.matches(regexLogin, uri)
-                || Pattern.matches(regexCode, uri)
-                || Pattern.matches(regexUids, uri)
-                || Pattern.matches(regexUser, uri)) {
-            return true;
-        }
-        return false;
-    }
+
     /**
      * 请求转发后，视图解析前
      *

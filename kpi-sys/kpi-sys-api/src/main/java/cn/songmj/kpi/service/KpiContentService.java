@@ -19,17 +19,19 @@ public interface KpiContentService {
      * 分页查询
      *
      * @param kpiContentParam
+     * @param kpType
      * @return
      */
-    Page<KpiContentParam> page(KpiContentParam kpiContentParam);
+    Page<KpiContentParam> page(KpiContentParam kpiContentParam, Integer kpType);
 
     /**
      * 列表查询
      *
      * @param kpiContentParam
+     * @param type
      * @return
      */
-    List<KpiContentParam> list(KpiContentParam kpiContentParam);
+    List<KpiContentParam> list(KpiContentParam kpiContentParam, String type);
 
     /**
      * 保存

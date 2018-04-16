@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author songmj123
@@ -16,6 +16,7 @@ import java.util.List;
 public interface UserService {
     /**
      * 分页查询数据
+     *
      * @param userParam
      * @return
      */
@@ -23,12 +24,15 @@ public interface UserService {
 
     /**
      * 得到符合条件的所有用户的id
+     *
      * @param userParam
      * @return
      */
     List<Long> listUserIds(UserParam userParam);
+
     /**
      * 列表查询数据
+     *
      * @param userParam
      * @return
      */
@@ -37,12 +41,15 @@ public interface UserService {
     /**
      * 检查用户是否重复
      * 适用情况：在更新或者插入数据时，在注册用户时
+     *
      * @param userParam
      * @return
      */
     Boolean checkRepeat(UserParam userParam);
+
     /**
      * 删除用户
+     *
      * @param userId
      * @return
      */
@@ -50,8 +57,17 @@ public interface UserService {
 
     /**
      * 插入用户
+     *
      * @param userParam
      * @return
      */
     Integer save(UserParam userParam);
+
+    /**
+     * 根据id获取用户
+     *
+     * @param userId
+     * @return
+     */
+    UserParam getUserById(Long userId);
 }

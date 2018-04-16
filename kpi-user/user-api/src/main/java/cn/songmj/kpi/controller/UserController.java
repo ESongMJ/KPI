@@ -5,6 +5,7 @@ import cn.songmj.kpi.enums.StatusCode;
 import cn.songmj.kpi.param.UserParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.UserService;
+import cn.songmj.kpi.util.CookieUtil;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
@@ -70,8 +72,15 @@ public class UserController extends BaseController {
         }
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), userParam);
     }
+    @PostMapping("/getUser")
+    @CrossOrigin
+    public Result getLoginUser(Long userId) {
+        UserParam userParam = userService.getUserById(userId);
+
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), userParam);
+    }
     @PostMapping("/login")
-    public Result login(HttpServletRequest request, UserParam userParam, String code) {
+    public Result login(HttpServletRequest request, HttpServletResponse response, UserParam userParam, String code) {
         if (!verifyCode(request, code)) {
             return view(StatusCode.FAIL.getCode(), "验证码输入错误");
         }
@@ -85,7 +94,14 @@ public class UserController extends BaseController {
             return view(StatusCode.FAIL.getCode(), "密码错误");
         }
         setSessionValue(request, "user", userParam1);
+        response.addCookie(bindUserToCookie(userParam1));
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), userParam1);
+    }
+    private Cookie bindUserToCookie(UserParam userParam) {
+        Cookie userCookie = new Cookie("user_id", String.valueOf(userParam.getUserId()));
+        userCookie.setMaxAge(60 * 60 * 24);
+        userCookie.setPath("/");
+        return userCookie;
     }
 
     public Boolean verifyCode(HttpServletRequest request, String code) {

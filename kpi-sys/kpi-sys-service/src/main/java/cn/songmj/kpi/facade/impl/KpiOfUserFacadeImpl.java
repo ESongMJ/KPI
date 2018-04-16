@@ -1,12 +1,15 @@
 package cn.songmj.kpi.facade.impl;
 
+import cn.songmj.kpi.entity.KpiForm;
 import cn.songmj.kpi.entity.KpiOfUser;
 import cn.songmj.kpi.facade.KpiOfUserFacade;
 import cn.songmj.kpi.mapper.KpiOfUserMapper;
+import cn.songmj.kpi.param.KpiFormParam;
 import cn.songmj.kpi.param.KpiOfUserParam;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +60,29 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
     public Integer send(Long kfId, List<Long> userIdList) {
         List<KpiOfUser> kuList = bindFormAndUser(kfId, userIdList);
         return baseMapper.insertBatch(kuList);
+    }
+
+    @Override
+    public Page<KpiOfUserParam> pageByUser(Long userId, KpiOfUserParam kpiOfUserParam) {
+        Page<KpiOfUser> kuPage = new Page<>();
+        KpiOfUser ku = new KpiOfUser();
+        BeanUtils.copyProperties(kpiOfUserParam, ku);
+        kuPage.setSize(kpiOfUserParam.getPageSize());
+        kuPage.setCurrent(kpiOfUserParam.getCurrentPage());
+        List<KpiOfUser> kuList = baseMapper.selectPageByUser(kuPage, userId, ku);
+        Page<KpiOfUserParam> kuParamPage = new Page<>();
+        BeanUtils.copyProperties(kuPage, kuParamPage);
+        kuParamPage.setRecords(kuList.stream().map(kpiOfUser -> {
+            KpiOfUserParam kuParam = new KpiOfUserParam();
+            BeanUtils.copyProperties(kpiOfUser, kuParam);
+            KpiFormParam kf = new KpiFormParam();
+            BeanUtils.copyProperties(kpiOfUser.getKf(), kf);
+            kf.setKfBeginDate(kf.getKfBeginDate().substring(0, 4));
+            kf.setKfEndDate(kf.getKfEndDate().substring(0, 4));
+            kuParam.setKf(kf);
+            return kuParam;
+        }).collect(Collectors.toList()));
+        return kuParamPage;
     }
 
     private List<KpiOfUser> bindFormAndUser(Long kfId, List<Long> userIdList) {

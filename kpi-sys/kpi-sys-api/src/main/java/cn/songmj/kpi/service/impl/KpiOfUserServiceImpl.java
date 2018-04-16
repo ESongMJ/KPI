@@ -2,6 +2,7 @@ package cn.songmj.kpi.service.impl;
 
 import cn.songmj.kpi.facade.KpiOfUserFacade;
 import cn.songmj.kpi.param.KpiOfUserParam;
+import cn.songmj.kpi.param.PageParam;
 import cn.songmj.kpi.service.KpiOfUserService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -48,5 +49,19 @@ public class KpiOfUserServiceImpl implements KpiOfUserService {
     @Override
     public Integer send(Long kfId, List<Long> userIdList) {
         return kpiOfUserFacade.send(kfId, userIdList);
+    }
+
+    @Override
+    public Page<KpiOfUserParam> pageByUser(Long userId, KpiOfUserParam kpiOfUserParam) {
+        checkPageParam(kpiOfUserParam);
+        return kpiOfUserFacade.pageByUser(userId, kpiOfUserParam);
+    }
+    private void checkPageParam(PageParam pageParam) {
+        if (pageParam.getPageSize() == null) {
+            pageParam.setPageSize(10);
+        }
+        if (pageParam.getCurrentPage() == null) {
+            pageParam.setCurrentPage(1);
+        }
     }
 }

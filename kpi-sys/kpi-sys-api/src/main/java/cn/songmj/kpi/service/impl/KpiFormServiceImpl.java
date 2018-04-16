@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author songmj123
@@ -49,6 +49,7 @@ public class KpiFormServiceImpl implements KpiFormService {
     public Integer delete(Long kfId) {
         return kpiFormFacade.delete(kfId);
     }
+
     private void checkPageParam(KpiFormParam kpiFormParam) {
         if (kpiFormParam.getPageSize() == null) {
             kpiFormParam.setPageSize(10);

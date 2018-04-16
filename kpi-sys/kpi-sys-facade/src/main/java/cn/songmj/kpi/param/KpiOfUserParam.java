@@ -1,5 +1,6 @@
 package cn.songmj.kpi.param;
 
+import cn.songmj.kpi.entity.KpiForm;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class KpiOfUserParam extends PageParam implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long kfId;
+    private KpiFormParam kf;
     /**
      * 表单状态
      */

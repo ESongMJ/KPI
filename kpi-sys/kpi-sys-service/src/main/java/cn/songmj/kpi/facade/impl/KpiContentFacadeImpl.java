@@ -31,13 +31,13 @@ import java.util.stream.Collectors;
 public class KpiContentFacadeImpl extends ServiceImpl<KpiContentMapper, KpiContent> implements KpiContentFacade {
 
     @Override
-    public Page<KpiContentParam> page(KpiContentParam kpiContentParam) {
+    public Page<KpiContentParam> page(KpiContentParam kpiContentParam, Integer kpType) {
         Page<KpiContent> kcPage = new Page<>();
         KpiContent kc = new KpiContent();
         BeanUtils.copyProperties(kpiContentParam, kc);
         kcPage.setSize(kpiContentParam.getPageSize());
         kcPage.setCurrent(kpiContentParam.getCurrentPage());
-        List<KpiContent> kcList = baseMapper.selectJoinPage(kcPage, kc);
+        List<KpiContent> kcList = baseMapper.selectJoinPage(kcPage, kc, kpType);
         Page<KpiContentParam> kcParamPage = new Page<>();
         BeanUtils.copyProperties(kcPage, kcParamPage);
         kcParamPage.setRecords(kcList.stream().map(kc1 -> {
@@ -49,7 +49,7 @@ public class KpiContentFacadeImpl extends ServiceImpl<KpiContentMapper, KpiConte
     }
 
     @Override
-    public List<KpiContentParam> list(KpiContentParam kpiContentParam) {
+    public List<KpiContentParam> list(KpiContentParam kpiContentParam, String type) {
         EntityWrapper<KpiContent> ew = bindParam(kpiContentParam);
         List<KpiContent> kcList = baseMapper.selectList(ew);
         return kcList.stream().map(kc -> {

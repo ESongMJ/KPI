@@ -1,6 +1,8 @@
 package cn.songmj.kpi.facade;
 
+import cn.songmj.kpi.entity.KpiForm;
 import cn.songmj.kpi.entity.KpiOfUser;
+import cn.songmj.kpi.param.KpiFormParam;
 import cn.songmj.kpi.param.KpiOfUserParam;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
@@ -16,7 +18,7 @@ import java.util.List;
  * @since 2018-03-23
  */
 public interface KpiOfUserFacade extends IService<KpiOfUser> {
-    /**
+    /**1
      * 分页查询
      *
      * @param kpiOfUserParam
@@ -65,4 +67,13 @@ public interface KpiOfUserFacade extends IService<KpiOfUser> {
      * @return
      */
     Integer send(Long kfId, List<Long> userIdList);
+
+    /**
+     * 根据用户查询表单信息
+     *
+     * @param userId
+     * @param kpiOfUserParam
+     * @return
+     */
+    Page<KpiOfUserParam> pageByUser(Long userId, KpiOfUserParam kpiOfUserParam);
 }

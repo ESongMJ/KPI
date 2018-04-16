@@ -41,42 +41,48 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th width="16%">编号</th>
-                    <th width="20%">年度</th>
-                    <th width="44%">名称</th>
+                    <th style="display: none">编号</th>
+                    <th width="30%">年度</th>
+                    <th width="50%">名称</th>
                     <th width="10%">状态</th>
                     <th width="10%">操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>2016-2017年度</td>
-                    <td>xxxxxxx教学绩效申请</td>
-                    <td>
-                        <span class="label label-primary">进行中</span>
-                    </td>
-                    <td>
-                        <a href="kpi_list.html?type=teach&id=124124" class="btn btn-info btn-xs">
-                            <i class="fa fa-edit">申请</i>
-                        </a>
-                    </td>
+                <tr v-if="kuPage.records.length < 1">
+                    <td colspan="4" class="text-center">没有此类数据~</td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>2014-2015年度</td>
-                    <td>xxxxxxx教学绩效申请</td>
+                <tr v-for="ku in kuPage.records">
+                    <td>{{ku.kf.kfBeginDate}}-{{ku.kf.kfEndDate}}年度</td>
+                    <td>{{ku.kf.kfName}}</td>
                     <td>
-                        <span class="label label-default">已结束</span>
+                        <span class="label label-primary" v-if="ku.kuStatus == 1">进行中</span>
+                        <span class="label label-primary" v-if="ku.kuStatus == 2">已完成</span>
+                        <span class="label label-primary" v-if="ku.kuStatus == 3">已过期</span>
                     </td>
                     <td>
-                        <a href="kpi_detail.html?id=123124324" class="btn btn-info btn-xs">
-                            <i class="fa fa-edit">查看</i>
+                        <a :href="'kpi_list.html?type=teach&userId='+ku.userId+'&kuId='+ku.kuId" class="btn btn-info btn-xs">
+                            <i class="fa fa-edit">申请</i>
                         </a>
                     </td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="row" style="height: 50px">
+            <div class="col-sm-6">
+                <div class="dataTables_info" style="margin-top: 10px">
+                    显示 {{pageInfo.dataBegin}} 到 {{pageInfo.dataEnd}} 项，共 {{pageInfo.total}} 项
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="btn-group" style="float: right">
+                    <button type="button" class="btn btn-sm btn-white" @click="pageClick(kuPage.current-1)">上一页
+                    </button>
+                    <button type="button" class="btn btn-sm btn-white" @click="pageClick(kuPage.current+1)">下一页
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -92,21 +98,37 @@
     vm = new Vue({
         "el": "#app",
         "data": {
-            "searchField": ""
+            searchField: "",
+            kuParam: {
+                "kuId": "",
+                "userId": "",
+                "kfId": "",
+                "kuStatus": "",
+                "kuFinishDate": "",
+                "pageSize": 10,
+                "currentPage": 1
+            },
+            kuPage: [],
+            pageInfo: {
+                dataBegin: 1,
+                dataEnd: 10,
+                total: 10,
+                pages: 1
+            }
         },
         methods: {
             search: function () {
 
             },
-            list: function (param) {
+            page: function (param) {
                 $.ajax({
                     type: 'POST',
-                    url: '/user/list',
-                    contentType: "application/json",
-                    data: JSON.stringify(param),
+                    url: '/sys/ku/page',
+                    data: param,
                     success: function (res) {
                         if (res.code === '0') {
-                            vm.users = res.dataList;
+                            vm.kuPage = res.pageData;
+                            vm.computePage();
                         }
                     },
                     error: function (e) {
@@ -114,42 +136,37 @@
                     }
                 });
             },
-            remove: function (user) {
-                swal({
-                    title: "你确定？",
-                    text: "您将无法恢复数据！",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "是的，删除！",
-                    closeOnConfirm: false
-                }, function () {
-                    $.ajax({
-                        type: 'POST',
-                        url: '/user/delete',
-                        data: {
-                            userId: user.userId
-                        },
-                        success: function (res) {
-                            if (res.code === "0") {
-                                swal("删除成功","","success");
-                                vm.initList();
-                            }
-                        },
-                        error: function (e) {
-                            swal("系统错误",e,"error");
-                        }
-                    });
-                })
+            computePage: function () {
+                var size = this.kuPage.size;
+                var current = this.kuPage.current;
+                var total = this.kuPage.total;
+                var pages = this.kuPage.pages;
+                this.pageInfo.dataBegin = (current - 1) * size + 1;
+                this.pageInfo.dataEnd = (current - 1) * size + this.kuPage.records.length;
+                this.pageInfo.total = total;
+                this.pageInfo.peges = pages;
             },
-            initList: function () {
-                this.list({
-
-                });
+            pageClick: function (current) {
+                if (current < 1 || current > this.kuPage.pages) {
+                    return;
+                }
+                this.kuParam.currentPage = current;
+                this.page(this.kuParam);
+            },
+            initParam: function () {
+                this.kuParam.kuId = "";
+                this.kuParam.userId = "";
+                this.kuParam.kfId = "";
+                this.kuParam.kuStatus = "";
+                this.kuParam.kuFinishDate = "";
+            },
+            initPage: function () {
+                this.kuParam.pageSize = 10;
+                this.kuParam.currentPage = 1;
             }
         },
         created: function () {
-            // this.initList();
+            this.page(this.kuParam);
         }
     });
 </script>

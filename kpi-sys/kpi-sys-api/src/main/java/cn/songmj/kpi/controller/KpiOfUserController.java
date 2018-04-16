@@ -2,17 +2,20 @@ package cn.songmj.kpi.controller;
 
 
 import cn.songmj.kpi.enums.StatusCode;
+import cn.songmj.kpi.param.KpiOfUserParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.KpiOfUserService;
+import cn.songmj.kpi.util.CookieUtil;
+import cn.songmj.kpi.util.param.UserParam;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * <p>
@@ -32,6 +35,13 @@ public class KpiOfUserController extends BaseController {
     public Result send(Long kfId, @RequestParam("uids[]") Long[] uids) {
         kpiOfUserService.send(kfId, Arrays.asList(uids));
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
+    }
+
+    @PostMapping("/page")
+    public Result pageByUser(HttpServletRequest request, KpiOfUserParam kpiOfUserParam) {
+        Long userId = Long.parseLong(CookieUtil.getCookie(request, "user_id"));
+        Page<KpiOfUserParam> kuPage = kpiOfUserService.pageByUser(userId, kpiOfUserParam);
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), kuPage);
     }
 }
 

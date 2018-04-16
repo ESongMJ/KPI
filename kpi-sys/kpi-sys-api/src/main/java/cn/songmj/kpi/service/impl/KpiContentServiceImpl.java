@@ -26,14 +26,17 @@ public class KpiContentServiceImpl implements KpiContentService {
     private KpiContentFacade kpiContentFacade;
 
     @Override
-    public Page<KpiContentParam> page(KpiContentParam kpiContentParam) {
+    public Page<KpiContentParam> page(KpiContentParam kpiContentParam, Integer kpType) {
         kpiContentParam = checkPageParam(kpiContentParam);
-        return kpiContentFacade.page(kpiContentParam);
+        if (kpType == 0) {
+            kpType = null;
+        }
+        return kpiContentFacade.page(kpiContentParam, kpType);
     }
 
     @Override
-    public List<KpiContentParam> list(KpiContentParam kpiContentParam) {
-        return kpiContentFacade.list(kpiContentParam);
+    public List<KpiContentParam> list(KpiContentParam kpiContentParam, String type) {
+        return kpiContentFacade.list(kpiContentParam, type);
     }
 
     @Override

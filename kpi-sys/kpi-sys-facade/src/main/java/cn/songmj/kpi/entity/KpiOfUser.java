@@ -34,6 +34,8 @@ public class KpiOfUser extends Model<KpiOfUser> implements Serializable {
      */
     @TableField("kf_id")
     private Long kfId;
+    @TableField(exist = false)
+    private KpiForm kf;
     /**
      * 表单状态
      */

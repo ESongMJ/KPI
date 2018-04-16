@@ -33,4 +33,5 @@ public class KpiContentParam extends PageParam implements Serializable {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long kpId;
     private String kpName;
+    private Integer kpType;
 }

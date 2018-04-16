@@ -10,10 +10,37 @@
         <result column="ku_status" property="kuStatus" />
         <result column="ku_finish_date" property="kuFinishDate" />
     </resultMap>
+    <!--连接绩效表单查询映射-->
+    <resultMap id="JoinFormResultMap" type="cn.songmj.kpi.entity.KpiOfUser">
+        <id column="kuId" property="kuId" />
+        <result column="userId" property="userId" />
+        <result column="kfId" property="kfId" />
+        <result column="kuStatus" property="kuStatus" />
+        <result column="kuFinishDate" property="kuFinishDate" />
+        <association property="kf" javaType="cn.songmj.kpi.entity.KpiForm">
+            <id column="kfId" property="kfId" />
+            <result column="kfName" property="kfName" />
+            <result column="kfBeginDate" property="kfBeginDate" />
+            <result column="kfEndDate" property="kfEndDate" />
+        </association>
+    </resultMap>
+
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         ku_id AS kuId, user_id AS userId, kf_id AS kfId, ku_status AS kuStatus, ku_finish_date AS kuFinishDate
+    </sql>
+
+    <!--连接绩效表单查询列-->
+    <sql id="Join_Form_Column">
+        ku.ku_id AS kuId,
+        ku.user_id AS userId,
+        ku.kf_id AS kfId,
+        ku.ku_status AS kuStatus,
+        ku.ku_finish_date AS kuFinishDate,
+        kf.kf_name as kfName,
+        kf.kf_begin_date as kfBeginDate,
+        kf.kf_end_date as kfEndDate
     </sql>
 
     <insert id="insertBatch">
@@ -22,4 +49,13 @@
             (#{ku.kuId}, #{ku.userId},#{ku.kfId},#{ku.kuStatus},#{ku.kuFinishDate})
         </foreach>
     </insert>
+    <select id="selectPageByUser" resultMap="JoinFormResultMap">
+        select
+        <include refid="Join_Form_Column"/>
+        from kpi_of_user ku
+        left join kpi_form kf on ku.kf_id=kf.kf_id
+        <where>
+            ku.user_id = #{userId}
+        </where>
+    </select>
 </mapper>

@@ -3,6 +3,7 @@ package cn.songmj.kpi.mapper;
 import cn.songmj.kpi.entity.KpiContent;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,7 +21,8 @@ public interface KpiContentMapper extends BaseMapper<KpiContent> {
      * 联合绩效站点表，查询站点名称
      * @param pagination
      * @param kpiContent
+     * @param kpType
      * @return
      */
-    List<KpiContent> selectJoinPage(Pagination pagination, KpiContent kpiContent);
+    List<KpiContent> selectJoinPage(Pagination pagination,@Param("kc") KpiContent kpiContent, @Param("kpType") Integer kpType);
 }

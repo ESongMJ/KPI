@@ -13,7 +13,9 @@
     <link href="../css/login.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
 </head>
-
+<script>
+    if(window.top !== window.self){ window.top.location = window.location;}
+</script>
 <body class="signin">
 <div class="signinpanel" id="app">
     <div class="row">
@@ -44,7 +46,7 @@
                     <img src="/sys/user/verifyCode" onclick="this.src='/sys/user/verifyCode'" style="width: 120px; height: 35px; margin-top: 12px"/>
                 </span>
             </div>
-            <a href="#">忘记密码了？</a>
+            <a href="#" @click="forgetPwd()">忘记密码了？</a>
             <button class="btn btn-success btn-block" @click="login()">登录</button>
         </div>
     </div>
@@ -76,10 +78,11 @@
                     data: this.userParam,
                     success: function (res) {
                         if (res.code === "0") {
+                            vm.sendUser("http://127.0.0.1:9302/sys/saveUser", res.data);
                             window.location.href = "/";
                         } else if (res.code === "1") {
                             swal(res.msg, "请重新输入", "warning");
-                            vm.userParam.userPassword = "";
+                            // vm.userParam.userPassword = "";
                             vm.userParam.code = "";
                         }
                     }
@@ -87,6 +90,18 @@
             },
             forgetPwd: function () {
                 swal("暂未开放此功能", "敬请期待~", "info");
+            },
+            sendUser: function (url, user) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: user,
+                    success: function (res) {
+                        if (res.code !== "0") {
+                            swal("系统错误", "用户信息注入失败\r\n目标："+url, "error");
+                        }
+                    }
+                });
             }
         }
     });

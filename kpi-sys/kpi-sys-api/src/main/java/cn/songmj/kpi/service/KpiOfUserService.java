@@ -55,4 +55,13 @@ public interface KpiOfUserService {
      * @return
      */
     Integer send(Long kfId, List<Long> userIdList);
+
+    /**
+     * 根据用户分页查找绩效表单
+     *
+     * @param userId
+     * @param kpiOfUserParam
+     * @return
+     */
+    Page<KpiOfUserParam> pageByUser(Long userId, KpiOfUserParam kpiOfUserParam);
 }
