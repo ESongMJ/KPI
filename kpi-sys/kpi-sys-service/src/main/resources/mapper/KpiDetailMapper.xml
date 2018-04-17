@@ -4,18 +4,93 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.KpiDetail">
-        <id column="kd_id" property="kdId" />
-        <result column="ku_id" property="kuId" />
-        <result column="kc_id" property="kcId" />
-        <result column="kd_score" property="kdScore" />
-        <result column="kd_reason" property="kdReason" />
-        <result column="kd_benefit_type" property="kdBenefitType" />
-        <result column="kd_status" property="kdStatus" />
+        <id column="kd_id" property="kdId"/>
+        <result column="ku_id" property="kuId"/>
+        <result column="kc_id" property="kcId"/>
+        <result column="kd_score" property="kdScore"/>
+        <result column="kd_reason" property="kdReason"/>
+        <result column="kd_benefit_type" property="kdBenefitType"/>
+        <result column="kd_status" property="kdStatus"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         kd_id AS kdId, ku_id AS kuId, kc_id AS kcId, kd_score AS kdScore, kd_reason AS kdReason, kd_benefit_type AS kdBenefitType, kd_status AS kdStatus
     </sql>
-
+    <resultMap id="PageByUserMap" type="cn.songmj.kpi.entity.KpiDetail">
+        <id column="kdId" property="kdId"/>
+        <result column="kuId" property="kuId"/>
+        <result column="kcId" property="kcId"/>
+        <result column="kdScore" property="kdScore"/>
+        <result column="kdReason" property="kdReason"/>
+        <result column="kdBenefitType" property="kdBenefitType"/>
+        <result column="kdStatus" property="kdStatus"/>
+        <result column="userName" property="userName"/>
+        <association property="kc" javaType="cn.songmj.kpi.entity.KpiContent">
+            <id column="kcId" property="kcId"/>
+            <result column="kcName" property="kcName"/>
+            <result column="kcDescription" property="kcDescription"/>
+            <result column="kcStandard" property="kcStandard"/>
+            <result column="kpId" property="kpId"/>
+            <association property="kp" javaType="cn.songmj.kpi.entity.KpiPoint">
+                <id column="kpId" property="kpId"/>
+                <result column="kpName" property="kpName"/>
+                <result column="kpDescription" property="kpDescription"/>
+                <result column="kpType" property="kpType"/>
+            </association>
+        </association>
+    </resultMap>
+    <sql id="Page_By_User_Column">
+        kd.kd_id AS kdId,
+        kd.ku_id AS kuId,
+        kd.kc_id AS kcId,
+        kd.kd_score AS kdScore,
+        kd.kd_reason AS kdReason,
+        kd.kd_benefit_type AS kdBenefitType,
+        kd.kd_status AS kdStatus,
+        u.user_name as userName,
+        kc.kc_name as kcName,
+        kc.kc_description as kcDescription,
+        kc.kc_standard as kcStandard,
+        kp.kp_id as kpId,
+        kp.kp_name as kpName,
+        kp.kp_description as kpDescription,
+        kp.kp_type as kpType
+    </sql>
+    <select id="pageByUser" parameterType="cn.songmj.kpi.entity.KpiDetail" resultMap="PageByUserMap">
+        select
+        <include refid="Page_By_User_Column"/>
+        from kpi_detail kd
+        left join kpi_of_user ku on kd.ku_id=ku.ku_id
+        left join user u on ku.user_id=u.user_id
+        left join kpi_content kc on kd.kc_id=kc.kc_id
+        left join kpi_point kp on kc.kp_id=kp.kp_id
+        <where>
+            <if test="kd.kuId != null">
+                kd.ku_id = #{kd.kuId}
+            </if>
+            <if test="kd.kdBenefitType != null">
+                and kd.kd_benefit_type = #{kd.kdBenefitType}
+            </if>
+            <if test="kpType != null">
+                and kp.kp_type = #{kpType}
+            </if>
+            <if test="kpId != null">
+                and kp.kp_id = #{kpId}
+            </if>
+            <if test="userId != null">
+                and ku.user_id = #{userId}
+            </if>
+            <if test="kd.kdStatus != null">
+                and kd.kd_status = #{kd.kdStatus}
+            </if>
+        </where>
+        order by kd.kd_status asc
+    </select>
+    <update id="updateStatus" parameterType="cn.songmj.kpi.entity.KpiDetail">
+        update kpi_detail set kd_status = #{kdStatus}
+        <where>
+            kd_id = #{kdId}
+        </where>
+    </update>
 </mapper>

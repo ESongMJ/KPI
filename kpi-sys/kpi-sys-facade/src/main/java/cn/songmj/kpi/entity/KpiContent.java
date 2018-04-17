@@ -19,7 +19,7 @@ import java.io.Serializable;
  */
 @Setter
 @Getter
-@TableName("kpi_content")
+@TableName("kp")
 public class KpiContent extends Model<KpiContent> implements Serializable {
 
     @TableId("kc_id")
@@ -39,7 +39,7 @@ public class KpiContent extends Model<KpiContent> implements Serializable {
     @TableField("kp_id")
     private Long kpId;
     @TableField(exist = false)
-    private String kpName;
+    private KpiPoint kp;
 
     @Override
     protected Serializable pkVal() {

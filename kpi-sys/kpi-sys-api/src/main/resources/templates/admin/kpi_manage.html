@@ -54,7 +54,7 @@
                     </tr>
                     <tr v-for="kc in kcPage.records" :key="kc.kcId">
                         <td>{{kc.kcName}}</td>
-                        <td>{{kc.kpName}}</td>
+                        <td>{{kc.kp.kpName}}</td>
                         <td>{{kc.kcStandard}}</td>
                         <td>{{kc.kcDescription}}</td>
                         <td>
@@ -111,7 +111,7 @@
                         <tr>
                             <td align="right" height="40px"> 观测点:</td>
                             <td>
-                                <select class="form-control m-l-md" style="width: 420px" v-model="modalKc.kpId">
+                                <select class="form-control m-l-md" style="width: 420px" v-model="modalKc.kp.kpId">
                                     <option v-for="kp in kpList" :value="kp.kpId">{{kp.kpName}}</option>
                                 </select>
                             </td>
@@ -169,7 +169,10 @@
                 "kcName": "",
                 "kcDescription": "",
                 "kcStandard": "",
-                "kpId": "",
+                "kp": {
+                    "kpId": "",
+                    "kpName": ""
+                },
                 "kpName": ""
             },
             searchField: "",
@@ -312,7 +315,8 @@
                 this.modalKc.kcName = "";
                 this.modalKc.kcDescription = "";
                 this.modalKc.kcStandard = "";
-                this.modalKc.kpId = "";
+                this.modalKc.kp.kpId = "";
+                this.modalKc.kp.kpName = "";
             },
             initPage: function () {
                 this.kcParam.pageSize = 10;

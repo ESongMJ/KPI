@@ -5,6 +5,7 @@ import cn.songmj.kpi.enums.StatusCode;
 import cn.songmj.kpi.param.KpiDetailParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.KpiDetailService;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,11 @@ public class KpiDetailController extends BaseController {
     public Result save(KpiDetailParam kpiDetailParam){
         kpiDetailService.save(kpiDetailParam);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
+    }
+    @PostMapping("/pageByUser")
+    public Result pageByUser(KpiDetailParam kpiDetailParam){
+        Page<KpiDetailParam> page = kpiDetailService.pageByUser(kpiDetailParam);
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(),page);
     }
 }
 

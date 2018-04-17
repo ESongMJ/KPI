@@ -42,7 +42,10 @@ public class KpiContentFacadeImpl extends ServiceImpl<KpiContentMapper, KpiConte
         BeanUtils.copyProperties(kcPage, kcParamPage);
         kcParamPage.setRecords(kcList.stream().map(kc1 -> {
             KpiContentParam kcParam = new KpiContentParam();
+            KpiPointParam kp = new KpiPointParam();
+            BeanUtils.copyProperties(kc1.getKp(), kp);
             BeanUtils.copyProperties(kc1, kcParam);
+            kcParam.setKp(kp);
             return kcParam;
         }).collect(Collectors.toList()));
         return kcParamPage;

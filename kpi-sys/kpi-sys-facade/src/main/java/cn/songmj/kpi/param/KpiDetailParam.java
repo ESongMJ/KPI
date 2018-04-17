@@ -26,11 +26,15 @@ public class KpiDetailParam extends PageParam implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long kuId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long userId;
+    private String userName;
     /**
      * 绩效内容
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long kcId;
+    private KpiContentParam kc;
     /**
      * 申请分数
      */
@@ -47,4 +51,10 @@ public class KpiDetailParam extends PageParam implements Serializable {
      * 审核状态
      */
     private Integer kdStatus;
+    /**
+     * 绩效类型
+     * 非数据库字段
+     */
+    private Integer kpType;
+    private Long kpId;
 }

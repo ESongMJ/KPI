@@ -16,29 +16,20 @@
 <section id="app">
     <div class="ibox float-e-margins animated fadeInRight">
         <div class="ibox-title">
-            <h5>KPI审核</h5>
+            <h5>{{titleText}}-申请列表</h5>
+            <a :href="backUrl" class="label label-default pull-right m-r-xs">
+                <i class="fa fa-mail-reply">返回</i>
+            </a>
         </div>
         <div class="ibox-content">
             <div class="row">
-                <div class="col-sm-2 m-l-sm">
-                    <select class="form-control btn-sm" style="font-size: 13px">
+                <div class="col-sm-2 m-l-sm pull-left">
+                    <select class="form-control input-sm" style="font-size: 13px">
                         <option value="0">--选择类型--</option>
-                        <option value="1">类型：教学型</option>
-                        <option value="2">类型：科研型</option>
-                    </select>
-                </div>
-                <div class="col-sm-3 m-l-sm">
-                    <select class="form-control btn-sm" style="font-size: 13px">
-                        <option value="0">--选择站点--</option>
-                        <option value="1">站点：教学任务</option>
-                        <option value="2">站点：实验课成果</option>
-                    </select>
-                </div>
-                <div class="col-sm-2 m-l-sm">
-                    <select class="form-control btn-sm" style="font-size: 13px">
-                        <option value="0">--选择申请人--</option>
-                        <option value="1">申请人：Admin</option>
-                        <option value="2">申请人：ZhangSan</option>
+                        <option value="1">类型1</option>
+                        <option value="2">类型2</option>
+                        <option value="3">类型3</option>
+                        <option value="4">类型4</option>
                     </select>
                 </div>
                 <div class="col-sm-3 pull-right">
@@ -54,35 +45,26 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th width="12%">KPI类型</th>
-                        <th width="12%">观测点</th>
-                        <th width="12%">KPI指标</th>
-                        <th width="12%">申请人</th>
-                        <th width="12%">申请类型</th>
-                        <th width="12%">申请分数</th>
-                        <th width="20%">申请理由</th>
-                        <th width="12%">状态</th>
+                        <th width="20%">KPI类型</th>
+                        <th width="20%">KPI指标</th>
+                        <th width="20%">申请类型</th>
+                        <th width="20%">申请分数</th>
+                        <th width="10%">状态</th>
                         <th width="10%">操作</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-if="kdPage.records.length < 1">
-                        <td colspan="8" class="text-center">没有此类数据~</td>
+                        <td colspan="6" class="text-center">没有此类数据~</td>
                     </tr>
                     <tr v-for="kd in kdPage.records">
-                        <td>
-                            <span v-if="kd.kc.kp.kpType == 1">科研绩效</span>
-                            <span v-if="kd.kc.kp.kpType == 2">教学绩效</span>
-                        </td>
                         <td>{{kd.kc.kp.kpName}}</td>
                         <td>{{kd.kc.kcName}}</td>
-                        <td>{{kd.userName}}</td>
                         <td>
-                            <span v-if="kd.kdBenefitType == 1">个人绩效</span>
-                            <span v-if="kd.kdBenefitType == 2">团队绩效</span>
+                            <span v-if="kd.kdBenefitType == 1">个人</span>
+                            <span v-if="kd.kdBenefitType == 2">团体</span>
                         </td>
                         <td>{{kd.kdScore}}</td>
-                        <td>{{kd.kdReason}}</td>
                         <td>
                             <span v-if="kd.kdStatus == 1" class="label label-info">审核中</span>
                             <span v-if="kd.kdStatus == 2" class="label label-warning">审核驳回</span>
@@ -90,7 +72,7 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-info btn-xs" @click="edit(kd)">
-                                <i class="fa fa-edit">审核</i>
+                                <i class="fa fa-edit">查看</i>
                             </button>
                         </td>
                     </tr>
@@ -121,56 +103,47 @@
                     <button type="button" class="close" data-dismiss="modal"><span
                             aria-hidden="true">&times;</span><span
                             class="sr-only">Close</span></button>
-                    <h4 class="modal-title" id="modalTitle">绩效审核</h4>
+                    <h4 class="modal-title" id="modalTitle">绩效申请</h4>
                 </div>
                 <div class="modal-body">
                     <table style="font-size: 14px">
                         <tr>
                             <td align="right" height="40px" width="60px"> 编号:</td>
-                            <td><input type="text" disabled class="form-control m-l-md" v-model="modalKd.kc.kcId"
-                                       style="width: 420px"/>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKd.kc.kcId"/>
                             </td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> KPI类型:</td>
-                            <td><input type="text" disabled class="form-control m-l-md" v-model="modalKd.kc.kp.kpName"
-                                       style="width: 420px"/></td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKd.kc.kp.kpName"/></td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> KPI指标:</td>
-                            <td><input type="text" disabled class="form-control m-l-md" v-model="modalKd.kc.kcName"
-                                       style="width: 420px"/></td>
-                        </tr>
-                        <tr>
-                            <td align="right" height="40px"> KPI标准:</td>
-                            <td><input type="text" disabled class="form-control m-l-md" v-model="modalKd.kc.kcStandard"
-                                       style="width: 420px"/></td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKd.kc.kcStandard"/></td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> KPI描述:</td>
                             <td>
-                            <textarea class="form-control m-l-md" disabled style="width: 420px" cols="30"
-                                      v-model="modalKd.kc.kcDescription"
-                                      rows="3"></textarea>
-                            </td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKd.kc.kcDescription"/></td>
                         </tr>
                     </table>
                     <hr/>
                     <table style="font-size: 14px">
                         <tr>
                             <td align="right" height="40px" width="60px"> 申请人:</td>
-                            <td><input type="text" disabled class="form-control m-l-md" v-model="modalKd.userName"
-                                       style="width: 420px"/></td>
-                        </tr>
-                        <tr>
-                            <td align="right" height="40px"> 申请分数:</td>
-                            <td><input type="text" disabled class="form-control m-l-md" v-model="modalKd.kdScore"
-                                       style="width: 420px"/></td>
+                            <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="user.userName"></td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 申请类型:</td>
                             <td>
-                                <select class="form-control m-l-md" style="width: 420px" disabled
+                                <select class="form-control m-l-md" style="width: 420px"
                                         v-model="modalKd.kdBenefitType">
                                     <option value="0">--选择类型--</option>
                                     <option value="1">个人</option>
@@ -179,31 +152,16 @@
                             </td>
                         </tr>
                         <tr>
+                            <td align="right" height="40px"> 申请分数:</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalKd.kdScore"/></td>
+                        </tr>
+                        <tr>
                             <td align="right" height="40px"> 申请理由:</td>
                             <td>
-                                <textarea class="form-control m-l-md" style="width: 420px" cols="30"
-                                          v-model="modalKd.kdReason" disabled
-                                          rows="3"></textarea>
+                                <textarea class="form-control m-l-md" style="width: 420px" cols="30" rows="3"
+                                          v-model="modalKd.kdReason"></textarea>
                             </td>
-                        </tr>
-                    </table>
-                    <hr/>
-                    <table style="font-size: 14px">
-                        <tr>
-                            <td align="right" height="40px" width="60px"> 审核结果:</td>
-                            <td>
-                                <select class="form-control m-l-md" style="width: 420px" v-model="modalKa.kaResult">
-                                    <option value="0">--选择结果--</option>
-                                    <option value="2">驳回申请</option>
-                                    <option value="3">通过申请</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right" height="40px"> 审核意见:</td>
-                            <td><textarea class="form-control m-l-md" style="width: 420px" cols="30"
-                                          v-model="modalKa.kaMsg"
-                                          rows="3"></textarea></td>
                         </tr>
                     </table>
                 </div>
@@ -234,18 +192,18 @@
                 "kdScore": "",
                 "kdReason": "",
                 "kdBenefitType": "",
-                "kdStatus": 1,
-                "kpType": "",
-                "kpId": "",
-                "userId": "",
+                "kdStatus": "",
+                "kpType": 1,
                 "pageSize": 10,
                 "currentPage": 1
             },
-            modalKa: {
-                "kaId": "",
-                "kdId": "",
-                "kaResult": "",
-                "kaMsg": ""
+            modalKc: {
+                "kcId": "",
+                "kcName": "",
+                "kcDescription": "",
+                "kcStandard": "",
+                "kpId": "",
+                "kpName": ""
             },
             modalKd: {
                 "kdId": "",
@@ -255,9 +213,9 @@
                 "kc": {
                     "kcId": "",
                     "kcStandard": "",
-                    "kcDescription": "",
+                    "kcDescription":"",
                     "kp": {
-                        "kpName": ""
+                        "kpName":""
                     }
                 },
                 "kdScore": "",
@@ -271,16 +229,23 @@
                 dataEnd: 10,
                 total: 10,
                 pages: 1
-            }
+            },
+            user: {},
+            titleText: "",
+            backUrl: ""
         },
         methods: {
-            edit: function (kd) {
-                this.modalKd = kd;
-                this.getAudit(kd.kdId);
-                this.modalKa.kdId = kd.kdId;
-                $("#kpiModal").modal("show");
+            search: function () {
+
             },
             page: function (param) {
+                var tmp = getParam(location+"", "type");
+                if (tmp == "teach") {
+                    param.kpType = 2;
+                } else if (tmp == "research") {
+                    param.kpType = 1;
+                }
+                param.kuId = getParam(location.href,"kuId");
                 $.ajax({
                     type: 'POST',
                     url: '/sys/kd/pageByUser',
@@ -293,6 +258,20 @@
                     },
                     error: function (e) {
                         swal("请求异常", "You clicked the button!", "warning")
+                    }
+                });
+            },
+            initUser: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9301/sys/user/getUser",
+                    data: {
+                        "userId": getParam(location.href+"", "userId")
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.user = res.data;
+                        }
                     }
                 });
             },
@@ -313,51 +292,47 @@
                 this.kdParam.currentPage = current;
                 this.page(this.kdParam);
             },
+            edit: function (kd) {
+                this.modalKd = kd;
+                $("#kpiModal").modal("show");
+            },
             save: function () {
+                // 赋值kcId
+                this.modalKd.kcId = this.modalKc.kcId;
                 $.ajax({
                     type: "POST",
-                    url: "/sys/ka/save",
-                    data: this.modalKa,
+                    url: "/sys/kd/save",
+                    data: this.modalKd,
                     success: function (res) {
                         if (res.code === "0") {
-                            $("#kpiModal").modal("hide");
-                            vm.page(vm.kdParam);
-                            swal("提交审核成功", res.msg, "success");
+                            swal("申请成功", res.msg, "success");
                         }
                     }
                 });
-            },
-            getAudit: function (kdId) {
-                $.ajax({
-                    type: "POST",
-                    url: "/sys/ka/getOne",
-                    data: {
-                        "kdId": kdId
-                    },
-                    success: function (res) {
-                        if (res.code === "0") {
-                            if (res.data != null) {
-                                vm.modalKa = res.data;
-                            } else {
-                                vm.initKa();
-                            }
-                        }
-                    }
-                });
-            },
-            initKa: function () {
-                this.modalKa = {
-                    "kaId": -1,
-                    "kdId": "",
-                    "kaResult": "",
-                    "kaMsg": ""
-                }
             }
         },
         created: function () {
+            this.titleText = decodeURI(getParam(location.href+"", "title"));
+            if (getParam(location.href+"", "type") == "teach") {
+                this.backUrl = "kpi_teach.html";
+            } else if (getParam(location.href+"", "type") == "research") {
+                this.backUrl = "kpi_research.html";
+            }
             this.page(this.kdParam);
+            this.initUser();
         }
     });
+    function getParam(href, key) {
+        var params = href.split("?")[1].split("&");
+        for (var index = 0; index < params.length; index++) {
+            var paramKey = params[index].split("=")[0];
+            var paramValue = params[index].split("=")[1];
+            if (paramKey == key) {
+                return paramValue;
+            }
+        }
+        return null;
+    }
 </script>
 </body>
 </html>

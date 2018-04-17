@@ -32,7 +32,7 @@ public class KpiAudit extends Model<KpiAudit> implements Serializable {
      * 审批结果
      */
     @TableField("ka_result")
-    private String kaResult;
+    private Integer kaResult;
     /**
      * 审批信息
      */

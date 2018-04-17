@@ -32,7 +32,7 @@ public class KpiContentParam extends PageParam implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long kpId;
-    private String kpName;
+    private KpiPointParam kp;
     private Integer kpType;
     private Long userId;
 }

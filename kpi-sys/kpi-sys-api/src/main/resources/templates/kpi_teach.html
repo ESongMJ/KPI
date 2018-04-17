@@ -61,7 +61,10 @@
                         <span class="label label-primary" v-if="ku.kuStatus == 3">已过期</span>
                     </td>
                     <td>
-                        <a :href="'kpi_list.html?type=teach&userId='+ku.userId+'&kuId='+ku.kuId" class="btn btn-info btn-xs">
+                        <a :href="'kpi_apply_list.html?type=teach&userId='+ku.userId+'&kuId='+ku.kuId+'&title='+ku.kf.kfBeginDate+'-'+ku.kf.kfEndDate+'年度'+ku.kf.kfName" class="btn btn-info btn-xs">
+                            <i class="fa fa-file-text">查看</i>
+                        </a>
+                        <a :href="'kpi_list.html?type=teach&userId='+ku.userId+'&kuId='+ku.kuId+'&title='+ku.kf.kfBeginDate+'-'+ku.kf.kfEndDate+'年度'+ku.kf.kfName" class="btn btn-info btn-xs">
                             <i class="fa fa-edit">申请</i>
                         </a>
                     </td>
@@ -154,20 +157,6 @@
                 }
                 this.kuParam.currentPage = current;
                 this.page(this.kuParam);
-            },
-            checkLogin: function () {
-                $.ajax({
-                    type: "POST",
-                    url: "http://127.0.0.1:9301/sys/user/checkLogin",
-                    success: function (res) {
-                        alert(JSON.stringify(res));
-                        if (res.code === "0") {
-
-                        } else if (res.code === "3") {
-                            window.location.href = "/login";
-                        }
-                    }
-                });
             },
             initParam: function () {
                 this.kuParam.kuId = "";

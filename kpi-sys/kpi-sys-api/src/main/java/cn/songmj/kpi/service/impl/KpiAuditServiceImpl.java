@@ -1,6 +1,7 @@
 package cn.songmj.kpi.service.impl;
 
 import cn.songmj.kpi.facade.KpiAuditFacade;
+import cn.songmj.kpi.param.KpiAuditParam;
 import cn.songmj.kpi.service.KpiAuditService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Service;
@@ -21,4 +22,17 @@ public class KpiAuditServiceImpl implements KpiAuditService {
     )
     private KpiAuditFacade kpiAuditFacade;
 
+    @Override
+    public Integer save(KpiAuditParam kpiAuditParam) {
+        if (kpiAuditParam.getKaId() == null || kpiAuditParam.getKaId() == -1) {
+            kpiAuditParam.setKaId(null);
+            return kpiAuditFacade.insert(kpiAuditParam);
+        }
+        return kpiAuditFacade.update(kpiAuditParam);
+    }
+
+    @Override
+    public KpiAuditParam getOne(Long kdId) {
+        return kpiAuditFacade.getOne(kdId);
+    }
 }

@@ -29,11 +29,15 @@ public class KpiDetail extends Model<KpiDetail> implements Serializable {
      */
     @TableField("ku_id")
     private Long kuId;
+    @TableField(exist = false)
+    private String userName;
     /**
      * 绩效内容
      */
     @TableField("kc_id")
     private Long kcId;
+    @TableField(exist = false)
+    private KpiContent kc;
     /**
      * 申请分数
      */

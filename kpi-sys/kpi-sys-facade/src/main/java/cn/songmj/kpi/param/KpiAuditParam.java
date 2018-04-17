@@ -28,7 +28,7 @@ public class KpiAuditParam extends PageParam implements Serializable {
     /**
      * 审批结果
      */
-    private String kaResult;
+    private Integer kaResult;
     /**
      * 审批信息
      */

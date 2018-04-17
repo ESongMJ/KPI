@@ -9,7 +9,10 @@
         <result column="kcDescription" property="kcDescription" />
         <result column="kcStandard" property="kcStandard" />
         <result column="kpId" property="kpId" />
-        <result column="kpName" property="kpName" />
+        <association property="kp" javaType="cn.songmj.kpi.entity.KpiPoint">
+            <id column="kpId" property="kpId"/>
+            <result column="kpName" property="kpName"/>
+        </association>
     </resultMap>
 
     <!-- 通用查询结果列 -->
