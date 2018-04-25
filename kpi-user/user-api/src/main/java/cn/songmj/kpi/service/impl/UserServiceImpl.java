@@ -44,9 +44,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Long> listUserIds(UserParam userParam) {
+    public List<String> listUserIds(UserParam userParam) {
         List<UserParam> userParamList = userFacade.list(userParam);
-        return userParamList.stream().map(UserParam::getUserId).collect(Collectors.toList());
+        return userParamList.stream().map(user -> String.valueOf(user.getUserId())).collect(Collectors.toList());
     }
 
     @Override

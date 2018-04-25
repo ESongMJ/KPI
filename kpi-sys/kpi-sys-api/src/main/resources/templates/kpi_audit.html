@@ -21,24 +21,22 @@
         <div class="ibox-content">
             <div class="row">
                 <div class="col-sm-2 m-l-sm">
-                    <select class="form-control btn-sm" style="font-size: 13px">
+                    <select class="form-control btn-sm" style="font-size: 13px" id="kpType" onchange="change()">
                         <option value="0">--选择类型--</option>
                         <option value="1">类型：教学型</option>
                         <option value="2">类型：科研型</option>
                     </select>
                 </div>
                 <div class="col-sm-3 m-l-sm">
-                    <select class="form-control btn-sm" style="font-size: 13px">
-                        <option value="0">--选择站点--</option>
-                        <option value="1">站点：教学任务</option>
-                        <option value="2">站点：实验课成果</option>
+                    <select class="form-control btn-sm" style="font-size: 13px" id="kpId" onchange="change()">
+                        <option value="0">--选择观测点--</option>
+                        <option v-for="kp in kpList" :value="kp.kpId">观测点：{{kp.kpName}}</option>
                     </select>
                 </div>
                 <div class="col-sm-2 m-l-sm">
-                    <select class="form-control btn-sm" style="font-size: 13px">
+                    <select class="form-control btn-sm" style="font-size: 13px" id="userId" onchange="change()">
                         <option value="0">--选择申请人--</option>
-                        <option value="1">申请人：Admin</option>
-                        <option value="2">申请人：ZhangSan</option>
+                        <option v-for="user in userList" :value="user.userId">申请人：{{userName}}</option>
                     </select>
                 </div>
                 <div class="col-sm-3 pull-right">
@@ -227,6 +225,8 @@
         el: "#app",
         data: {
             kdPage: [],
+            kpList: [],
+            userList: [],
             kdParam: {
                 "kdId": "",
                 "kuId": "",
@@ -235,9 +235,9 @@
                 "kdReason": "",
                 "kdBenefitType": "",
                 "kdStatus": 1,
-                "kpType": "",
-                "kpId": "",
-                "userId": "",
+                "kpType": 0,
+                "kpId": 0,
+                "userId": 0,
                 "pageSize": 10,
                 "currentPage": 1
             },
@@ -314,6 +314,7 @@
                 this.page(this.kdParam);
             },
             save: function () {
+                this.modalKa.kdId = this.modalKd.kdId;
                 $.ajax({
                     type: "POST",
                     url: "/sys/ka/save",
@@ -352,12 +353,49 @@
                     "kaResult": "",
                     "kaMsg": ""
                 }
+            },
+            initUsers: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9301/sys/user/list",
+                    success: function (res) {
+                        if (res.code == 0) {
+                            vm.userList = res.dataList;
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", "", "error");
+                    }
+                });
+            },
+            initKps: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9302/sys/kp/list",
+                    data: {
+                        "kpType": this.kdParam.kpType
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.kpList = res.dataList;
+                        }
+                    }
+                })
             }
         },
         created: function () {
             this.page(this.kdParam);
+            this.initUsers();
+            this.initKps();
         }
     });
+    function change() {
+        vm.kdParam.kpType = $("#kpType").val();
+        vm.kdParam.kpId = $("#kpId").val();
+        vm.kdParam.userId = $("#userId").val();
+        vm.page(vm.kdParam);
+        vm.initKps();
+    }
 </script>
 </body>
 </html>

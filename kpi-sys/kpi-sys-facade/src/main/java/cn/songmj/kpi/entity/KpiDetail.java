@@ -30,6 +30,8 @@ public class KpiDetail extends Model<KpiDetail> implements Serializable {
     @TableField("ku_id")
     private Long kuId;
     @TableField(exist = false)
+    private Long userId;
+    @TableField(exist = false)
     private String userName;
     /**
      * 绩效内容
@@ -58,6 +60,15 @@ public class KpiDetail extends Model<KpiDetail> implements Serializable {
      */
     @TableField("kd_status")
     private Integer kdStatus;
+    /**
+     * 绩效类型
+     * 非数据库字段
+     */
+    @TableField(exist = false)
+    private Integer kpType;
+    @TableField(exist = false)
+    private Long kpId;
+
 
     @Override
     protected Serializable pkVal() {

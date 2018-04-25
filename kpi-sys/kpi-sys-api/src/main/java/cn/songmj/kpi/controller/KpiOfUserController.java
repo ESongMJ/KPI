@@ -32,7 +32,7 @@ public class KpiOfUserController extends BaseController {
     private KpiOfUserService kpiOfUserService;
 
     @PostMapping("/send")
-    public Result send(Long kfId, @RequestParam("uids[]") Long[] uids) {
+    public Result send(Long kfId, @RequestParam("uids[]") String[] uids) {
         kpiOfUserService.send(kfId, Arrays.asList(uids));
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
     }

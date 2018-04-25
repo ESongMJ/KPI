@@ -43,8 +43,8 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
         // 过滤掉登录页面请求和验证码请求
         String regexLogin = ".*login";
         String regexCode = ".*verifyCode";
-        // 过滤跨域请求获取用户id列表
-        String regexUids = ".*uid/list";
+        // 过滤跨域请求获取用户列表
+        String regexUids = ".*list";
         // 过滤获取登录用户请求
         String regexUser = ".*getUser";
         if (Pattern.matches(regexLogin, uri)

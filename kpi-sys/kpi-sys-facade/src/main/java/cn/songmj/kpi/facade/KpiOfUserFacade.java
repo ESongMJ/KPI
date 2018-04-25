@@ -66,7 +66,7 @@ public interface KpiOfUserFacade extends IService<KpiOfUser> {
      * @param userIdList
      * @return
      */
-    Integer send(Long kfId, List<Long> userIdList);
+    Integer send(Long kfId, List<String> userIdList);
 
     /**
      * 根据用户查询表单信息

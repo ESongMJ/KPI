@@ -57,7 +57,7 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
     }
 
     @Override
-    public Integer send(Long kfId, List<Long> userIdList) {
+    public Integer send(Long kfId, List<String> userIdList) {
         List<KpiOfUser> kuList = bindFormAndUser(kfId, userIdList);
         return baseMapper.insertBatch(kuList);
     }
@@ -85,11 +85,11 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
         return kuParamPage;
     }
 
-    private List<KpiOfUser> bindFormAndUser(Long kfId, List<Long> userIdList) {
+    private List<KpiOfUser> bindFormAndUser(Long kfId, List<String> userIdList) {
         return userIdList.stream().map(userId -> {
             KpiOfUser ku = new KpiOfUser();
             ku.setKuId(null);
-            ku.setUserId(userId);
+            ku.setUserId(Long.valueOf(userId));
             ku.setKfId(kfId);
             ku.setKuStatus(1);
             ku.setKuFinishDate("----.--.--");

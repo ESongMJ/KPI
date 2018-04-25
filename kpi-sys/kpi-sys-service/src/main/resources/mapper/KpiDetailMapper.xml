@@ -72,13 +72,13 @@
             <if test="kd.kdBenefitType != null">
                 and kd.kd_benefit_type = #{kd.kdBenefitType}
             </if>
-            <if test="kpType != null">
+            <if test="kpType != null and kpType != 0">
                 and kp.kp_type = #{kpType}
             </if>
-            <if test="kpId != null">
+            <if test="kpId != null and kpId != 0">
                 and kp.kp_id = #{kpId}
             </if>
-            <if test="userId != null">
+            <if test="userId != null and userId != 0">
                 and ku.user_id = #{userId}
             </if>
             <if test="kd.kdStatus != null">

@@ -30,7 +30,7 @@
                     <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 后端采用spring-boot+mybatis-plus开发</li>
                     <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 前端用H+框架做页面布局,vue.js处理请求和数据</li>
                     <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 整体采用dubbo+zookeeper做集群部署</li>
-                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 项目分成多个功能模块开发,采用"热插拔"方式集成在一起</li>
+                    <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 项目分成多个功能模块开发,集成在一起,功能可"插拔"</li>
                     <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 此项目做学习使用,请联系我<a href="#"><i
                             class="fa fa-qq"></i>1041746117</a></li>
                 </ul>
@@ -38,7 +38,7 @@
         </div>
         <div class="col-sm-5">
             <p class="m-t-md">登录到KPI系统</p>
-            <input type="text" class="form-control uname" placeholder="用户名" v-model="userParam.userName" minlength="4" required/>
+            <input type="text" class="form-control uname" placeholder="用户名" v-model="userParam.userNumber" minlength="4" required/>
             <input type="password" class="form-control pword" placeholder="密码" v-model="userParam.userPassword" minlength="6" required/>
             <div class="input-group m-b">
                 <input class="form-control uname" type="text" v-model="userParam.code" style="width: 80%" placeholder="验证码" minlength="5" maxlength="5" required/>
@@ -65,7 +65,7 @@
         el: "#app",
         data: {
             userParam: {
-                "userName": "admin",
+                "userNumber": "admin",
                 "userPassword": "123456",
                 "code": ""
             }

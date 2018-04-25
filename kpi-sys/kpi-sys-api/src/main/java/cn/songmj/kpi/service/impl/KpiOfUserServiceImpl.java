@@ -47,7 +47,7 @@ public class KpiOfUserServiceImpl implements KpiOfUserService {
     }
 
     @Override
-    public Integer send(Long kfId, List<Long> userIdList) {
+    public Integer send(Long kfId, List<String> userIdList) {
         return kpiOfUserFacade.send(kfId, userIdList);
     }
 

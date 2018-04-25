@@ -1,8 +1,10 @@
 package cn.songmj.kpi.service.impl;
 
 import cn.songmj.kpi.facade.YearEndBonusFacade;
+import cn.songmj.kpi.param.YearEndBonusParam;
 import cn.songmj.kpi.service.YearEndBonusService;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,4 +23,8 @@ public class YearEndBonusServiceImpl implements YearEndBonusService {
     )
     private YearEndBonusFacade yearEndBonusFacade;
 
+    @Override
+    public Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam) {
+        return null;
+    }
 }

@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-sm-3 pull-right">
                     <div class="input-group">
-                        <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control">
+                        <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control" v-model="searchField">
                         <span class="input-group-btn">
                         <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
                     </span>
@@ -217,7 +217,8 @@
         },
         methods: {
             search: function () {
-
+                this.kcParam = this.searchField;
+                this.page(this.kcParam);
             },
             page: function (param) {
                 var tmp = getParam(location.href+"", "type");

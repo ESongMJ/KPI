@@ -28,7 +28,7 @@ public interface UserService {
      * @param userParam
      * @return
      */
-    List<Long> listUserIds(UserParam userParam);
+    List<String> listUserIds(UserParam userParam);
 
     /**
      * 列表查询数据

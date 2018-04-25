@@ -61,7 +61,7 @@ public class UserFacadeImpl extends ServiceImpl<UserMapper, User> implements Use
     public List<UserParam> list(UserParam userParam) {
         EntityWrapper<User> ew = new EntityWrapper<>();
         if (userParam.getUserNumber() != null) {
-            ew.like("user_number", userParam.getUserNumber());
+            ew.eq("user_number", userParam.getUserNumber());
         }
         if (userParam.getUserName() != null) {
             ew.like("user_name", userParam.getUserName());

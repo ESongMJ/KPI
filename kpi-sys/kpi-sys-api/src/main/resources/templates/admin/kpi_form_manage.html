@@ -224,6 +224,7 @@
                 });
             },
             send: function (kf,uids) {
+                alert(JSON.stringify(uids));
                 swal({
                     title: "你确定？",
                     text: "您将把<"+kf.kfName+">表单分发给所有用户！",

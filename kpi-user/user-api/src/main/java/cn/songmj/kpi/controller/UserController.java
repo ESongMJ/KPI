@@ -51,7 +51,7 @@ public class UserController extends BaseController {
     @PostMapping("/uid/list")
     @CrossOrigin
     public Result listUserIds(UserParam userParam) {
-        List<Long> uids = userService.listUserIds(userParam);
+        List<String> uids = userService.listUserIds(userParam);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), uids);
     }
     @PostMapping("/save")

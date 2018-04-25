@@ -56,5 +56,6 @@ public class KpiDetailParam extends PageParam implements Serializable {
      * 非数据库字段
      */
     private Integer kpType;
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long kpId;
 }
