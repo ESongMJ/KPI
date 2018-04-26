@@ -1,0 +1,63 @@
+#spring
+spring:
+  application:
+    name: mail-sys-provider
+  datasource:
+      type: com.zaxxer.hikari.HikariDataSource
+      # 云服务器118.24.15.181
+      url: jdbc:mysql://118.24.15.181:3306/kpi?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      username: root
+      password: Song0828_root
+      driver-class-name: com.mysql.jdbc.Driver
+      hikari:
+        max-lifetime: 600
+        validation-timeout: 300
+        idle-timeout: 600
+        login-timeout: 5
+        connection-timeout: 600
+#dubbo
+dubbo:
+  application:
+    id: mail-sys-provider
+    name: mail-sys-provider
+    owner: songmj
+  #协议配置
+  protocol:
+    id: rmi
+    name: rmi
+    port: 20880 #替换默认20880端口
+  #服务注册配置
+  registry:
+    id: kpi-dubbo
+    address: zookeeper://localhost:2181
+  #dubbo接口包扫描
+  scan:
+    base-packages: cn.songmj.kpi.facade
+#dubbo健康监控
+endpoints:
+  dubbo:
+    enabled: true
+management:
+  health:
+    dubbo:
+      status:
+        defaults: memory
+        extras: load,threadpool
+  port: 9203
+#mybatis-plus
+mybatis-plus:
+  #mapper扫描
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  #实体扫描
+  type-aliases-package: cn.songmj.kpi.entity
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID"
+    id-type: 2
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+#启动日志
+#debug: true

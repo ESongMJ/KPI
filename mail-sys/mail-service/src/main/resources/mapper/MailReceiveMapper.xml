@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.songmj.kpi.mapper.MailReceiveMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.MailReceive">
+        <id column="mr_id" property="mrId" />
+        <result column="mail_id" property="mailId" />
+        <result column="user_id" property="userId" />
+        <result column="mr_status" property="mrStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        mr_id AS mrId, mail_id AS mailId, user_id AS userId, mr_status AS mrStatus
+    </sql>
+
+</mapper>

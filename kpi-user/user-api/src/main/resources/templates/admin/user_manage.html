@@ -9,6 +9,7 @@
     <link href="../../css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="../../css/plugins/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     <link href="../../css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="../../css/plugins/datapicker/datepicker3.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
 
 </head>
@@ -111,7 +112,7 @@
                 </div>
                 <div class="modal-body">
                     <table style="font-size: 14px; width: 100%" border="0">
-                        <tr>
+                        <tr style="display: none;">
                             <td align="right" height="40px"> 编号:</td>
                             <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
                                        v-model="modalUser.userId"/>
@@ -126,6 +127,11 @@
                             <td align="right" height="40px"> 登录名:</td>
                             <td><input type="text" class="form-control m-l-md" style="width: 420px"
                                        v-model="modalUser.userNumber"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 密码:</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalUser.userPassword"/></td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 角色:</td>
@@ -151,8 +157,10 @@
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 出生日期:</td>
-                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
-                                       v-model="modalUser.userBirthday"/></td>
+                            <td>
+                                <input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalUser.userBirthday"/>
+                            </td>
                         </tr>
                         <tr>
                             <td align="right" height="40px"> 学院:</td>
@@ -173,7 +181,9 @@
                             <td align="right" height="40px"> 岗位等级:</td>
                             <td>
                                 <select class="form-control m-l-md" style="width: 420px" v-model="modalUser.kbrId">
-                                    <option :value="kbr.kbrId" v-for="kbr in kbrList">{{kbr.kbrType}},{{kbr.kbrLevel}}级</option>
+                                    <option :value="kbr.kbrId" v-for="kbr in kbrList">
+                                        {{kbr.kbrType}},{{kbr.kbrLevel}}级
+                                    </option>
                                 </select>
                             </td>
                         </tr>
@@ -199,6 +209,8 @@
 <script src="../../js/bootstrap.min14ed.js?v=3.3.6"></script>
 <script src="../../js/plugins/iCheck/icheck.min.js"></script>
 <script src="../../js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="../../js/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script src="../../myjs/RegexUtils.js"></script>
 <script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
@@ -346,6 +358,10 @@
                 })
             },
             save: function () {
+                if (!checkDate("yyyy-MM-dd", this.modalUser.userBirthday)) {
+                    swal("格式错误", "请输入合法的日期", "error");
+                    return;
+                }
                 if (this.modalUser.userId === "自动生成") {
                     this.modalUser.userId = -1;
                 }
@@ -431,6 +447,7 @@
             this.listKBR();
         }
     });
+
 </script>
 </body>
 </html>

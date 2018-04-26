@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>KPI - 写信</title>
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link href="../css/bootstrap.min335.css" rel="stylesheet">
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="../css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="../css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="../css/plugins/chosen/chosen.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content" id="app">
+    <div class="row animated fadeInRight">
+        <div class="col-sm-12">
+            <div class="mail-box-header">
+                <h2>
+                    写信
+                </h2>
+            </div>
+            <div class="mail-box">
+                <div class="mail-body">
+                    <form class="form-horizontal" method="get">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">发送到：</label>
+                            <div class="col-sm-10">
+                                <select data-placeholder="选择接收方" class="chosen-select form-control" multiple
+                                        id="select-uids"
+                                        style="width:350px;" tabindex="4">
+                                    <option value="">请选择接收方</option>
+                                    <option v-for="user in userList" :value="user.userId" hassubinfo="true">
+                                        {{user.userName}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">主题：</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" v-model="mailParam.mailTitle">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mail-text h-200">
+                    <div class="summernote" id="mail-content">
+                        <h2>反馈标题</h2>
+                        <p>
+                            这是一个富文本编辑器，可以自定义文章样式，普通用户可以反馈给审批人，系统管理员。管理员和审批人可以指定发送给谁
+                        </p>
+                        <p>
+                            这是一个富文本编辑器，可以自定义文章样式，普通用户可以反馈给审批人，系统管理员。管理员和审批人可以指定发送给谁
+                        </p>
+                        <p>
+                            这是一个富文本编辑器，可以自定义文章样式，普通用户可以反馈给审批人，系统管理员。管理员和审批人可以指定发送给谁
+                        </p>
+                        <p>
+                            这是一个富文本编辑器，可以自定义文章样式，普通用户可以反馈给审批人，系统管理员。管理员和审批人可以指定发送给谁
+                        </p>
+                    </div>
+                </div>
+                <div class="mail-body text-right">
+                    <a href="mailbox.html" class="btn btn-sm btn-primary" @click="send()"
+                       title="Send"><i class="fa fa-reply"></i> 发送</a>
+                    <a href="#" class="btn btn-white btn-sm" @click="save()"
+                       title="Move to draft folder"><i class="fa fa-pencil"></i> 存为草稿</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min63b9.js?v=2.1.4"></script>
+<script src="../js/bootstrap.min335.js"></script>
+<script src="../js/plugins/chosen/chosen.jquery.js"></script>
+<script src="../js/content.mine209.js?v=1.0.0"></script>
+<script src="../js/plugins/iCheck/icheck.min.js"></script>
+<script src="../js/plugins/summernote/summernote.min.js"></script>
+<script src="../js/plugins/summernote/summernote-zh-CN.js"></script>
+<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+<script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    $(document).ready(function () {
+        $(".summernote").summernote({lang: "zh-CN"})
+    });
+
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            mailParam: {
+                "mailId": "",
+                "userId": "",
+                "mailTitle": "",
+                "mailContent": "",
+                "mailDate": "",
+                "mailStatus": ""
+            },
+            userList: {},
+            uidList: []
+        },
+        methods: {
+            initUserList: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9301/sys/user/list",
+                    success: function (res) {
+                        if (res.code == 0) {
+                            vm.userList = res.dataList;
+                            for (var selector in config) {
+                                $(selector).chosen(config[selector]);
+                            }
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", "", "error");
+                    }
+                });
+            },
+            send: function () {
+                // 获取选择的接收方
+                var selects = $("#select_uids_chosen").find(".chosen-choices").find(".search-choice");
+                if (selects.size() < 1) {
+                    swal("请选择接收方", "", "warning");
+                    return;
+                }
+                // 初始化数组, 防止重复push
+                var uid = [];
+                selects.each(function () {
+                    uid.push($(this).find("a").attr("data-option-array-index"));
+                });
+                // 把最新的id列表赋值给uidList
+                this.uidList = uid;
+                this.getMailParam(2);//已发送状态
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9303/mail/send",
+                    data: {
+                        "mail": this.mailParam,
+                        "udis": this.uidList
+                    },
+                    success: function (res) {
+                        if (res.code == 0) {
+                            swal("发送成功", "即将跳转到收件箱", "success");
+                            location.href = "mailbox.html";
+                        }
+                    }
+                });
+            },
+            save: function () {
+                this.getMailParam(1);//草稿状态
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9303/mail/save",//保存为草稿
+                    data: this.mailParam,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            swal("保存成功", "", "success");
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", "", "");
+                    }
+                });
+            },
+            initMail: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9303/mail/get/one",
+                    data: {
+                        "userId": $.cookie('user_id')
+                    },
+                    success: function (res) {
+                        if (res.code == 0) {
+                            if (res.data != null) {
+                                this.mailParam = res.data;
+                            }
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", "", "error");
+                    }
+                });
+            },
+            getMailParam: function (status) {
+                this.mailParam.mailStatus = status;//已发送状态
+                this.mailParam.mailContent = $("#mail-content").parent().find(".note-editable").html().toString();
+                this.mailParam.userId = $.cookie('user_id');
+            }
+        },
+        created: function () {
+            // this.initUserList();
+            this.initMail();
+            this.userList = [
+                {
+                    "userId": "1",
+                    "userName": "test1"
+                },
+                {
+                    "userId": "2",
+                    "userName": "test2"
+                },
+                {
+                    "userId": "3",
+                    "userName": "test3"
+                },
+                {
+                    "userId": "4",
+                    "userName": "test4"
+                },
+                {
+                    "userId": "5",
+                    "userName": "test5"
+                }
+            ];
+            setTimeout(loadSelect, 10);
+        }
+    });
+
+    function test() {
+    }
+
+    function loadSelect() {
+        var config = {
+            ".chosen-select": {},
+            ".chosen-select-deselect": {allow_single_deselect: !0},
+            ".chosen-select-no-single": {disable_search_threshold: 10},
+            ".chosen-select-no-results": {no_results_text: "Oops, nothing found!"},
+            ".chosen-select-width": {width: "95%"}
+        };
+        for (var selector in config) $(selector).chosen(config[selector]);
+    }
+</script>
+</body>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/mail_compose.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Mar 2016 12:29:21 GMT -->
+</html>

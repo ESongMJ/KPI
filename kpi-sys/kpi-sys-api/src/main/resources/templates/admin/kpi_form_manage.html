@@ -98,7 +98,7 @@
                 </div>
                 <div class="modal-body">
                     <table style="font-size: 14px; width: 100%" border="0">
-                        <tr>
+                        <tr style="display: none;">
                             <td align="right" height="40px"> 编号:</td>
                             <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
                                        v-model="modalKf.kfId"/>
@@ -137,6 +137,7 @@
 <script src="../../js/bootstrap.min14ed.js?v=3.3.6"></script>
 <script src="../../js/plugins/iCheck/icheck.min.js"></script>
 <script src="../../js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="../../myjs/RegexUtils.js"></script>
 <script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
@@ -286,6 +287,11 @@
                 })
             },
             save: function () {
+                if (!checkDate("yyyy-MM-dd", this.modalKf.kfBeginDate)
+                    || !checkDate("yyyy-MM-dd", this.modalKf.kfEndDate)) {
+                    swal("格式错误", "请输入合法的日期", "error");
+                    return;
+                }
                 if (this.modalKf.kfId === "自动生成") {
                     this.modalKf.kfId = -1;
                 }
@@ -331,10 +337,12 @@
                 this.kfParam.kfEndDate = "";
             },
             initModal: function () {
-                this.modalKf.kfId = "";
-                this.modalKf.kfName = "";
-                this.modalKf.kfBeginDate = "";
-                this.modalKf.kfEndDate = "";
+                this.modalKf = {
+                    "kfId": "",
+                    "kfName": "",
+                    "kfBeginDate": "",
+                    "kfEndDate": ""
+                };
             },
             initPage: function () {
                 this.kfParam.pageSize = 10;

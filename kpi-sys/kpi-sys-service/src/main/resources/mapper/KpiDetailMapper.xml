@@ -88,7 +88,8 @@
         order by kd.kd_status asc
     </select>
     <update id="updateStatus" parameterType="cn.songmj.kpi.entity.KpiDetail">
-        update kpi_detail set kd_status = #{kdStatus}
+        update kpi_detail set
+        kd_status = #{kdStatus}
         <where>
             kd_id = #{kdId}
         </where>

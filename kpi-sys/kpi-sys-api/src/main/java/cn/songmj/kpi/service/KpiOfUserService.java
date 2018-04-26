@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author songmj123
@@ -37,6 +37,14 @@ public interface KpiOfUserService {
      * @return
      */
     Integer save(KpiOfUserParam kpiOfUserParam);
+
+    /**
+     * 更新最后修改时间
+     *
+     * @param kuId
+     * @return
+     */
+    Integer updateDateById(Long kuId);
 
     /**
      * 删除

@@ -1,0 +1,26 @@
+#spring
+spring:
+  application:
+    name: mail-sys-consumer
+  thymeleaf:
+    suffix: .html
+    cache: false
+    mode: LEGACYHTML5
+#server
+server:
+  port: 9303
+#dubbo
+dubbo:
+  application:
+    id: mail-sys-consumer
+    name: mail-sys-consumer
+    owner: songmj
+#服务注册配置
+  registry:
+    id: kpi-dubbo
+    address: zookeeper://localhost:2181
+#dubbo健康监控
+management:
+  port: 9403
+#启动日志
+#debug: true

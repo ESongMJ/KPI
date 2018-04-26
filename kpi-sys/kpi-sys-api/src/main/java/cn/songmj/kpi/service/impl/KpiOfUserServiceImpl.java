@@ -8,6 +8,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -39,6 +40,14 @@ public class KpiOfUserServiceImpl implements KpiOfUserService {
     @Override
     public Integer save(KpiOfUserParam kpiOfUserParam) {
         return null;
+    }
+
+    @Override
+    public Integer updateDateById(Long kuId) {
+        KpiOfUserParam kpiOfUserParam = new KpiOfUserParam();
+        kpiOfUserParam.setKuId(kuId);
+        kpiOfUserParam.setKuFinishDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
+        return kpiOfUserFacade.updateDateById(kpiOfUserParam);
     }
 
     @Override

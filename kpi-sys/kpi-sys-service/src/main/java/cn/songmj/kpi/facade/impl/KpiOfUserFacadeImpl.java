@@ -7,6 +7,7 @@ import cn.songmj.kpi.mapper.KpiOfUserMapper;
 import cn.songmj.kpi.param.KpiFormParam;
 import cn.songmj.kpi.param.KpiOfUserParam;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -49,6 +50,13 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
     @Override
     public Integer update(KpiOfUserParam kpiOfUserParam) {
         return null;
+    }
+
+    @Override
+    public Integer updateDateById(KpiOfUserParam kpiOfUserParam) {
+        KpiOfUser ku = new KpiOfUser();
+        BeanUtils.copyProperties(kpiOfUserParam, ku);
+        return baseMapper.updateById(ku);
     }
 
     @Override

@@ -51,6 +51,12 @@ public interface KpiOfUserFacade extends IService<KpiOfUser> {
     Integer update(KpiOfUserParam kpiOfUserParam);
 
     /**
+     * 更新最后修改时间
+     * @param kpiOfUserParam
+     * @return
+     */
+    Integer updateDateById(KpiOfUserParam kpiOfUserParam);
+    /**
      * 删除
      *
      * @param kuId
