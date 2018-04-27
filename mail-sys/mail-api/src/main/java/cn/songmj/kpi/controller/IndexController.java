@@ -1,6 +1,7 @@
 package cn.songmj.kpi.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -14,24 +15,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class IndexController {
 
     @GetMapping("/sys/{path}")
+    @CrossOrigin
     public String indexSys(@PathVariable("path") String path) {
         return path;
     }
 
     @GetMapping("/")
+    @CrossOrigin
     public String route() {
         return "index";
     }
 
     @GetMapping("/{path}")
+    @CrossOrigin
     public String route(@PathVariable("path") String path) {
         return path;
     }
     @GetMapping("/sys/admin/{path}")
+    @CrossOrigin
     public String routeSysAdmin(@PathVariable("path") String path) {
         return "admin/"+path;
     }
     @GetMapping("/admin/{path}")
+    @CrossOrigin
     public String routeAdmin(@PathVariable("path") String path) {
         return "admin/"+path;
     }

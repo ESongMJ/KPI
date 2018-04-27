@@ -26,6 +26,7 @@ public class MailParam extends PageParam implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
+    private String userName;
     private String mailTitle;
     private String mailContent;
     /**

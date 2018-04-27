@@ -1,25 +1,19 @@
 <!DOCTYPE html>
 <html>
-
-
-<!-- Mirrored from www.zi-han.net/theme/hplus/mailbox.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Mar 2016 12:28:42 GMT -->
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
     <title>KPI - 收件箱</title>
     <link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
     <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="../css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="../css/animate.min.css" rel="stylesheet">
     <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet">
-
+    <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content" id="app">
     <div class="row animated fadeInRight">
         <div class="col-sm-12 animated fadeInRight">
             <div class="mail-box-header">
@@ -59,182 +53,26 @@
             <div class="mail-box">
                 <table class="table table-hover table-mail">
                     <tbody>
-                    <tr class="unread">
-                        <td class="check-mail">
+                    <tr v-if="mrPage.records.length < 1" class="unread">
+                        <td colspan="5" class="text-center">
+                            收件箱为空~
+                        </td>
+                    </tr>
+                    <tr v-for="mr in mrPage.records" :class="mr.mrStatus==1?'unread':'read'"
+                        @click="mark(mr.mrId, mr.mrStatus)" style="cursor: pointer">
+                        <td class="check-mail" width="5%">
                             <input type="checkbox" class="i-checks">
                         </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">支付宝</a>
+                        <td class="mail-ontact" width="25%">
+                            <a href="#">{{mr.mail.userName}}</a>
+                            <span v-if="mr.mrStatus == 1" class="label label-warning pull-right">未读邮件</span>
                         </td>
-                        <td class="mail-subject"><a href="mail_detail.html">支付宝提醒</a>
+                        <td class="mail-subject" width="55%">
+                            <a href="#">{{mr.mail.mailTitle}}</a>
                         </td>
-                        <td class=""><i class="fa fa-paperclip"></i>
+                        <td class="" width="5"><i class="fa fa-paperclip"></i>
                         </td>
-                        <td class="text-right mail-date">昨天 10:20</td>
-                    </tr>
-                    <tr class="unread">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks" checked>
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">Amaze UI</a>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">Amaze UI Beta2 发布</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">上午10:57</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">WordPress</a> <span
-                                class="label label-warning pull-right">验证邮件</span>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">wp-user-frontend-pro v2.1.9</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">上午9:21</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">淘宝网</a>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">史上最全！淘宝双11红包疯抢攻略！</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">中午12:24</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">淘宝网</a> <span
-                                class="label label-danger pull-right">AD</span>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">亲，双11来啦！帮你挑货，还送你4999元红包！仅此一次！</a>
-                        </td>
-                        <td class=""><i class="fa fa-paperclip"></i>
-                        </td>
-                        <td class="text-right mail-date">上午6:48</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">支付宝</a>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">支付宝提醒</a>
-                        </td>
-                        <td class=""><i class="fa fa-paperclip"></i>
-                        </td>
-                        <td class="text-right mail-date">昨天 10:20</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">Amaze UI</a>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">Amaze UI Beta2 发布</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">上午10:57</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">WordPress</a> <span
-                                class="label label-warning pull-right">验证邮件</span>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">wp-user-frontend-pro v2.1.9</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">上午9:21</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">淘宝网</a>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">史上最全！淘宝双11红包疯抢攻略！</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">中午12:24</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">淘宝网</a> <span
-                                class="label label-danger pull-right">AD</span>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">亲，双11来啦！帮你挑货，还送你4999元红包！仅此一次！</a>
-                        </td>
-                        <td class=""><i class="fa fa-paperclip"></i>
-                        </td>
-                        <td class="text-right mail-date">上午6:48</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">支付宝</a>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">支付宝提醒</a>
-                        </td>
-                        <td class=""><i class="fa fa-paperclip"></i>
-                        </td>
-                        <td class="text-right mail-date">昨天 10:20</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">Amaze UI</a>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">Amaze UI Beta2 发布</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">上午10:57</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">WordPress</a> <span
-                                class="label label-warning pull-right">验证邮件</span>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">wp-user-frontend-pro v2.1.9</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">上午9:21</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">淘宝网</a>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">史上最全！淘宝双11红包疯抢攻略！</a>
-                        </td>
-                        <td class=""></td>
-                        <td class="text-right mail-date">中午12:24</td>
-                    </tr>
-                    <tr class="read">
-                        <td class="check-mail">
-                            <input type="checkbox" class="i-checks">
-                        </td>
-                        <td class="mail-ontact"><a href="mail_detail.html">淘宝网</a> <span
-                                class="label label-danger pull-right">AD</span>
-                        </td>
-                        <td class="mail-subject"><a href="mail_detail.html">亲，双11来啦！帮你挑货，还送你4999元红包！仅此一次！</a>
-                        </td>
-                        <td class=""><i class="fa fa-paperclip"></i>
-                        </td>
-                        <td class="text-right mail-date">上午6:48</td>
+                        <td class="text-right mail-date" width="10%">{{mr.mrDate}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -246,14 +84,104 @@
 <script src="../js/bootstrap.min14ed.js?v=3.3.6"></script>
 <script src="../js/content.mine209.js?v=1.0.0"></script>
 <script src="../js/plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+<script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
-    $(document).ready(function () {
+    function initChck() {
         $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
+    }
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            mrPage: [],
+            mrIdList: [],
+            mrParam: {
+                "mrId": "",
+                "mailId": "",
+                "mail": {
+                    "mailId": "",
+                    "userId": "",
+                    "userName": "",
+                    "mailTitle": "",
+                    "mailContent": ""
+                },
+                "userId": "",
+                "userName": "",
+                "mrStatus": "",
+                "mrDate": ""
+            },
+            mailParam: {
+                "mailId": "",
+                "userId": "",
+                "userName": "",
+                "mailTitle": "",
+                "mailContent": "",
+                "mailDate": "",
+                "mailStatus": "",
+                "pageSize": 10,
+                "currentPage": 1
+            }
+        },
+        methods: {
+            page: function (param) {
+                $.ajax({
+                    type: "POST",
+                    url: "/mr/page",
+                    data: param,
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.mrPage = res.pageData;
+                            setTimeout(initChck, 1);
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", "", "error");
+                    }
+                })
+            },
+            mark: function(mrId, status) {
+                if (status != 1) {
+                    location.href = "mail_detail.html?mrId="+mrId;
+                    return;
+                }
+                $.ajax({
+                   type: "POST",
+                   url: "/mr/mark",
+                   data: {
+                       "mrId": mrId
+                   },
+                   success: function (res) {
+                       if (res.code != "0") {
+                           swal("读取失败", res.msg, "error");
+                       } else if (res.code === "0") {
+                           location.href = "mail_detail.html?mrId="+mrId;
+                       }
+                   }
+                });
+            },
+            bathMark: function () {
+                this.getChecked();
+                $.ajax({
+                   type: "POST",
+                   url: "/mr/mark/batch",
+                   data: this.mrIdList,
+                   success: function (res) {
+                       if (res.code === "0") {
+                           vm.page(vm.mailParam);
+                       }
+                   }
+                });
+            },
+            getChecked: function () {
+
+            }
+        },
+        created: function () {
+            this.mailParam.userId = $.cookie('user_id');
+            this.page(this.mailParam);
+        }
     });
 </script>
-<script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
 </body>
-
-
-<!-- Mirrored from www.zi-han.net/theme/hplus/mailbox.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Mar 2016 12:28:43 GMT -->
 </html>

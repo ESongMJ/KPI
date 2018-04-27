@@ -7,10 +7,7 @@ import cn.songmj.kpi.param.MailParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.MailReceiveService;
 import cn.songmj.kpi.service.MailService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -31,7 +28,7 @@ public class MailController extends BaseController {
     @Resource
     private MailReceiveService mailReceiveService;
     @PostMapping("/send")
-    public Result send(@RequestParam("mail") MailParam mailParam, @RequestParam("udis[]") String[] uidList) {
+    public Result send(MailParam mailParam, @RequestParam("uids[]") String[] uidList) {
         Mail mail = mailService.save(mailParam);
         // 若保存成功
         if (mail.getMailId() != null) {

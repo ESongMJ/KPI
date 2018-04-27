@@ -27,6 +27,8 @@ public class Mail extends Model<Mail> implements Serializable {
      */
     @TableField("user_id")
     private Long userId;
+    @TableField(exist = false)
+    private String userName;
     @TableField("mail_title")
     private String mailTitle;
     @TableField("mail_content")

@@ -8,11 +8,74 @@
         <result column="mail_id" property="mailId" />
         <result column="user_id" property="userId" />
         <result column="mr_status" property="mrStatus" />
+        <result column="mr_date" property="mrDate"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        mr_id AS mrId, mail_id AS mailId, user_id AS userId, mr_status AS mrStatus
+        mr.mr_id AS mrId,
+        mr.mail_id AS mailId,
+        mr.user_id AS mrId,
+        mr.mr_status AS mrStatus,
+        mr.mr_date AS mrDate
     </sql>
 
+    <sql id="Box_Column_list">
+        mr.mr_id AS mrId,
+        mr.mail_id AS mailId,
+        mr.user_id AS mrUser,
+        mr.mr_status AS mrStatus,
+        mr.mr_date AS mrDate,
+		m.user_id AS mailUser,
+        m.mail_title AS mailTitle,
+        m.mail_content AS mailContent,
+        u1.user_name AS mrName,
+		u2.user_name AS mailName
+    </sql>
+    <resultMap id="Mail_Box_Map" type="cn.songmj.kpi.entity.MailReceive">
+        <id column="mrId" property="mrId" />
+        <result column="mailId" property="mailId" />
+        <result column="mrUser" property="userId" />
+        <result column="mrStatus" property="mrStatus" />
+        <result column="mrDate" property="mrDate"/>
+        <result column="mrName" property="userName"/>
+        <association property="mail" javaType="cn.songmj.kpi.entity.Mail">
+            <id column="mailId" property="mailId"/>
+            <result column="mailUser" property="userId"/>
+            <result column="mailName" property="userName"/>
+            <result column="mailTitle" property="mailTitle"/>
+            <result column="mailContent" property="mailContent"/>
+        </association>
+    </resultMap>
+
+    <select id="page" parameterType="cn.songmj.kpi.entity.Mail" resultMap="Mail_Box_Map">
+        select
+        <include refid="Box_Column_list"/>
+        from mail_receive mr
+        LEFT JOIN mail m ON mr.mail_id = m.mail_id
+        LEFT JOIN `user` u1 ON mr.user_id = u1.user_id
+        LEFT JOIN `user` u2 ON m.user_id = u2.user_id
+        <where>
+            mr.user_id = #{userId} and (
+            <if test="mailTitle != null">
+                m.mail_title like concat('%', #{mailTitle}, '%')
+            </if>
+            <if test="mailContent != null">
+                or m.mail_content like concat('%', #{mailContent}, '%')
+            </if>
+            )
+        </where>
+    </select>
+
+    <select id="readMail" parameterType="string" resultMap="Mail_Box_Map">
+        select
+        <include refid="Box_Column_list"/>
+        from mail_receive mr
+        LEFT JOIN mail m ON mr.mail_id = m.mail_id
+        LEFT JOIN `user` u1 ON mr.user_id = u1.user_id
+        LEFT JOIN `user` u2 ON m.user_id = u2.user_id
+        <where>
+            mr.mr_id = #{mrId}
+        </where>
+    </select>
 </mapper>

@@ -33,7 +33,6 @@
                                 <select data-placeholder="选择接收方" class="chosen-select form-control" multiple
                                         id="select-uids"
                                         style="width:350px;" tabindex="4">
-                                    <option value="">请选择接收方</option>
                                     <option v-for="user in userList" :value="user.userId" hassubinfo="true">
                                         {{user.userName}}
                                     </option>
@@ -66,7 +65,7 @@
                     </div>
                 </div>
                 <div class="mail-body text-right">
-                    <a href="mailbox.html" class="btn btn-sm btn-primary" @click="send()"
+                    <a href="#" class="btn btn-sm btn-primary" @click="send()"
                        title="Send"><i class="fa fa-reply"></i> 发送</a>
                     <a href="#" class="btn btn-white btn-sm" @click="save()"
                        title="Move to draft folder"><i class="fa fa-pencil"></i> 存为草稿</a>
@@ -112,9 +111,7 @@
                     success: function (res) {
                         if (res.code == 0) {
                             vm.userList = res.dataList;
-                            for (var selector in config) {
-                                $(selector).chosen(config[selector]);
-                            }
+                            setTimeout(loadSelect, 10);
                         }
                     },
                     error: function (e) {
@@ -139,10 +136,15 @@
                 this.getMailParam(2);//已发送状态
                 $.ajax({
                     type: "POST",
-                    url: "http://127.0.0.1:9303/mail/send",
+                    url: "/mail/send",
                     data: {
-                        "mail": this.mailParam,
-                        "udis": this.uidList
+                        "mailId": this.mailParam.mailId,
+                        "userId": this.mailParam.userId,
+                        "mailTitle": this.mailParam.mailTitle,
+                        "mailContent": this.mailParam.mailContent,
+                        "mailDate": this.mailParam.mailDate,
+                        "mailStatus": this.mailParam.mailStatus,
+                        "uids": this.uidList
                     },
                     success: function (res) {
                         if (res.code == 0) {
@@ -156,7 +158,7 @@
                 this.getMailParam(1);//草稿状态
                 $.ajax({
                     type: "POST",
-                    url: "http://127.0.0.1:9303/mail/save",//保存为草稿
+                    url: "/mail/save",//保存为草稿
                     data: this.mailParam,
                     success: function (res) {
                         if (res.code == 0) {
@@ -168,17 +170,19 @@
                     }
                 });
             },
+            // 初始化草稿件
             initMail: function () {
                 $.ajax({
                     type: "POST",
-                    url: "http://127.0.0.1:9303/mail/get/one",
+                    url: "/mail/get/one",
                     data: {
                         "userId": $.cookie('user_id')
                     },
                     success: function (res) {
-                        if (res.code == 0) {
+                        if (res.code === "0") {
                             if (res.data != null) {
-                                this.mailParam = res.data;
+                                vm.mailParam = res.data;
+                                $("#mail-content").parent().find(".note-editable").html(vm.mailParam.mailContent);
                             }
                         }
                     },
@@ -194,36 +198,10 @@
             }
         },
         created: function () {
-            // this.initUserList();
+            this.initUserList();
             this.initMail();
-            this.userList = [
-                {
-                    "userId": "1",
-                    "userName": "test1"
-                },
-                {
-                    "userId": "2",
-                    "userName": "test2"
-                },
-                {
-                    "userId": "3",
-                    "userName": "test3"
-                },
-                {
-                    "userId": "4",
-                    "userName": "test4"
-                },
-                {
-                    "userId": "5",
-                    "userName": "test5"
-                }
-            ];
-            setTimeout(loadSelect, 10);
         }
     });
-
-    function test() {
-    }
 
     function loadSelect() {
         var config = {

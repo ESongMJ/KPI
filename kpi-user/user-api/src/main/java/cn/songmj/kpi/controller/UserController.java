@@ -44,6 +44,7 @@ public class UserController extends BaseController {
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), paramPage);
     }
     @PostMapping("/list")
+    @CrossOrigin
     public Result list(UserParam userParam) {
         List<UserParam> userParamList = userService.list(userParam);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), userParamList);

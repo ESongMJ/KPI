@@ -29,16 +29,25 @@ public class MailReceive extends Model<MailReceive> implements Serializable {
      */
     @TableField("mail_id")
     private Long mailId;
+    @TableField(exist = false)
+    private Mail mail;
     /**
      * 接收人
      */
     @TableField("user_id")
     private Long userId;
+    @TableField(exist = false)
+    private String userName;
     /**
      * 已读状态
      */
     @TableField("mr_status")
     private Integer mrStatus;
+    /**
+     * 信件发送时间
+     */
+    @TableField("mr_Date")
+    private String mrDate;
 
     @Override
     protected Serializable pkVal() {
