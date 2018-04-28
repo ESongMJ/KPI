@@ -42,6 +42,7 @@ public class MailFacadeImpl extends ServiceImpl<MailMapper, Mail> implements Mai
     public MailParam getMail(String uid) {
         EntityWrapper<Mail> ew = new EntityWrapper<>();
         ew.eq("user_id", uid);
+        ew.and().eq("mail_status", 1);
         List<Mail> mails = baseMapper.selectList(ew);
         // 未查询到数据
         if (mails.size() < 1) {

@@ -12,7 +12,7 @@ spring:
       hikari:
         max-lifetime: 6000
         validation-timeout: 3000
-        idle-timeout: 6000
+        idle-timeout: 60000
         login-timeout: 5
         connection-timeout: 6000
 #server

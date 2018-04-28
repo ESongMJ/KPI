@@ -29,6 +29,7 @@
 		m.user_id AS mailUser,
         m.mail_title AS mailTitle,
         m.mail_content AS mailContent,
+        m.mail_date AS mailDate,
         u1.user_name AS mrName,
 		u2.user_name AS mailName
     </sql>
@@ -45,6 +46,7 @@
             <result column="mailName" property="userName"/>
             <result column="mailTitle" property="mailTitle"/>
             <result column="mailContent" property="mailContent"/>
+            <result column="mailDate" property="mailDate"/>
         </association>
     </resultMap>
 
@@ -56,7 +58,10 @@
         LEFT JOIN `user` u1 ON mr.user_id = u1.user_id
         LEFT JOIN `user` u2 ON m.user_id = u2.user_id
         <where>
-            mr.user_id = #{userId} and (
+            <if test="userId != null">
+                mr.user_id = #{userId} and
+            </if>
+            (
             <if test="mailTitle != null">
                 m.mail_title like concat('%', #{mailTitle}, '%')
             </if>

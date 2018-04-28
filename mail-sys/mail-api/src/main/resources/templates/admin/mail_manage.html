@@ -6,6 +6,8 @@
     <link href="../../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="../../css/animate.min.css" rel="stylesheet">
     <link href="../../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="../../css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="../../css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
     <link href="../../css/plugins/iCheck/custom.css" rel="stylesheet">
     <link href="../../css/plugins/colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     <link href="../../css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
@@ -13,149 +15,226 @@
 
 </head>
 <body class="gray-bg">
-<div class="ibox float-e-margins animated fadeInRight" id="app">
-    <div class="ibox-title">
-        <h5>站内信管理</h5>
-    </div>
-    <div class="ibox-content">
-        <div class="row">
-            <div class="col-sm-9 m-l-sm">
+<section id="app">
+    <div class="ibox float-e-margins animated fadeInRight">
+        <div class="ibox-title">
+            <h5>站内信管理</h5>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-9 m-l-sm">
 
-            </div>
-            <div class="col-sm-3" style="float: right">
-                <div class="input-group">
-                    <input type="text" placeholder="请输入KPI关键字" class="input-sm form-control">
-                    <span class="input-group-btn">
+                </div>
+                <div class="col-sm-3" style="float: right">
+                    <div class="input-group">
+                        <input type="text" placeholder="请输入主题或者内容关键词" class="input-sm form-control" v-model="searchField">
+                        <span class="input-group-btn">
                         <button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>
                     </span>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th width="40%">标题</th>
+                        <th width="18%">发送人</th>
+                        <th width="18%">接收人</th>
+                        <th width="15%">发送时间</th>
+                        <th width="16%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-if="mrPage.records.length < 1">
+                        <td colspan="5">暂时没有数据~</td>
+                    </tr>
+                    <tr v-for="mr in mrPage.records">
+                        <td>{{mr.mail.mailTitle}}</td>
+                        <td>{{mr.mail.userName}}</td>
+                        <td>{{mr.userName}}</td>
+                        <td>{{mr.mail.mailDate}}</td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-xs" @click="modal(mr)">
+                                <i class="fa fa-edit">查看</i>
+                            </button>
+                            <button type="button" class="btn btn-danger btn-xs" @click="remove(mr)">
+                                <i class="fa fa-trash">删除</i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row" style="height: 50px">
+                <div class="col-sm-6">
+                    <div class="dataTables_info" style="margin-top: 10px">
+                        显示 {{pageInfo.dataBegin}} 到 {{pageInfo.dataEnd}} 项，共 {{pageInfo.total}} 项
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="btn-group" style="float: right">
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(mrPage.current-1)">上一页
+                        </button>
+                        <button type="button" class="btn btn-sm btn-white" @click="pageClick(mrPage.current+1)">下一页
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th width="8%">编号</th>
-                    <th width="12%">标题</th>
-                    <th width="12%">发送人</th>
-                    <th width="12%">接收人</th>
-                    <th width="44%">时间</th>
-                    <th width="16%">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>xxxx通知</td>
-                    <td>Admin</td>
-                    <td>ZhangSan</td>
-                    <td>2018-03-19 10:29</td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs" @click="modal()">
-                            <i class="fa fa-edit">查看</i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash">删除</i>
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>xxxxx反馈</td>
-                    <td>ZhangSan</td>
-                    <td>Admin</td>
-                    <td>2018-03-19 10:29</td>
-                    <td>
-                        <button type="button" class="btn btn-info btn-xs" @click="modal()">
-                            <i class="fa fa-edit">查看</i>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs">
-                            <i class="fa fa-trash">删除</i>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
-</div>
-<div class="modal fade" id="kpiModal">
-    <div class="modal-dialog">
-        <div class="modal-content animated fadeIn">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span
-                        aria-hidden="true">&times;</span><span
-                        class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="modalTitle">站内信详情</h4>
-            </div>
-            <div class="modal-body">
-                <table style="font-size: 14px">
-                    <tr>
-                        <td align="right" height="40px" width="60px"> 标题:</td>
-                        <td><input type="text" class="form-control m-l-md" style="width: 420px"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 发送人:</td>
-                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 接收人:</td>
-                        <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"/></td>
-                    </tr>
-                    <tr>
-                        <td align="right" height="40px"> 内容:</td>
-                        <td>
-                            <textarea class="form-control m-l-md" style="width: 420px" cols="30"
-                                      rows="3"></textarea>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" @click="save()">保存</button>
+    <div class="modal fade" id="kpiModal">
+        <div class="modal-dialog" style="width: 1020px">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalTitle">站内信详情</h4>
+                </div>
+                <div class="modal-body">
+                    <table style="font-size: 14px">
+                        <tr>
+                            <td align="right" height="40px" width="60px"> 标题:</td>
+                            <td><input type="text" class="form-control m-l-md" style="width: 420px"
+                                       v-model="mrModal.mail.mailTitle"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 发送人:</td>
+                            <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="mrModal.mail.userName"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 接收人:</td>
+                            <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="mrModal.userName"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 发送时间:</td>
+                            <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="mrModal.mail.mailDate"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 内容:</td>
+                            <td>
+                                <!--<textarea class="form-control m-l-md" style="width: 420px" cols="30"-->
+                                <!--rows="3" v-html="mrModal.mail.mailContent"></textarea>-->
+                                <div class="summernote m-l-md" id="mail-content" v-html="mrModal.mail.mailContent">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="save()">保存</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 <script src="../../js/jquery.min63b9.js?v=2.1.4"></script>
 <script src="../../js/bootstrap.min14ed.js?v=3.3.6"></script>
 <script src="../../js/plugins/iCheck/icheck.min.js"></script>
 <script src="../../js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="../../js/plugins/summernote/summernote.min.js"></script>
+<script src="../../js/plugins/summernote/summernote-zh-CN.js"></script>
 <script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
     var vm;
     vm = new Vue({
-        "el": "#app",
-        "data": {
-            "searchField": ""
+        el: "#app",
+        data: {
+            searchField: "",
+            mrPage: [],
+            mailParam: {
+                "mailId": "",
+                "userId": "",
+                "userName": "",
+                "mailTitle": "",
+                "mailContent": "",
+                "mailDate": "",
+                "mailStatus": "",
+                "pageSize": 10,
+                "currentPage": 1
+            },
+            mrModal: {
+                "mrId": "",
+                "mailId": "",
+                "mail": {
+                    "mailId": "",
+                    "userId": "",
+                    "userName": "",
+                    "mailTitle": "",
+                    "mailContent": "",
+                    "mailDate": ""
+                },
+                "userId": "",
+                "userName": "",
+                "mrStatus": "",
+                "mrDate": ""
+            },
+            pageInfo: {
+                dataBegin: 1,
+                dataEnd: 10,
+                total: 10,
+                pages: 1
+            }
         },
         methods: {
-            modal: function () {
+            search: function () {
+                this.mailParam.mailTitle = this.searchField;
+                this.mailParam.mailContent = this.searchField;
+                this.page(this.mailParam);
+            },
+            modal: function (mr) {
+                this.mrModal = mr;
+                setTimeout($("#mail-content").summernote({lang: "zh-CN"}), 1);
+                setTimeout($(".note-editor").addClass("m-l-md"), 2);
+                $(".note-editable").html(this.mrModal.mail.mailContent);
                 $("#kpiModal").modal("show");
             },
-            search: function () {
-
-            },
-            list: function (param) {
+            page: function (param) {
                 $.ajax({
-                    type: 'POST',
-                    url: '/user/list',
-                    contentType: "application/json",
-                    data: JSON.stringify(param),
+                    type: "POST",
+                    url: "/mr/page",
+                    data: param,
                     success: function (res) {
-                        if (res.code === '0') {
-                            vm.users = res.dataList;
+                        if (res.code === "0") {
+                            vm.mrPage = res.pageData;
+                            vm.computePage();
                         }
                     },
                     error: function (e) {
-                        swal("请求异常", "You clicked the button!", "warning")
+                        swal("系统错误", "", "error");
+                    }
+                })
+            },
+            save: function () {
+                this.mailParam.mailContent = $("#mail-content").parent().find(".note-editable").html().toString();
+                this.mailParam.mailId = this.mrModal.mailId;
+                this.mailParam.userId = this.mrModal.userId;
+                this.mailParam.userName = this.mrModal.userName;
+                this.mailParam.mailTitle = this.mrModal.mail.mailTitle;
+                this.mailParam.mailContent = this.mrModal.mail.mailContent;
+                this.mailParam.mailDate = this.mrModal.mail.mailDate;
+                $.ajax({
+                    type: "POST",
+                    url: "/mail/save",//修改保存
+                    data: this.mailParam,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            swal("保存成功", "", "success");
+                        }
+                    },
+                    error: function (e) {
+                        swal("系统错误", "", "");
                     }
                 });
             },
-            remove: function (user) {
+            remove: function (mr) {
                 swal({
                     title: "你确定？",
                     text: "您将无法恢复数据！",
@@ -167,30 +246,69 @@
                 }, function () {
                     $.ajax({
                         type: 'POST',
-                        url: '/user/delete',
+                        url: '/mr/delete',
                         data: {
-                            userId: user.userId
+                            "mrId": mr.userId
                         },
                         success: function (res) {
                             if (res.code === "0") {
-                                swal("删除成功","","success");
-                                vm.initList();
+                                swal("删除成功", "", "success");
+                                vm.initParam();
+                                vm.page(vm.mailParam);
                             }
                         },
                         error: function (e) {
-                            swal("系统错误",e,"error");
+                            swal("系统错误", e, "error");
                         }
                     });
-                })
-            },
-            initList: function () {
-                this.list({
-
                 });
+            },
+            computePage: function () {
+                var size = this.mrPage.size;
+                var current = this.mrPage.current;
+                var total = this.mrPage.total;
+                var pages = this.mrPage.pages;
+                this.pageInfo.dataBegin = (current - 1) * size + 1;
+                this.pageInfo.dataEnd = (current - 1) * size + this.mrPage.records.length;
+                this.pageInfo.total = total;
+                this.pageInfo.peges = pages;
+            },
+            pageClick: function (current) {
+                if (current < 1 || current > this.mrPage.pages) {
+                    return;
+                }
+                this.mailParam.currentPage = current;
+                this.page(this.mailParam);
+            },
+            initParam: function () {
+                this.mailParam.mailId = "";
+                this.mailParam.userId = "";
+                this.mailParam.userName = "";
+                this.mailParam.mailTitle = "";
+                this.mailParam.mailContent = "";
+                this.mailParam.mailDate = "";
+                this.mailParam.mailStatus = "";
+            },
+            initModal: function () {
+                this.mrModal = {
+                    "mrId": "",
+                    "mailId": "",
+                    "mail": {
+                        "mailId": "",
+                        "userId": "",
+                        "userName": "",
+                        "mailTitle": "",
+                        "mailContent": ""
+                    },
+                    "userId": "",
+                    "userName": "",
+                    "mrStatus": "",
+                    "mrDate": ""
+                }
             }
         },
         created: function () {
-            // this.initList();
+            this.page(this.mailParam);
         }
     });
 </script>

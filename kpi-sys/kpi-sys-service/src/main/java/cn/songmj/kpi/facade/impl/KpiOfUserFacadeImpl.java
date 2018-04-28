@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,6 +86,13 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
             BeanUtils.copyProperties(kpiOfUser, kuParam);
             KpiFormParam kf = new KpiFormParam();
             BeanUtils.copyProperties(kpiOfUser.getKf(), kf);
+            // 判断表单是否过期
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String nowDate = sdf.format(System.currentTimeMillis());
+            if (kf.getKfEndDate().compareTo(nowDate) < 0) {
+                kuParam.setKuStatus(3);
+            }
+            // 截取日期
             kf.setKfBeginDate(kf.getKfBeginDate().substring(0, 4));
             kf.setKfEndDate(kf.getKfEndDate().substring(0, 4));
             kuParam.setKf(kf);

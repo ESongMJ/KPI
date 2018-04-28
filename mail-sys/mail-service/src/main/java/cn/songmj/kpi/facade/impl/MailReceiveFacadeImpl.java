@@ -73,6 +73,11 @@ public class MailReceiveFacadeImpl extends ServiceImpl<MailReceiveMapper, MailRe
     }
 
     @Override
+    public Integer deleteBatch(List<String> mrList) {
+        return baseMapper.deleteBatchIds(mrList);
+    }
+
+    @Override
     public Integer batchMarkMailRead(List<String> mrIdList) {
         int count = 0;
         for (String mrId : mrIdList) {

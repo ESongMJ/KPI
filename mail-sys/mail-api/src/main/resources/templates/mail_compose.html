@@ -128,8 +128,9 @@
                 }
                 // 初始化数组, 防止重复push
                 var uid = [];
+                var uList = $("#select-uids").find("option");
                 selects.each(function () {
-                    uid.push($(this).find("a").attr("data-option-array-index"));
+                    uid.push($(uList[$(this).find("a").attr("data-option-array-index")]).val());
                 });
                 // 把最新的id列表赋值给uidList
                 this.uidList = uid;

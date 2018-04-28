@@ -7,6 +7,8 @@ import cn.songmj.kpi.service.MailService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+
 /**
  * <p>
  *  服务实现类
@@ -25,6 +27,9 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public Mail save(MailParam mailParam) {
+        if (mailParam.getMailDate() == null || mailParam.getMailDate() == "") {
+            mailParam.setMailDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
+        }
         return mailFacade.save(mailParam);
     }
 

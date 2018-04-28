@@ -62,5 +62,11 @@ public class MailReceiveController extends BaseController {
         mailReceiveService.deleteById(mrId);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
     }
+
+    @PostMapping("/delete/batch")
+    private Result deleteBatchByIds(@RequestParam("mrIds[]") String[] mrIds) {
+        mailReceiveService.deleteBatch(Arrays.asList(mrIds));
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
+    }
 }
 

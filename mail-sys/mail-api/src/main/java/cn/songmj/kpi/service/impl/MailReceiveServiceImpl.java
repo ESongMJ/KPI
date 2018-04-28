@@ -65,4 +65,9 @@ public class MailReceiveServiceImpl implements MailReceiveService {
         }
         return mailParam;
     }
+
+    @Override
+    public Integer deleteBatch(List<String> mrList) {
+        return mailReceiveFacade.deleteBatch(mrList);
+    }
 }

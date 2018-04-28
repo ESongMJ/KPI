@@ -17,51 +17,61 @@
     <div class="row animated fadeInRight">
         <div class="col-sm-12 animated fadeInRight">
             <div class="mail-box-header">
-                <form method="get" action="http://www.zi-han.net/theme/hplus/index.html" class="pull-right mail-search">
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm" name="search" placeholder="搜索邮件标题，正文等">
-                        <div class="input-group-btn">
-                            <button type="submit" class="btn btn-sm btn-primary">
-                                搜索
-                            </button>
+                <div class="row">
+                    <div class="col-sm-8 m-l-sm">
+                        <h2>
+                            收件箱 ({{mrPage.total}})
+                        </h2>
+                    </div>
+                    <div class="col-sm-3" style="float: right">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm" name="search" placeholder="搜索邮件标题，正文等"
+                                   v-model="searchField">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-sm btn-primary" @click="search()">
+                                    搜索
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </form>
-                <h2>
-                    收件箱 (16)
-                </h2>
+                </div>
+
                 <div class="mail-tools tooltip-demo m-t-md">
                     <div class="btn-group pull-right">
-                        <button class="btn btn-white btn-sm"><i class="fa fa-arrow-left"></i>
+                        <button class="btn btn-white btn-sm" @click="pageClick(mrPage.current-1)"><i
+                                class="fa fa-arrow-left"></i>
                         </button>
-                        <button class="btn btn-white btn-sm"><i class="fa fa-arrow-right"></i>
+                        <button class="btn btn-white btn-sm" @click="pageClick(mrPage.current+1)"><i
+                                class="fa fa-arrow-right"></i>
                         </button>
 
                     </div>
-                    <button class="btn btn-white btn-sm" title="刷新邮件列表"><i
+                    <button class="btn btn-white btn-sm" title="刷新邮件列表" @click="reset()"><i
                             class="fa fa-refresh"></i> 刷新
                     </button>
-                    <button class="btn btn-white btn-sm" title="标为已读"><i
+                    <button class="btn btn-white btn-sm" title="标为已读" @click="batchMark()"><i
                             class="fa fa-eye"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm" title="删除邮件"><i
+                    <button class="btn btn-danger btn-sm" title="删除邮件" @click="batchDelete()"><i
                             class="fa fa-trash-o"></i>
                     </button>
-
                 </div>
             </div>
             <div class="mail-box">
-                <table class="table table-hover table-mail">
+                <table class="table table-hover table-mail" id="data_table">
                     <tbody>
                     <tr v-if="mrPage.records.length < 1" class="unread">
                         <td colspan="5" class="text-center">
                             收件箱为空~
                         </td>
                     </tr>
-                    <tr v-for="mr in mrPage.records" :class="mr.mrStatus==1?'unread':'read'"
+                    <tr v-for="mr in mrPage.records" :class="mr.mrStatus==1?'unread test':'read test'"
                         @click="mark(mr.mrId, mr.mrStatus)" style="cursor: pointer">
                         <td class="check-mail" width="5%">
                             <input type="checkbox" class="i-checks">
+                        </td>
+                        <td style="display: none;" id="mr_id">
+                            {{mr.mrId}}
                         </td>
                         <td class="mail-ontact" width="25%">
                             <a href="#">{{mr.mail.userName}}</a>
@@ -91,6 +101,7 @@
     function initChck() {
         $(".i-checks").iCheck({checkboxClass: "icheckbox_square-green", radioClass: "iradio_square-green",})
     }
+
     var vm = new Vue({
         el: "#app",
         data: {
@@ -121,9 +132,15 @@
                 "mailStatus": "",
                 "pageSize": 10,
                 "currentPage": 1
-            }
+            },
+            searchField: ""
         },
         methods: {
+            search: function () {
+                this.mailParam.mailTitle = this.searchField;
+                this.mailParam.mailContent = this.searchField;
+                this.page(this.mailParam);
+            },
             page: function (param) {
                 $.ajax({
                     type: "POST",
@@ -140,41 +157,101 @@
                     }
                 })
             },
-            mark: function(mrId, status) {
+            mark: function (mrId, status) {
                 if (status != 1) {
-                    location.href = "mail_detail.html?mrId="+mrId;
+                    location.href = "mail_detail.html?mrId=" + mrId;
                     return;
                 }
                 $.ajax({
-                   type: "POST",
-                   url: "/mr/mark",
-                   data: {
-                       "mrId": mrId
-                   },
-                   success: function (res) {
-                       if (res.code != "0") {
-                           swal("读取失败", res.msg, "error");
-                       } else if (res.code === "0") {
-                           location.href = "mail_detail.html?mrId="+mrId;
-                       }
-                   }
+                    type: "POST",
+                    url: "/mr/mark",
+                    data: {
+                        "mrId": mrId
+                    },
+                    success: function (res) {
+                        if (res.code != "0") {
+                            swal("读取失败", res.msg, "error");
+                        } else if (res.code === "0") {
+                            location.href = "mail_detail.html?mrId=" + mrId;
+                        }
+                    }
                 });
             },
-            bathMark: function () {
-                this.getChecked();
+            pageClick: function (current) {
+                if (current < 1 || current > this.mrPage.pages) {
+                    return;
+                }
+                this.mailParam.currentPage = current;
+                this.page(this.mailParam);
+            },
+            batchMark: function () {
+                this.mrIdList = this.getChecked("unread");
                 $.ajax({
-                   type: "POST",
-                   url: "/mr/mark/batch",
-                   data: this.mrIdList,
-                   success: function (res) {
-                       if (res.code === "0") {
-                           vm.page(vm.mailParam);
-                       }
-                   }
+                    type: "POST",
+                    url: "/mr/mark/batch",
+                    data: {
+                        "mrIds": this.mrIdList
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.page(vm.mailParam);
+                        }
+                    }
                 });
             },
-            getChecked: function () {
-
+            batchDelete: function () {
+                swal({
+                    title: "你确定？",
+                    text: "您将无法恢复数据！",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "是的，删除！",
+                    closeOnConfirm: false
+                }, function () {
+                    this.mrIdList = this.getChecked("test");
+                    $.ajax({
+                        type: "POST",
+                        url: "/mr/delete/batch",
+                        data: {
+                            "mrIds": this.mrIdList
+                        },
+                        success: function (res) {
+                            if (res.code === "0") {
+                                vm.page(vm.mailParam);
+                            }
+                        }
+                    });
+                });
+            },
+            getChecked: function (typeClass) {
+                var trList = $("#data_table").find("tr");
+                var mrIds = [];
+                trList.each(function () {
+                    if ($(this).hasClass(typeClass)
+                        && $(this).find(".check-mail").find("div").hasClass("checked")) {
+                        mrIds.push($.trim($(this).find("#mr_id").html()));
+                        // alert($.trim($(this).find("#mr_id").html()));
+                    }
+                });
+                return mrIds;
+            },
+            reset: function () {
+                this.initParam();
+                this.page(this.mailParam);
+            },
+            initParam: function () {
+                this.mailParam = {
+                    "mailId": "",
+                    "userId": $.cookie('user_id'),
+                    "userName": "",
+                    "mailTitle": "",
+                    "mailContent": "",
+                    "mailDate": "",
+                    "mailStatus": "",
+                    "pageSize": 10,
+                    "currentPage": 1
+                };
             }
         },
         created: function () {

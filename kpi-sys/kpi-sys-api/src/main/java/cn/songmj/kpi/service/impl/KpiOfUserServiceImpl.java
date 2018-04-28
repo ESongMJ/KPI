@@ -46,7 +46,10 @@ public class KpiOfUserServiceImpl implements KpiOfUserService {
     public Integer updateDateById(Long kuId) {
         KpiOfUserParam kpiOfUserParam = new KpiOfUserParam();
         kpiOfUserParam.setKuId(kuId);
+        // 更新最后修改时间
         kpiOfUserParam.setKuFinishDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
+        // 设置状态为已完成
+        kpiOfUserParam.setKuStatus(2);
         return kpiOfUserFacade.updateDateById(kpiOfUserParam);
     }
 

@@ -63,4 +63,12 @@ public interface MailReceiveService {
      * @return
      */
     Integer deleteById(String mrId);
+
+    /**
+     * 批量删除
+     *
+     * @param mrList
+     * @return
+     */
+    Integer deleteBatch(List<String> mrList);
 }

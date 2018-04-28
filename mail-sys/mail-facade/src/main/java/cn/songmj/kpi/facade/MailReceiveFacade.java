@@ -59,9 +59,18 @@ public interface MailReceiveFacade extends IService<MailReceive> {
     MailReceiveParam readMail(String mrId);
 
     /**
+     * 删除邮件
      *
      * @param mrId
      * @return
      */
     Integer deleteById(String mrId);
+
+    /**
+     * 批量删除
+     *
+     * @param mrList
+     * @return
+     */
+    Integer deleteBatch(List<String> mrList);
 }
