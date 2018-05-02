@@ -3,9 +3,7 @@ package cn.songmj.kpi.facade.impl;
 import cn.songmj.kpi.entity.KpiDetail;
 import cn.songmj.kpi.facade.KpiDetailFacade;
 import cn.songmj.kpi.mapper.KpiDetailMapper;
-import cn.songmj.kpi.param.KpiContentParam;
-import cn.songmj.kpi.param.KpiDetailParam;
-import cn.songmj.kpi.param.KpiPointParam;
+import cn.songmj.kpi.param.*;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -74,5 +72,22 @@ public class KpiDetailFacadeImpl extends ServiceImpl<KpiDetailMapper, KpiDetail>
         BeanUtils.copyProperties(kdPage, kdParamPage);
         kdParamPage.setRecords(kdParamList);
         return kdParamPage;
+    }
+
+    @Override
+    public StatisticalObj selectDetail(String kuId) {
+        List<StatisticalData> dataList = baseMapper.selectDetail(kuId);
+        StatisticalObj statisticalObj = new StatisticalObj();
+        statisticalObj.setTeachScore(0.0F);
+        statisticalObj.setResearchScore(0.0F);
+        for (StatisticalData statisticalData : dataList) {
+            if (statisticalData.getType() == 2) {
+                statisticalObj.setTeachScore(statisticalObj.getTeachScore() + statisticalData.getScore());
+            } else {
+                statisticalObj.setResearchScore(statisticalObj.getResearchScore() + statisticalData.getScore());
+            }
+        }
+        statisticalObj.setTotalScore(statisticalObj.getTeachScore()+statisticalObj.getResearchScore());
+        return statisticalObj;
     }
 }

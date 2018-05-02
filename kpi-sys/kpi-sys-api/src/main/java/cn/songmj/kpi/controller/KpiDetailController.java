@@ -3,6 +3,7 @@ package cn.songmj.kpi.controller;
 
 import cn.songmj.kpi.enums.StatusCode;
 import cn.songmj.kpi.param.KpiDetailParam;
+import cn.songmj.kpi.param.StatisticalObj;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.KpiDetailService;
 import cn.songmj.kpi.service.KpiOfUserService;
@@ -15,7 +16,7 @@ import javax.annotation.Resource;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author meijie.song123
@@ -30,17 +31,24 @@ public class KpiDetailController extends BaseController {
     private KpiOfUserService kpiOfUserService;
 
     @PostMapping("/save")
-    public Result save(KpiDetailParam kpiDetailParam){
+    public Result save(KpiDetailParam kpiDetailParam) {
         // 申请成功，则更新对应表单最后的修改时间为当前时间
         if (kpiDetailService.save(kpiDetailParam) > 0) {
             kpiOfUserService.updateDateById(kpiDetailParam.getKuId());
         }
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
     }
+
     @PostMapping("/pageByUser")
-    public Result pageByUser(KpiDetailParam kpiDetailParam){
+    public Result pageByUser(KpiDetailParam kpiDetailParam) {
         Page<KpiDetailParam> page = kpiDetailService.pageByUser(kpiDetailParam);
-        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(),page);
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), page);
+    }
+
+    @PostMapping("/getDetail")
+    public Result getDetails(String kuId) {
+        StatisticalObj statisticalObj = kpiDetailService.selectDetail(kuId);
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), statisticalObj);
     }
 }
 

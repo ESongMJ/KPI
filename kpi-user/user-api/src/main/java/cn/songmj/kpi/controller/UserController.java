@@ -76,8 +76,8 @@ public class UserController extends BaseController {
     }
     @PostMapping("/getUser")
     @CrossOrigin
-    public Result getLoginUser(Long userId) {
-        UserParam userParam = userService.getUserById(userId);
+    public Result getLoginUser(String userId) {
+        UserParam userParam = userService.getUserById(Long.parseLong(userId));
 
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), userParam);
     }

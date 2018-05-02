@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/graph_metrics.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 03 Mar 2016 12:29:13 GMT -->
+<head>
+
+    <meta charset="utf-8">
+    <title>KPI - 统计分析</title>
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="../css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+
+    <link href="../css/animate.min.css" rel="stylesheet">
+    <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-1">
+            <input type="button" class="btn btn-sm btn-info" style="margin-top: 4px" value="年终奖申请">
+        </div>
+        <div class="col-sm-3">
+            <select class="form-control" value="0" title="选择用户">
+                <option value="0">---选择用户---</option>
+                <option value="1">用户1</option>
+                <option value="2">用户2</option>
+                <option value="3">用户3</option>
+                <option value="4">用户4</option>
+            </select>
+        </div>
+        <div class="col-sm-5">
+            <select class="form-control" value="0" title="选择绩效表单">
+                <option value="0">---选择绩效表单---</option>
+                <option value="1">绩效表单1</option>
+                <option value="2">绩效表单2</option>
+                <option value="3">绩效表单3</option>
+                <option value="4">绩效表单4</option>
+            </select>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+    <div class="row m-t-md">
+        <div class="col-sm-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>教学绩效达成率</h5>
+                    <h2>65%</h2>
+                    <div class="progress progress-mini">
+                        <div style="width: 68%;" class="progress-bar"></div>
+                    </div>
+
+                    <div class="m-t-sm small">4:32更新</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>科研绩效达成率</h5>
+                    <h2>50%</h2>
+                    <div class="progress progress-mini">
+                        <div style="width: 78%;" class="progress-bar"></div>
+                    </div>
+
+                    <div class="m-t-sm small">4:32更新</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>绩效总体达成率</h5>
+                    <h2>14%</h2>
+                    <div class="progress progress-mini">
+                        <div style="width: 38%;" class="progress-bar progress-bar-danger"></div>
+                    </div>
+
+                    <div class="m-t-sm small">4:32更新</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>教学绩效达成百分比</h5>
+                    <h2>42/20</h2>
+                    <div class="text-center">
+                        <div id="sparkline5"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>科研绩效达成百分比</h5>
+                    <h2>100/54</h2>
+                    <div class="text-center">
+                        <div id="sparkline6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h5>绩效总体达成百分比</h5>
+                    <h2>685/211</h2>
+                    <div class="text-center">
+                        <div id="sparkline7"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery.min63b9.js?v=2.1.4"></script>
+<script src="../js/bootstrap.min14ed.js?v=3.3.6"></script>
+<script src="../js/plugins/sparkline/jquery.sparkline.min.js"></script>
+<script src="http://mishengqiang.com/sweetalert/js/sweetalert-dev.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script type="text/javascript" src="../js/jquery.cookie.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#sparkline5").sparkline([1, 4], {type: "pie", height: "140", sliceColors: ["#1ab394", "#F5F5F5"]});
+        $("#sparkline6").sparkline([5, 3], {type: "pie", height: "140", sliceColors: ["#1ab394", "#F5F5F5"]});
+        $("#sparkline7").sparkline([2, 2], {type: "pie", height: "140", sliceColors: ["#ed5565", "#F5F5F5"]});
+    });
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            statistical: {
+                "teachScore": "",
+                "researchScore": "",
+                "totalScore": "",
+                "data": []
+            },
+            basicRequire: {
+                "kbrId": "",
+                "kbrType": "",
+                "kbrLevel": "",
+                "kbrTeach": "",
+                "kbrResearch": ""
+            },
+            user: {
+                "userId": "",
+                "userName": "",
+                "userNumber": "",
+                "userPassword": "",
+                "userSex": "",
+                "userAge": "",
+                "userBirthday": "",
+                "userIntroduce": "",
+                "userImg": "",
+                "userCollege": "",
+                "userRO": "",
+                "userProTitle": "",
+                "roleId": "",
+                "kbrId": ""
+            },
+            kuList: []
+        },
+        methods: {
+            getUser: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9301/sys/user/getUser",
+                    data: {
+                        "userId": $.cookie('user_id')
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            if (res.data != null) {
+                                vm.user = res.data;
+                                vm.getKBR(vm.user.kbrId);
+                                vm.getKuList(vm.user.userId);
+                            }
+                        }
+                    }
+                });
+            },
+            getKBR: function (kbrId) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9301/sys/kbr/getOne",
+                    data: {
+                        "kbrId": kbrId
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            if (res.data != null) {
+                                vm.basicRequire = res.data;
+                            }
+                        }
+                    }
+                });
+            },
+            getKpiStatistical: function (kuId) {
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/kd/getDetail",
+                    data: {
+                        "kuId": kuId
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            if (res.data != null) {
+                                vm.statistical = res.data;
+                            }
+                        }
+                    }
+                });
+            },
+            getKuList: function (userId) {
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/ku/list",
+                    data: {
+                        "userId": userId
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.kuList = res.dataList;
+                            if (vm.kuList.length > 0) {
+                                vm.getKpiStatistical(vm.kuList[0].kuId);
+                            }
+                        }
+                    }
+                });
+            }
+        },
+        created: function () {
+            this.getUser();
+        }
+    });
+</script>
+</body>
+</html>

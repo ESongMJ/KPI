@@ -34,7 +34,7 @@ public class KpiOfUserServiceImpl implements KpiOfUserService {
 
     @Override
     public List<KpiOfUserParam> list(KpiOfUserParam kpiOfUserParam) {
-        return null;
+        return kpiOfUserFacade.list(kpiOfUserParam);
     }
 
     @Override

@@ -2,6 +2,7 @@ package cn.songmj.kpi.service.impl;
 
 import cn.songmj.kpi.facade.KpiDetailFacade;
 import cn.songmj.kpi.param.KpiDetailParam;
+import cn.songmj.kpi.param.StatisticalObj;
 import cn.songmj.kpi.service.KpiDetailService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -43,6 +44,11 @@ public class KpiDetailServiceImpl implements KpiDetailService {
     @Override
     public Integer updateStatus(KpiDetailParam kpiDetailParam) {
         return kpiDetailFacade.updateStatusById(kpiDetailParam);
+    }
+
+    @Override
+    public StatisticalObj selectDetail(String kuId) {
+        return kpiDetailFacade.selectDetail(kuId);
     }
 
     private void checkPageParam(KpiDetailParam kpiDetailParam) {

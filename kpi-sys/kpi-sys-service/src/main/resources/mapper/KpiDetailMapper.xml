@@ -94,4 +94,11 @@
             kd_id = #{kdId}
         </where>
     </update>
+    <select id="selectDetail" parameterType="string" resultType="cn.songmj.kpi.param.StatisticalData">
+        select kc.kc_name name,kd.kd_reason reason,kd.kd_score score,kp.kp_type type from kpi_detail kd
+        LEFT JOIN kpi_of_user ku ON kd.ku_id = ku.ku_id
+        LEFT JOIN kpi_content kc ON kd.kc_id = kc.kc_id
+        LEFT JOIN kpi_point kp ON kc.kp_id = kp.kp_id
+        WHERE ku.ku_id = #{kuId}
+    </select>
 </mapper>

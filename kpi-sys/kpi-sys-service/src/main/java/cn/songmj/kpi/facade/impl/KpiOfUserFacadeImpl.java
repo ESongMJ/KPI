@@ -40,7 +40,15 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
 
     @Override
     public List<KpiOfUserParam> list(KpiOfUserParam kpiOfUserParam) {
-        return null;
+        List<KpiOfUser> list = baseMapper.selectPageByUser(kpiOfUserParam.getUserId());
+        return list.stream().map(ku -> {
+            KpiOfUserParam kuParam = new KpiOfUserParam();
+            BeanUtils.copyProperties(ku, kuParam);
+            KpiFormParam kf = new KpiFormParam();
+            BeanUtils.copyProperties(ku.getKf(), kf);
+            kuParam.setKf(kf);
+            return kuParam;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -74,11 +82,9 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
     @Override
     public Page<KpiOfUserParam> pageByUser(Long userId, KpiOfUserParam kpiOfUserParam) {
         Page<KpiOfUser> kuPage = new Page<>();
-        KpiOfUser ku = new KpiOfUser();
-        BeanUtils.copyProperties(kpiOfUserParam, ku);
         kuPage.setSize(kpiOfUserParam.getPageSize());
         kuPage.setCurrent(kpiOfUserParam.getCurrentPage());
-        List<KpiOfUser> kuList = baseMapper.selectPageByUser(kuPage, userId, ku);
+        List<KpiOfUser> kuList = baseMapper.selectPageByUser(kuPage, userId);
         Page<KpiOfUserParam> kuParamPage = new Page<>();
         BeanUtils.copyProperties(kuPage, kuParamPage);
         kuParamPage.setRecords(kuList.stream().map(kpiOfUser -> {

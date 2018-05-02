@@ -29,8 +29,18 @@ public interface KpiOfUserMapper extends BaseMapper<KpiOfUser> {
      * 查询指定用户的绩效表单
      *
      * @param userId
-     * @param ku
+     * @param page
      * @return
      */
-    List<KpiOfUser> selectPageByUser(Pagination page, @Param("userId") Long userId, @Param("ku") KpiOfUser ku);
+    List<KpiOfUser> selectPageByUser(Pagination page, @Param("userId") Long userId);
+
+    /**
+     * 列表查询
+     *
+     * @param userId
+     * @return
+     */
+    List<KpiOfUser> selectPageByUser(@Param("userId") Long userId);
+
+
 }

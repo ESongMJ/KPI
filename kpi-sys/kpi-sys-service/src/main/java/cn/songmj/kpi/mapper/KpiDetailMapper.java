@@ -1,6 +1,7 @@
 package cn.songmj.kpi.mapper;
 
 import cn.songmj.kpi.entity.KpiDetail;
+import cn.songmj.kpi.param.StatisticalData;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
@@ -35,4 +36,13 @@ public interface KpiDetailMapper extends BaseMapper<KpiDetail> {
      * @return
      */
     Integer updateStatus(KpiDetail kpiDetail);
+
+    /**
+     * 查询指定用户的表单的详细申请信息
+     * 作用：用户统计绩效申请数据
+     *
+     * @param kuId
+     * @return
+     */
+    List<StatisticalData> selectDetail(String kuId);
 }

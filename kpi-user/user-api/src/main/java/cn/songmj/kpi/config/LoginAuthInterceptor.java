@@ -47,9 +47,12 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
         String regexUids = ".*list";
         // 过滤获取登录用户请求
         String regexUser = ".*getUser";
+        // 过滤获取岗位信息请求
+        String regexKBR = ".*getOne";
         if (Pattern.matches(regexLogin, uri)
                 || Pattern.matches(regexCode, uri)
                 || Pattern.matches(regexUids, uri)
+                || Pattern.matches(regexKBR, uri)
                 || Pattern.matches(regexUser, uri)) {
             return true;
         }

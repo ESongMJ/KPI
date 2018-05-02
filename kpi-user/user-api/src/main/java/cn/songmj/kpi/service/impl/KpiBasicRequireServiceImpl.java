@@ -1,10 +1,12 @@
 package cn.songmj.kpi.service.impl;
 
+import cn.songmj.kpi.entity.KpiBasicRequire;
 import cn.songmj.kpi.facade.KpiBasicRequireFacade;
 import cn.songmj.kpi.param.KpiBasicRequireParam;
 import cn.songmj.kpi.service.KpiBasicRequireService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,5 +55,13 @@ public class KpiBasicRequireServiceImpl implements KpiBasicRequireService {
             return kpiBasicRequireFacade.insert(kbrParam);
         }
         return kpiBasicRequireFacade.update(kbrParam);
+    }
+
+    @Override
+    public KpiBasicRequireParam getOne(Long kbrId) {
+        KpiBasicRequire kpiBasicRequire = kpiBasicRequireFacade.selectById(kbrId);
+        KpiBasicRequireParam kpiBasicRequireParam = new KpiBasicRequireParam();
+        BeanUtils.copyProperties(kpiBasicRequire, kpiBasicRequireParam);
+        return kpiBasicRequireParam;
     }
 }

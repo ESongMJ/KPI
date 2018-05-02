@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * <p>
@@ -41,6 +42,13 @@ public class KpiOfUserController extends BaseController {
     public Result pageByUser(KpiOfUserParam kpiOfUserParam) {
         Page<KpiOfUserParam> kuPage = kpiOfUserService.pageByUser(kpiOfUserParam.getUserId(), kpiOfUserParam);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), kuPage);
+    }
+
+    @PostMapping("/list")
+    public Result list(KpiOfUserParam kpiOfUserParam) {
+        List<KpiOfUserParam> kuList = kpiOfUserService.list(kpiOfUserParam);
+
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), kuList);
     }
 }
 

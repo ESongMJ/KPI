@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author songmj123
@@ -16,6 +16,7 @@ import java.util.List;
 public interface KpiBasicRequireService {
     /**
      * 分页查询数据
+     *
      * @param kbrParam
      * @return
      */
@@ -23,6 +24,7 @@ public interface KpiBasicRequireService {
 
     /**
      * 列表查询数据
+     *
      * @param kbrParam
      * @return
      */
@@ -30,6 +32,7 @@ public interface KpiBasicRequireService {
 
     /**
      * 删除
+     *
      * @param kbrId
      * @return
      */
@@ -37,8 +40,17 @@ public interface KpiBasicRequireService {
 
     /**
      * 保存
+     *
      * @param kbrParam
      * @return
      */
     Integer save(KpiBasicRequireParam kbrParam);
+
+    /**
+     * 根据id查询
+     *
+     * @param kbrId
+     * @return
+     */
+    KpiBasicRequireParam getOne(Long kbrId);
 }

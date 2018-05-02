@@ -6,6 +6,7 @@ import cn.songmj.kpi.param.KpiBasicRequireParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.KpiBasicRequireService;
 import com.baomidou.mybatisplus.plugins.Page;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +47,12 @@ public class KpiBasicRequireController extends BaseController {
     public Result delete(Long kbrId) {
         kpiBasicRequireService.delete(kbrId);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg());
+    }
+    @PostMapping("/getOne")
+    @CrossOrigin
+    public Result getKBR(Long kbrId) {
+        KpiBasicRequireParam kpiBasicRequireParam = kpiBasicRequireService.getOne(kbrId);
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), kpiBasicRequireParam);
     }
 }
 
