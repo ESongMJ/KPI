@@ -14,6 +14,7 @@
 
     <link href="../css/animate.min.css" rel="stylesheet">
     <link href="../css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://mishengqiang.com/sweetalert/css/sweetalert.css">
 
 </head>
 
@@ -25,13 +26,13 @@
                 <input type="button" class="btn btn-sm btn-info" style="margin-top: 4px" value="年终奖预报" @click="newYEB()">
             </div>
             <div class="col-sm-3">
-                <select class="form-control" value="0" title="选择用户" id="screening_user" onchange="changeUserSelect()">
+                <select class="form-control" title="选择用户" v-model="oldParam.userId" id="screening_user" onchange="changeUserSelect()">
                     <option value="0">---选择用户---</option>
                     <option v-for="user in userList" :value="user.userId">{{user.userName}}</option>
                 </select>
             </div>
             <div class="col-sm-5">
-                <select class="form-control" value="0" title="选择绩效表单" id="screening_form" onchange="changeFormSelect()">
+                <select class="form-control" title="选择绩效表单" v-model="oldParam.kuId" id="screening_form" onchange="changeFormSelect()">
                     <option value="0">---选择绩效表单---</option>
                     <option v-for="ku in kuList" :value="ku.kuId">{{ku.kf.kfName}}</option>
                 </select>
@@ -268,7 +269,7 @@
                     <hr id="yeb-audit-hr"/>
                     <table style="font-size: 14px" id="yeb-audit">
                         <tr>
-                            <td align="right" height="40px" width="60px"> 审核结果:</td>
+                            <td align="right" height="40px" width="74px"> 审核结果:</td>
                             <td>
                                 <select class="form-control m-l-md" style="width: 420px" v-model="modalBa.baResult" disabled>
                                     <option value="0">--选择结果--</option>
@@ -279,7 +280,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td align="right" height="40px"> 审核意见:</td>
+                            <td align="right" height="80px"> 审核意见:</td>
                             <td><textarea class="form-control m-l-md" style="width: 420px" cols="30" disabled
                                           v-model="modalBa.baReason"
                                           rows="3"></textarea></td>
@@ -288,7 +289,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" @click="saveYEB()">保存</button>
+                    <button type="button" class="btn btn-primary" @click="saveYEB()" id="modal-save-btn">保存</button>
                 </div>
             </div>
         </div>
@@ -383,7 +384,6 @@
                                 vm.getKBR(vm.user.kbrId);
                                 vm.getKuList(vm.user.userId);
                                 vm.oldParam.userId = vm.user.userId;
-                                $("#screening_user").val(vm.user.userId);
                             }
                         }
                     }
@@ -434,7 +434,6 @@
                             if (res.data != null) {
                                 vm.statistical = res.data;
                                 vm.initDataGraph();
-                                $("#screening_form").val(kuId);
                             }
                         }
                     }
@@ -530,7 +529,11 @@
                     },
                     success: function (res) {
                         if (res.code === "0") {
-                            vm.modalBa = res.data;
+                            if (res.data != null) {
+                                vm.modalBa = res.data;
+                            } else {
+                                vm.modalBa.baResult = 1;
+                            }
                         }
                     }
                 });
@@ -572,7 +575,7 @@
                                 swal("绩效申请已过期", "本季度申请已结束或者还未开始", "error");
                                 return;
                             } else {
-                               vm.editYEB();
+                               vm.editYEB(res.data.kf.kfName);
                             }
                         }
                     }
@@ -587,14 +590,20 @@
              * 数据：
              * 1.本季度未申请过时，数据为空，否则应自动填写上次申请的数据
              */
-            editYEB: function () {
+            editYEB: function (name) {
                 // 当前数据不为空时判定为已经申报过
-                if (vm.modalYEB.yebId !== "") {
-
+                // 则修改为查看模式
+                if (this.modalYEB.yebId != "") {
+                    this.initModalStyle("look");
                 } else {
-                    vm.modalYEB.yebId = -1;
+                    this.modalYEB.yebId = -1;
+                    this.modalYEB.userId = this.oldParam.userId;
+                    this.modalYEB.kuId = this.oldParam.kuId;
+                    this.modalYEB.yebName = name+"-年终奖预报"
+                    this.modalYEB.yebTeachScore = this.statistical.teachScore;
+                    this.modalYEB.yebResearchScore = this.statistical.researchScore;
+                    this.initModalStyle("new");
                 }
-                vm.initModalStyle("new");
                 $("#kpiModal").modal("show");
             },
             /**
@@ -610,15 +619,17 @@
                 // 转换input是否为disabled
                 // 新增阶段隐藏审核结果信息
                 var tabTrs = $("#yeb-table").find("tr");
-                if (type === "new") {
+                if (type == "new") {
                     $("#yeb-audit-hr").css("display", "none");
                     $("#yeb-audit").css("display", "none");
+                    $("#modal-save-btn").css("display", "block");
                     tabTrs.each(function () {
                         $(this).find(".form-control").attr("disabled", false);
                     });
-                } else if (type === "look") {
+                } else if (type == "look") {
                     $("#yeb-audit-hr").css("display", "block");
                     $("#yeb-audit").css("display", "block");
+                    $("#modal-save-btn").css("display", "none");
                     tabTrs.each(function () {
                         $(this).find(".form-control").attr("disabled", true);
                     });
