@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.songmj.kpi.mapper.BenefitAllocaMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.BenefitAlloca">
+        <id column="ba_id" property="baId" />
+        <result column="kd_id" property="kdId" />
+        <result column="user_id" property="userId" />
+        <result column="ba_score" property="baScore" />
+        <result column="ba_reason" property="baReason" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ba_id AS baId, kd_id AS kdId, user_id AS userId, ba_score AS baScore, ba_reason AS baReason
+    </sql>
+
+</mapper>

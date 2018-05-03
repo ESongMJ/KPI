@@ -19,10 +19,12 @@ public class StatisticalObj implements Serializable {
      * 教学绩效分数总和
      */
     private Float teachScore;
+    private String teachDate;
     /**
      * 科研绩效分数总和
      */
     private Float researchScore;
+    private String researchDate;
     /**
      * 本期绩效分数总和
      */

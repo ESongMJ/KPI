@@ -7,6 +7,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -26,5 +28,19 @@ public class YearEndBonusServiceImpl implements YearEndBonusService {
     @Override
     public Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam) {
         return null;
+    }
+
+    @Override
+    public Integer save(YearEndBonusParam yearEndBonusParam) {
+        if (yearEndBonusParam.getYebId() == null || yearEndBonusParam.getYebId() == -1L) {
+            yearEndBonusParam.setYebId(null);
+            return yearEndBonusFacade.insert(yearEndBonusParam);
+        }
+        return yearEndBonusFacade.updateById(yearEndBonusParam);
+    }
+
+    @Override
+    public List<YearEndBonusParam> list(YearEndBonusParam yearEndBonusParam) {
+        return yearEndBonusFacade.list(yearEndBonusParam);
     }
 }

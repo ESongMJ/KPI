@@ -68,6 +68,12 @@ public class KpiOfUserServiceImpl implements KpiOfUserService {
         checkPageParam(kpiOfUserParam);
         return kpiOfUserFacade.pageByUser(userId, kpiOfUserParam);
     }
+
+    @Override
+    public KpiOfUserParam selectOne(Long userId) {
+        return kpiOfUserFacade.selectOne(userId);
+    }
+
     private void checkPageParam(PageParam pageParam) {
         if (pageParam.getPageSize() == null) {
             pageParam.setPageSize(10);

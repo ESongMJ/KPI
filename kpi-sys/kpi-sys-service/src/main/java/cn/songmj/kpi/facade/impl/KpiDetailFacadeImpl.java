@@ -1,14 +1,17 @@
 package cn.songmj.kpi.facade.impl;
 
 import cn.songmj.kpi.entity.KpiDetail;
+import cn.songmj.kpi.entity.KpiOfUser;
 import cn.songmj.kpi.facade.KpiDetailFacade;
 import cn.songmj.kpi.mapper.KpiDetailMapper;
+import cn.songmj.kpi.mapper.KpiOfUserMapper;
 import cn.songmj.kpi.param.*;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,9 @@ import java.util.stream.Collectors;
         registry = "${dubbo.registry.id}"
 )
 public class KpiDetailFacadeImpl extends ServiceImpl<KpiDetailMapper, KpiDetail> implements KpiDetailFacade {
+
+    @Resource
+    KpiOfUserMapper kpiOfUserMapper;
 
     @Override
     public Integer update(KpiDetailParam kpiDetailParam) {
@@ -77,7 +83,10 @@ public class KpiDetailFacadeImpl extends ServiceImpl<KpiDetailMapper, KpiDetail>
     @Override
     public StatisticalObj selectDetail(String kuId) {
         List<StatisticalData> dataList = baseMapper.selectDetail(kuId);
+        KpiOfUser kpiOfUser = kpiOfUserMapper.selectById(kuId);
         StatisticalObj statisticalObj = new StatisticalObj();
+        statisticalObj.setTeachDate(kpiOfUser.getKuFinishDate());
+        statisticalObj.setResearchDate(kpiOfUser.getKuFinishDate());
         statisticalObj.setTeachScore(0.0F);
         statisticalObj.setResearchScore(0.0F);
         for (StatisticalData statisticalData : dataList) {
@@ -88,6 +97,7 @@ public class KpiDetailFacadeImpl extends ServiceImpl<KpiDetailMapper, KpiDetail>
             }
         }
         statisticalObj.setTotalScore(statisticalObj.getTeachScore()+statisticalObj.getResearchScore());
+        statisticalObj.setData(dataList);
         return statisticalObj;
     }
 }

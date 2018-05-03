@@ -58,4 +58,15 @@
             ku.user_id = #{userId}
         </where>
     </select>
+    <select id="selectFormById" resultMap="JoinFormResultMap" parameterType="long">
+        select
+        <include refid="Join_Form_Column"/>
+        from kpi_of_user ku
+        left join kpi_form kf on ku.kf_id=kf.kf_id
+        <where>
+            ku.user_id = #{userId}
+        </where>
+        ORDER BY ku.ku_id DESC
+        LIMIT 1
+    </select>
 </mapper>

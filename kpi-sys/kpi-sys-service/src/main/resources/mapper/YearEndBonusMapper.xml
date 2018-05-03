@@ -4,17 +4,18 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.YearEndBonus">
-        <id column="yeb_id" property="yebId" />
-        <result column="yeb_name" property="yebName" />
-        <result column="user_id" property="userId" />
-        <result column="yeb_money" property="yebMoney" />
-        <result column="yeb_teach_score" property="yebTeachScore" />
-        <result column="yeb_research_score" property="yebResearchScore" />
-        <result column="yeb_basic_kpi" property="yebBasicKpi" />
-        <result column="yeb_award_kpi" property="yebAwardKpi" />
-        <result column="yeb_reduce_workload" property="yebReduceWorkload" />
-        <result column="yeb_reduce_reaon" property="yebReduceReaon" />
-        <result column="yeb_status" property="yebStatus" />
+        <id column="yebId" property="yebId" />
+        <result column="yebName" property="yebName" />
+        <result column="userId" property="userId" />
+        <result column="kuId" property="kuId"/>
+        <result column="yebMoney" property="yebMoney" />
+        <result column="yebTeachScore" property="yebTeachScore" />
+        <result column="yebResearchScore" property="yebResearchScore" />
+        <result column="yebBasicKpi" property="yebBasicKpi" />
+        <result column="yebAwardKpi" property="yebAwardKpi" />
+        <result column="yebReduceWorkload" property="yebReduceWorkload" />
+        <result column="yebReduceReason" property="yebReduceReason" />
+        <result column="yebStatus" property="yebStatus" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

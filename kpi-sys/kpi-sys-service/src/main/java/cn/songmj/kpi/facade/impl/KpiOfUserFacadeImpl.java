@@ -107,6 +107,23 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
         return kuParamPage;
     }
 
+    @Override
+    public KpiOfUserParam selectOne(Long userId) {
+        KpiOfUser kpiOfUser = baseMapper.selectFormById(userId);
+        KpiOfUserParam kuParam = new KpiOfUserParam();
+        BeanUtils.copyProperties(kpiOfUser, kuParam);
+        KpiFormParam kf = new KpiFormParam();
+        BeanUtils.copyProperties(kpiOfUser.getKf(), kf);
+        // 判断表单是否过期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String nowDate = sdf.format(System.currentTimeMillis());
+        if (kf.getKfEndDate().compareTo(nowDate) < 0) {
+            kuParam.setKuStatus(3);
+        }
+        kuParam.setKf(kf);
+        return kuParam;
+    }
+
     private List<KpiOfUser> bindFormAndUser(Long kfId, List<String> userIdList) {
         return userIdList.stream().map(userId -> {
             KpiOfUser ku = new KpiOfUser();

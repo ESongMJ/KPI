@@ -50,5 +50,11 @@ public class KpiOfUserController extends BaseController {
 
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), kuList);
     }
+
+    @PostMapping("/get/one")
+    public Result getOne(Long userId) {
+        KpiOfUserParam kuParam = kpiOfUserService.selectOne(userId);
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), kuParam);
+    }
 }
 

@@ -3,6 +3,8 @@ package cn.songmj.kpi.service;
 import cn.songmj.kpi.param.YearEndBonusParam;
 import com.baomidou.mybatisplus.plugins.Page;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -19,5 +21,19 @@ public interface YearEndBonusService {
      * @return
      */
     Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam);
+    /**
+     * 更新
+     *
+     * @param yearEndBonusParam
+     * @return
+     */
+    Integer save(YearEndBonusParam yearEndBonusParam);
 
+    /**
+     * 列表查询
+     *
+     * @param yearEndBonusParam
+     * @return
+     */
+    List<YearEndBonusParam> list(YearEndBonusParam yearEndBonusParam);
 }

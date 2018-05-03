@@ -18,111 +18,282 @@
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-sm-1">
-            <input type="button" class="btn btn-sm btn-info" style="margin-top: 4px" value="年终奖申请">
+<section id="app">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-1">
+                <input type="button" class="btn btn-sm btn-info" style="margin-top: 4px" value="年终奖预报" @click="newYEB()">
+            </div>
+            <div class="col-sm-3">
+                <select class="form-control" value="0" title="选择用户" id="screening_user" onchange="changeUserSelect()">
+                    <option value="0">---选择用户---</option>
+                    <option v-for="user in userList" :value="user.userId">{{user.userName}}</option>
+                </select>
+            </div>
+            <div class="col-sm-5">
+                <select class="form-control" value="0" title="选择绩效表单" id="screening_form" onchange="changeFormSelect()">
+                    <option value="0">---选择绩效表单---</option>
+                    <option v-for="ku in kuList" :value="ku.kuId">{{ku.kf.kfName}}</option>
+                </select>
+            </div>
+            <div class="col-sm-2"></div>
         </div>
-        <div class="col-sm-3">
-            <select class="form-control" value="0" title="选择用户">
-                <option value="0">---选择用户---</option>
-                <option value="1">用户1</option>
-                <option value="2">用户2</option>
-                <option value="3">用户3</option>
-                <option value="4">用户4</option>
-            </select>
+        <div class="row m-t-md">
+            <div class="col-sm-4">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>教学绩效达成率</h5>
+                        <h2>{{parseInt(statistical.teachScore/basicRequire.kbrTeach * 100)}}%</h2>
+                        <div class="progress progress-mini">
+                            <div :style="'width: '+statistical.teachScore/basicRequire.kbrTeach * 100+'%'"
+                                 class="progress-bar"></div>
+                        </div>
+
+                        <div class="m-t-sm small">{{statistical.teachDate}}更新</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>科研绩效达成率</h5>
+                        <h2>{{parseInt(statistical.researchScore/basicRequire.kbrResearch*100)}}%</h2>
+                        <div class="progress progress-mini">
+                            <div :style="'width: '+statistical.researchScore/basicRequire.kbrResearch*100+'%'"
+                                 class="progress-bar"></div>
+                        </div>
+
+                        <div class="m-t-sm small">{{statistical.researchDate}}更新</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>绩效总体达成率</h5>
+                        <h2>{{parseInt(statistical.totalScore/(basicRequire.kbrTeach+basicRequire.kbrResearch) *
+                            100)}}%</h2>
+                        <div class="progress progress-mini">
+                            <div :style="'width: '+statistical.totalScore/(basicRequire.kbrTeach+basicRequire.kbrResearch) * 100+'%'"
+                                 class="progress-bar progress-bar-danger"></div>
+                        </div>
+
+                        <div class="m-t-sm small">{{statistical.teachDate}}更新</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-5">
-            <select class="form-control" value="0" title="选择绩效表单">
-                <option value="0">---选择绩效表单---</option>
-                <option value="1">绩效表单1</option>
-                <option value="2">绩效表单2</option>
-                <option value="3">绩效表单3</option>
-                <option value="4">绩效表单4</option>
-            </select>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>教学绩效达成百分比</h5>
+                        <h2>{{statistical.teachScore}}/{{basicRequire.kbrTeach}}</h2>
+                        <div class="text-center">
+                            <div id="sparkline5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>科研绩效达成百分比</h5>
+                        <h2>{{statistical.researchScore}}/{{basicRequire.kbrResearch}}</h2>
+                        <div class="text-center">
+                            <div id="sparkline6"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>绩效总体达成百分比</h5>
+                        <h2>{{statistical.totalScore}}/{{basicRequire.kbrTeach+basicRequire.kbrResearch}}</h2>
+                        <div class="text-center">
+                            <div id="sparkline7"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-2"></div>
+        <div class="row">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <h3>绩效申请详情</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th width="30%">KPI名称</th>
+                                <th width="20%">类型</th>
+                                <th width="40%">申请理由</th>
+                                <th width="10%">绩效分数(分)</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-if="statistical.data.length < 1">
+                                <td colspan="4" class="text-center">没有此类数据~</td>
+                            </tr>
+                            <tr v-for="data in statistical.data">
+                                <td>{{data.name}}</td>
+                                <td>
+                                    <span v-if="data.type == 1">科研绩效</span>
+                                    <span v-if="data.type == 2">教学绩效</span>
+                                </td>
+                                <td>{{data.reason}}</td>
+                                <td>{{data.score}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <h3>年终奖预报</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th width="30%">名称</th>
+                                <th width="20%">基础绩效</th>
+                                <th width="20%">奖励绩效</th>
+                                <th width="10%">申请金额</th>
+                                <th width="8%">审核状态</th>
+                                <th width="12%">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-if="YEBList.length < 1">
+                                <td colspan="6" class="text-center">没有此类数据~</td>
+                            </tr>
+                            <tr v-for="yeb in YEBList">
+                                <td>{{yeb.yebName}}</td>
+                                <td>
+                                    {{yeb.yebBasicKpi}}
+                                </td>
+                                <td>{{yeb.yebAwardKpi}}</td>
+                                <td>{{yeb.yebMoney}}</td>
+                                <td>
+                                    <span v-if="yeb.yebStatus==1" class="label label-info">正在审核</span>
+                                    <span v-if="yeb.yebStatus==2" class="label label-success">审核通过</span>
+                                    <span v-if="yeb.yebStatus==3" class="label label-danger">驳回申请</span>
+                                </td>
+                                <td>
+                                    <input v-if="yeb.yebStatus==3" type="button" class="btn btn-sm btn-info"
+                                          @click="newYEB()" value="编辑"/>
+                                    <input v-if="yeb.yebStatus!=3" type="button" class="btn btn-sm btn-success"
+                                          @click="lookYEB()" value="查看"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row m-t-md">
-        <div class="col-sm-4">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5>教学绩效达成率</h5>
-                    <h2>65%</h2>
-                    <div class="progress progress-mini">
-                        <div style="width: 68%;" class="progress-bar"></div>
-                    </div>
-
-                    <div class="m-t-sm small">4:32更新</div>
+    <div class="modal fade" id="kpiModal">
+        <div class="modal-dialog">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalTitle">年终奖预报</h4>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-sm-4">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5>科研绩效达成率</h5>
-                    <h2>50%</h2>
-                    <div class="progress progress-mini">
-                        <div style="width: 78%;" class="progress-bar"></div>
-                    </div>
-
-                    <div class="m-t-sm small">4:32更新</div>
+                <div class="modal-body">
+                    <table style="font-size: 14px" id="yeb-table">
+                        <tr>
+                            <td align="right" height="40px"> 名称:</td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalYEB.yebName"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 申请金额:</td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalYEB.yebMoney"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 教学分数:</td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalYEB.yebTeachScore"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 科研分数:</td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalYEB.yebResearchScore"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 基础绩效:</td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalYEB.yebBasicKpi"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 奖励绩效:</td>
+                            <td>
+                                <input type="text" disabled class="form-control m-l-md" style="width: 420px"
+                                       v-model="modalYEB.yebAwardKpi"/></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="80px"> 减免工作量:</td>
+                            <td>
+                                <textarea class="form-control m-l-md" style="width: 420px" cols="30" rows="3"
+                                          v-model="modalYEB.yebReduceWorkload"></textarea>
+                            </td>
+                        </tr>
+                        <tr class="m-t-sm">
+                            <td align="right" height="80px"> 减免理由:</td>
+                            <td>
+                                <textarea class="form-control m-l-md" style="width: 420px" cols="30" rows="3"
+                                          v-model="modalYEB.yebReduceReason"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr id="yeb-audit-hr"/>
+                    <table style="font-size: 14px" id="yeb-audit">
+                        <tr>
+                            <td align="right" height="40px" width="60px"> 审核结果:</td>
+                            <td>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="modalBa.baResult" disabled>
+                                    <option value="0">--选择结果--</option>
+                                    <option value="1">正在审核</option>
+                                    <option value="2">驳回申请</option>
+                                    <option value="3">通过申请</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="40px"> 审核意见:</td>
+                            <td><textarea class="form-control m-l-md" style="width: 420px" cols="30" disabled
+                                          v-model="modalBa.baReason"
+                                          rows="3"></textarea></td>
+                        </tr>
+                    </table>
                 </div>
-            </div>
-        </div>
-
-        <div class="col-sm-4">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5>绩效总体达成率</h5>
-                    <h2>14%</h2>
-                    <div class="progress progress-mini">
-                        <div style="width: 38%;" class="progress-bar progress-bar-danger"></div>
-                    </div>
-
-                    <div class="m-t-sm small">4:32更新</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="saveYEB()">保存</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5>教学绩效达成百分比</h5>
-                    <h2>42/20</h2>
-                    <div class="text-center">
-                        <div id="sparkline5"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5>科研绩效达成百分比</h5>
-                    <h2>100/54</h2>
-                    <div class="text-center">
-                        <div id="sparkline6"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="ibox">
-                <div class="ibox-content">
-                    <h5>绩效总体达成百分比</h5>
-                    <h2>685/211</h2>
-                    <div class="text-center">
-                        <div id="sparkline7"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+</section>
 <script src="../js/jquery.min63b9.js?v=2.1.4"></script>
 <script src="../js/bootstrap.min14ed.js?v=3.3.6"></script>
 <script src="../js/plugins/sparkline/jquery.sparkline.min.js"></script>
@@ -130,17 +301,14 @@
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script type="text/javascript" src="../js/jquery.cookie.js"></script>
 <script>
-    $(document).ready(function () {
-        $("#sparkline5").sparkline([1, 4], {type: "pie", height: "140", sliceColors: ["#1ab394", "#F5F5F5"]});
-        $("#sparkline6").sparkline([5, 3], {type: "pie", height: "140", sliceColors: ["#1ab394", "#F5F5F5"]});
-        $("#sparkline7").sparkline([2, 2], {type: "pie", height: "140", sliceColors: ["#ed5565", "#F5F5F5"]});
-    });
     var vm = new Vue({
         el: "#app",
         data: {
             statistical: {
                 "teachScore": "",
+                "teachDate": "",
                 "researchScore": "",
+                "researchDate": "",
                 "totalScore": "",
                 "data": []
             },
@@ -167,7 +335,37 @@
                 "roleId": "",
                 "kbrId": ""
             },
-            kuList: []
+            role: {
+                "roleId": "",
+                "roleName": "",
+                "roleDescription": ""
+            },
+            kuList: [],
+            userList: [],
+            modalYEB: {
+                "yebId": "",
+                "yebName": "",
+                "userId": "",
+                "kuId": "",
+                "yebMoney": "",
+                "yebTeachScore": "",
+                "yebResearchScore": "",
+                "yebBasicKpi": "",
+                "yebAwardKpi": "",
+                "yebReduceWorkload": "",
+                "yebReduceReason": ""
+            },
+            modalBa: {
+                "baId": "",
+                "yebId": "",
+                "baResult": "",
+                "baReason": ""
+            },
+            YEBList: [],
+            oldParam: {
+                "kuId": "",
+                "userId": ""
+            }
         },
         methods: {
             getUser: function () {
@@ -181,8 +379,28 @@
                         if (res.code === "0") {
                             if (res.data != null) {
                                 vm.user = res.data;
+                                vm.getRole(vm.user.roleId);
                                 vm.getKBR(vm.user.kbrId);
                                 vm.getKuList(vm.user.userId);
+                                vm.oldParam.userId = vm.user.userId;
+                                $("#screening_user").val(vm.user.userId);
+                            }
+                        }
+                    }
+                });
+            },
+            getRole: function (roleId) {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9300/sys/role/get/one",
+                    data: {
+                        "roleId": roleId
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            if (res.data != null) {
+                                vm.role = res.data;
+                                vm.initScreening();
                             }
                         }
                     }
@@ -215,7 +433,20 @@
                         if (res.code === "0") {
                             if (res.data != null) {
                                 vm.statistical = res.data;
+                                vm.initDataGraph();
+                                $("#screening_form").val(kuId);
                             }
+                        }
+                    }
+                });
+            },
+            getUserList: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:9301/sys/user/list",
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.userList = res.dataList;
                         }
                     }
                 });
@@ -232,16 +463,202 @@
                             vm.kuList = res.dataList;
                             if (vm.kuList.length > 0) {
                                 vm.getKpiStatistical(vm.kuList[0].kuId);
+                                vm.getYEBList(vm.kuList[0].kuId);
+                                vm.oldParam.kuId = vm.kuList[0].kuId;
                             }
                         }
                     }
                 });
+            },
+            initDataGraph: function () {
+                $("#sparkline5").sparkline([this.statistical.teachScore, this.basicRequire.kbrTeach - this.statistical.teachScore], {
+                    type: "pie",
+                    height: "140",
+                    sliceColors: ["#1ab394", "#F5F5F5"]
+                });
+                $("#sparkline6").sparkline([this.statistical.researchScore, this.basicRequire.kbrResearch - this.statistical.researchScore], {
+                    type: "pie",
+                    height: "140",
+                    sliceColors: ["#1ab394", "#F5F5F5"]
+                });
+                $("#sparkline7").sparkline([this.statistical.totalScore, this.basicRequire.kbrTeach + this.basicRequire.kbrResearch - this.statistical.totalScore], {
+                    type: "pie",
+                    height: "140",
+                    sliceColors: ["#ed5565", "#F5F5F5"]
+                });
+            },
+            initScreening: function () {
+                // 如果不是管理员用户则不予显示用户列表
+                if (this.role.roleName === "教师") {
+                    $("#screening_user").parent().css("display", "none");
+                } else {
+                    $("#screening_user").parent().css("display", "block");
+                    this.getUserList();
+                }
+            },
+            getKbrIdByUserId: function (userId) {
+                this.userList.forEach(function (user) {
+                    if (user.userId === userId) {
+                        return user.kbrId;
+                    }
+                });
+            },
+            getYEBList: function (kuId) {
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/yeb/list",
+                    data: {
+                        "kuId": kuId
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.YEBList = res.dataList;
+                            if (vm.YEBList.length > 0) {
+                                vm.modalYEB = vm.YEBList[0];
+                                vm.getModalBa(vm.modalYEB.yebId);
+                            }
+                        }
+                    }
+                });
+            },
+            getModalBa: function (yebId) {
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/ba/get/one",
+                    data: {
+                        "yebId": yebId
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            vm.modalBa = res.data;
+                        }
+                    }
+                });
+            },
+            saveYEB: function () {
+                // 提交申请
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/yeb/save",
+                    data: this.modalYEB,
+                    success: function (res) {
+                        if (res.code === "0") {
+                            swal("提交成功", "", "success");
+                            // 刷新数据
+                            vm.getYEBList(vm.modalYEB.kuId);
+                            $("#kpiModal").modal('hide');
+                        }
+                    }
+                });
+            },
+            /**
+             * 新增年终奖预报
+             * 1.检查本季度是否开启绩效申请
+             * 2.检查本季度绩效申请时间是否过期
+             * 3.检查本季度是否已经预报
+             */
+            newYEB: function () {
+                // 验证本季度是否开始绩效申请以及是否过期
+                $.ajax({
+                    type: "POST",
+                    url: "/sys/ku/get/one",
+                    data: {
+                        "userId": this.oldParam.userId
+                    },
+                    success: function (res) {
+                        if (res.code === "0") {
+                            // 当前绩效审核已过期或者本季度审核还未开始
+                            if (res.data.kuStatus === "3") {
+                                swal("绩效申请已过期", "本季度申请已结束或者还未开始", "error");
+                                return;
+                            } else {
+                               vm.editYEB();
+                            }
+                        }
+                    }
+                });
+            },
+            /**
+             * 编辑年终奖预报
+             * 场景：
+             * 1.本季度已经申请过但是被驳回，点击新增时调用
+             * 2.本季度未申请点新增时调用
+             * 3.本季度已经申请过但是被驳回，点击编辑时调用
+             * 数据：
+             * 1.本季度未申请过时，数据为空，否则应自动填写上次申请的数据
+             */
+            editYEB: function () {
+                // 当前数据不为空时判定为已经申报过
+                if (vm.modalYEB.yebId !== "") {
+
+                } else {
+                    vm.modalYEB.yebId = -1;
+                }
+                vm.initModalStyle("new");
+                $("#kpiModal").modal("show");
+            },
+            /**
+             * 查看年终奖预报
+             * 1.应展示出审核状态以及审核信息
+             * 2.应把所有输入框禁用
+             */
+            lookYEB: function () {
+                vm.initModalStyle("look");
+                $("#kpiModal").modal("show");
+            },
+            initModalStyle: function (type) {
+                // 转换input是否为disabled
+                // 新增阶段隐藏审核结果信息
+                var tabTrs = $("#yeb-table").find("tr");
+                if (type === "new") {
+                    $("#yeb-audit-hr").css("display", "none");
+                    $("#yeb-audit").css("display", "none");
+                    tabTrs.each(function () {
+                        $(this).find(".form-control").attr("disabled", false);
+                    });
+                } else if (type === "look") {
+                    $("#yeb-audit-hr").css("display", "block");
+                    $("#yeb-audit").css("display", "block");
+                    tabTrs.each(function () {
+                        $(this).find(".form-control").attr("disabled", true);
+                    });
+                }
             }
         },
         created: function () {
             this.getUser();
         }
     });
+
+    function changeUserSelect() {
+        var userId = $("#screening_user").val();
+        // 检查选择项是否为提示项（无效项）
+        if (userId === 0) {
+            return;
+        }
+        // 检查选择是否较上次没有变化
+        if (userId === vm.oldParam.userId) {
+            return;
+        }
+        vm.oldParam.userId = userId;
+        var kbrId = vm.getKbrIdByUserId(userId);
+        vm.getKBR(kbrId);
+        vm.getKuList(userId);
+    }
+
+    function changeFormSelect() {
+        var kuId = $("#screening_form").val();
+        // 检查选择项是否为提示项（无效项）
+        if (kuId === 0) {
+            return;
+        }
+        // 检查选择是否较上次没有变化
+        if (kuId === vm.oldParam.kuId) {
+            return;
+        }
+        vm.oldParam.kuId = kuId;
+        vm.getKpiStatistical(kuId);
+    }
 </script>
 </body>
 </html>

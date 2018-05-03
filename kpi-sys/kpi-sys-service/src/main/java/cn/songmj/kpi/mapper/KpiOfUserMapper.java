@@ -42,5 +42,11 @@ public interface KpiOfUserMapper extends BaseMapper<KpiOfUser> {
      */
     List<KpiOfUser> selectPageByUser(@Param("userId") Long userId);
 
-
+    /**
+     * 根据id连接表单表查询
+     *
+     * @param userId
+     * @return
+     */
+    KpiOfUser selectFormById(Long userId);
 }

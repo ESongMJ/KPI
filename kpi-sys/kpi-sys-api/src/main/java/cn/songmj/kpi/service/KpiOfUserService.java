@@ -72,4 +72,12 @@ public interface KpiOfUserService {
      * @return
      */
     Page<KpiOfUserParam> pageByUser(Long userId, KpiOfUserParam kpiOfUserParam);
+
+    /**
+     * 查询
+     *
+     * @param kuId
+     * @return
+     */
+    KpiOfUserParam selectOne(Long userId);
 }

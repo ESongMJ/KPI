@@ -28,6 +28,8 @@ public class YearEndBonus extends Model<YearEndBonus> implements Serializable {
     private String yebName;
     @TableField("user_id")
     private Long userId;
+    @TableField("ku_id")
+    private Long kuId;
     /**
      * 申请金额
      */
@@ -61,8 +63,8 @@ public class YearEndBonus extends Model<YearEndBonus> implements Serializable {
     /**
      * 减免理由
      */
-    @TableField("yeb_reduce_reaon")
-    private String yebReduceReaon;
+    @TableField("yeb_reduce_reason")
+    private String yebReduceReason;
     /**
      * 审核状态
      */

@@ -18,7 +18,8 @@ import java.util.List;
  * @since 2018-03-23
  */
 public interface KpiOfUserFacade extends IService<KpiOfUser> {
-    /**1
+    /**
+     * 1
      * 分页查询
      *
      * @param kpiOfUserParam
@@ -52,10 +53,12 @@ public interface KpiOfUserFacade extends IService<KpiOfUser> {
 
     /**
      * 更新最后修改时间
+     *
      * @param kpiOfUserParam
      * @return
      */
     Integer updateDateById(KpiOfUserParam kpiOfUserParam);
+
     /**
      * 删除
      *
@@ -82,4 +85,12 @@ public interface KpiOfUserFacade extends IService<KpiOfUser> {
      * @return
      */
     Page<KpiOfUserParam> pageByUser(Long userId, KpiOfUserParam kpiOfUserParam);
+
+    /**
+     * 查询
+     *
+     * @param userId
+     * @return
+     */
+    KpiOfUserParam selectOne(Long userId);
 }

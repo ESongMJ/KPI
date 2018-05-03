@@ -24,6 +24,8 @@ public class YearEndBonusParam extends PageParam implements Serializable{
     private String yebName;
     @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long kuId;
     /**
      * 申请金额
      */
@@ -51,7 +53,7 @@ public class YearEndBonusParam extends PageParam implements Serializable{
     /**
      * 减免理由
      */
-    private String yebReduceReaon;
+    private String yebReduceReason;
     /**
      * 审核状态
      */
