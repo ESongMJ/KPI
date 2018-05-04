@@ -68,6 +68,12 @@ public class YearEndBonusFacadeImpl extends ServiceImpl<YearEndBonusMapper, Year
         BeanUtils.copyProperties(yearEndBonus, yearEndBonusParam);
         return yearEndBonusParam;
     }
+
+    /**
+     * 绑定查询参数
+     * @param yearEndBonusParam
+     * @return
+     */
     private EntityWrapper<YearEndBonus> bindQueryParam(YearEndBonusParam yearEndBonusParam){
         EntityWrapper<YearEndBonus> ew = new EntityWrapper<>();
 

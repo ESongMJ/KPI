@@ -41,6 +41,7 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
     @Override
     public List<KpiOfUserParam> list(KpiOfUserParam kpiOfUserParam) {
         List<KpiOfUser> list = baseMapper.selectPageByUser(kpiOfUserParam.getUserId());
+        // 数据类型转化
         return list.stream().map(ku -> {
             KpiOfUserParam kuParam = new KpiOfUserParam();
             BeanUtils.copyProperties(ku, kuParam);
@@ -87,6 +88,7 @@ public class KpiOfUserFacadeImpl extends ServiceImpl<KpiOfUserMapper, KpiOfUser>
         List<KpiOfUser> kuList = baseMapper.selectPageByUser(kuPage, userId);
         Page<KpiOfUserParam> kuParamPage = new Page<>();
         BeanUtils.copyProperties(kuPage, kuParamPage);
+        // 数据转化
         kuParamPage.setRecords(kuList.stream().map(kpiOfUser -> {
             KpiOfUserParam kuParam = new KpiOfUserParam();
             BeanUtils.copyProperties(kpiOfUser, kuParam);

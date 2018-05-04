@@ -80,6 +80,12 @@ public class KpiContentFacadeImpl extends ServiceImpl<KpiContentMapper, KpiConte
     public Integer delete(Long kcId) {
         return baseMapper.deleteById(kcId);
     }
+
+    /**
+     * 绑定查询参数
+     * @param kcParam
+     * @return
+     */
     private EntityWrapper<KpiContent> bindParam(KpiContentParam kcParam) {
         EntityWrapper<KpiContent> ew = new EntityWrapper<>();
         if (kcParam.getKcName() != null) {

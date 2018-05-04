@@ -104,6 +104,9 @@
             uidList: []
         },
         methods: {
+            /**
+             * 获取可接收邮件的用户
+             */
             initUserList: function () {
                 $.ajax({
                     type: "POST",
@@ -119,6 +122,9 @@
                     }
                 });
             },
+            /**
+             * 发送邮件
+             */
             send: function () {
                 // 获取选择的接收方
                 var selects = $("#select_uids_chosen").find(".chosen-choices").find(".search-choice");
@@ -155,6 +161,9 @@
                     }
                 });
             },
+            /**
+             * 保存为草稿，每个用户只能存留一个草稿
+             */
             save: function () {
                 this.getMailParam(1);//草稿状态
                 $.ajax({
@@ -171,7 +180,9 @@
                     }
                 });
             },
-            // 初始化草稿件
+            /**
+             * 初始化草稿
+             */
             initMail: function () {
                 $.ajax({
                     type: "POST",
@@ -192,6 +203,10 @@
                     }
                 });
             },
+            /**
+             * 获取当前编辑的邮件信息，包括状态/主题/内容/发送方
+             * @param status
+             */
             getMailParam: function (status) {
                 this.mailParam.mailStatus = status;//已发送状态
                 this.mailParam.mailContent = $("#mail-content").parent().find(".note-editable").html().toString();
@@ -204,6 +219,9 @@
         }
     });
 
+    /**
+     * 手动渲染用户选择器
+     */
     function loadSelect() {
         var config = {
             ".chosen-select": {},

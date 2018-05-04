@@ -157,6 +157,12 @@
                     }
                 })
             },
+            /**
+             * 标记邮件为已读
+             * 场景：用户点击阅读邮件时发送请求，标记完成则读取邮件详细类容显示
+             * @param mrId
+             * @param status
+             */
             mark: function (mrId, status) {
                 if (status != 1) {
                     location.href = "mail_detail.html?mrId=" + mrId;
@@ -184,6 +190,9 @@
                 this.mailParam.currentPage = current;
                 this.page(this.mailParam);
             },
+            /**
+             * 批量标记
+             */
             batchMark: function () {
                 this.mrIdList = this.getChecked("unread");
                 $.ajax({
@@ -199,6 +208,9 @@
                     }
                 });
             },
+            /**
+             * 批量删除
+             */
             batchDelete: function () {
                 swal({
                     title: "你确定？",
@@ -209,6 +221,7 @@
                     confirmButtonText: "是的，删除！",
                     closeOnConfirm: false
                 }, function () {
+                    // 获取已选择的邮件
                     this.mrIdList = this.getChecked("test");
                     $.ajax({
                         type: "POST",
@@ -231,7 +244,6 @@
                     if ($(this).hasClass(typeClass)
                         && $(this).find(".check-mail").find("div").hasClass("checked")) {
                         mrIds.push($.trim($(this).find("#mr_id").html()));
-                        // alert($.trim($(this).find("#mr_id").html()));
                     }
                 });
                 return mrIds;

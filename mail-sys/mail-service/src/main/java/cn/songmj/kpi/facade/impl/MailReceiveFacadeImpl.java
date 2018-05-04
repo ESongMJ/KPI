@@ -90,7 +90,7 @@ public class MailReceiveFacadeImpl extends ServiceImpl<MailReceiveMapper, MailRe
     public Integer markMailRead(String mrId) {
         MailReceive mailReceive = new MailReceive();
         mailReceive.setMrId(Long.parseLong(mrId));
-        // 这是状态为已读
+        // 致状态为已读
         mailReceive.setMrStatus(2);
         return baseMapper.updateById(mailReceive);
     }

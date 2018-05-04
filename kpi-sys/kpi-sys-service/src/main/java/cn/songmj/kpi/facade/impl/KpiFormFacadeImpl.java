@@ -38,6 +38,7 @@ public class KpiFormFacadeImpl extends ServiceImpl<KpiFormMapper, KpiForm> imple
         List<KpiForm> kfList = baseMapper.selectPage(kfPage, ew);
         Page<KpiFormParam> kfParamPage = new Page<>();
         BeanUtils.copyProperties(kfPage, kfParamPage);
+        // 数据类型转换
         kfParamPage.setRecords(kfList.stream().map(kf -> {
             KpiFormParam kfParam = new KpiFormParam();
             BeanUtils.copyProperties(kf, kfParam);

@@ -23,16 +23,19 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-sm-1">
-                <input type="button" class="btn btn-sm btn-info" style="margin-top: 4px" value="年终奖预报" @click="newYEB()">
+                <input type="button" class="btn btn-sm btn-info" style="margin-top: 4px" value="年终奖预报"
+                       @click="newYEB()">
             </div>
             <div class="col-sm-3">
-                <select class="form-control" title="选择用户" v-model="oldParam.userId" id="screening_user" onchange="changeUserSelect()">
+                <select class="form-control" title="选择用户" v-model="oldParam.userId" id="screening_user"
+                        onchange="changeUserSelect()">
                     <option value="0">---选择用户---</option>
                     <option v-for="user in userList" :value="user.userId">{{user.userName}}</option>
                 </select>
             </div>
             <div class="col-sm-5">
-                <select class="form-control" title="选择绩效表单" v-model="oldParam.kuId" id="screening_form" onchange="changeFormSelect()">
+                <select class="form-control" title="选择绩效表单" v-model="oldParam.kuId" id="screening_form"
+                        onchange="changeFormSelect()">
                     <option value="0">---选择绩效表单---</option>
                     <option v-for="ku in kuList" :value="ku.kuId">{{ku.kf.kfName}}</option>
                 </select>
@@ -192,9 +195,9 @@
                                 </td>
                                 <td>
                                     <input v-if="yeb.yebStatus==3" type="button" class="btn btn-sm btn-info"
-                                          @click="newYEB()" value="编辑"/>
+                                           @click="newYEB()" value="编辑"/>
                                     <input v-if="yeb.yebStatus!=3" type="button" class="btn btn-sm btn-success"
-                                          @click="lookYEB()" value="查看"/>
+                                           @click="lookYEB()" value="查看"/>
                                 </td>
                             </tr>
                             </tbody>
@@ -271,7 +274,8 @@
                         <tr>
                             <td align="right" height="40px" width="74px"> 审核结果:</td>
                             <td>
-                                <select class="form-control m-l-md" style="width: 420px" v-model="modalBa.baResult" disabled>
+                                <select class="form-control m-l-md" style="width: 420px" v-model="modalBa.baResult"
+                                        disabled>
                                     <option value="0">--选择结果--</option>
                                     <option value="1">正在审核</option>
                                     <option value="2">驳回申请</option>
@@ -502,6 +506,9 @@
                     }
                 });
             },
+            /**
+             * 获取年终奖申请信息
+             */
             getYEBList: function (kuId) {
                 $.ajax({
                     type: "POST",
@@ -520,6 +527,9 @@
                     }
                 });
             },
+            /**
+             * 获取审核信息
+             */
             getModalBa: function (yebId) {
                 $.ajax({
                     type: "POST",
@@ -575,7 +585,7 @@
                                 swal("绩效申请已过期", "本季度申请已结束或者还未开始", "error");
                                 return;
                             } else {
-                               vm.editYEB(res.data.kf.kfName);
+                                vm.editYEB(res.data.kf.kfName);
                             }
                         }
                     }
@@ -599,7 +609,7 @@
                     this.modalYEB.yebId = -1;
                     this.modalYEB.userId = this.oldParam.userId;
                     this.modalYEB.kuId = this.oldParam.kuId;
-                    this.modalYEB.yebName = name+"-年终奖预报"
+                    this.modalYEB.yebName = name + "-年终奖预报"
                     this.modalYEB.yebTeachScore = this.statistical.teachScore;
                     this.modalYEB.yebResearchScore = this.statistical.researchScore;
                     this.initModalStyle("new");
@@ -641,6 +651,10 @@
         }
     });
 
+    /**
+     * 监听用户下拉选择是否变化
+     * 从而级联改变表单下拉列表框数据
+     */
     function changeUserSelect() {
         var userId = $("#screening_user").val();
         // 检查选择项是否为提示项（无效项）
@@ -657,6 +671,9 @@
         vm.getKuList(userId);
     }
 
+    /**
+     * 监听表单选择是否变化从而获取不同的绩效数据进行分析
+     */
     function changeFormSelect() {
         var kuId = $("#screening_form").val();
         // 检查选择项是否为提示项（无效项）

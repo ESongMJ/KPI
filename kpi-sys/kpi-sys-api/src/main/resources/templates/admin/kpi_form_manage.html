@@ -224,8 +224,14 @@
                     }
                 });
             },
+            /**
+             * 表单分发核心
+             * 分发表单
+             * 暂时只是发给系统所有的用户
+             * @param kf
+             * @param uids
+             */
             send: function (kf,uids) {
-                alert(JSON.stringify(uids));
                 swal({
                     title: "你确定？",
                     text: "您将把<"+kf.kfName+">表单分发给所有用户！",

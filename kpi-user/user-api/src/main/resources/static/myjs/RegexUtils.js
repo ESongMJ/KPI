@@ -1,7 +1,15 @@
+/**
+ * 根据传入的format匹配对应的日期
+ * 匹配上了返回true 反之 返回false
+ *
+ * @param format
+ * @param value
+ * @returns {boolean}
+ */
 function checkDate(format, value) {
-    var dateRegex = /^\d{4}-(0[1-9]|1[0-2])-((0[1-9])|((1|2)[0-9])|3[0-1])$/;
-    var timeRegex = /\d/;
-    var dateTimeRegex = /\d/;
+    var dateRegex = /^\d{4}-(0[1-9]|1[0-2])-((0[1-9])|(([12])[0-9])|3[0-1])$/;
+    var timeRegex = /^(([01][0-9])|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
+    var dateTimeRegex = /^\d{4}-(0[1-9]|1[0-2])-((0[1-9])|(([12])[0-9])|3[0-1]) (([01][0-9])|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
     if (format === "yyyy-MM-dd") {
         return dateRegex.test(value);
     }

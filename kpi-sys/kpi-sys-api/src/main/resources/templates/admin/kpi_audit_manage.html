@@ -327,6 +327,11 @@
                     }
                 });
             },
+            /**
+             * 当前绩效已经审核过
+             * 则从后台获取审核结果以及审核信息
+             * @param kdId
+             */
             getAudit: function (kdId) {
                 $.ajax({
                     type: "POST",

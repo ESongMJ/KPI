@@ -387,6 +387,11 @@
             this.initKps();
         }
     });
+
+    /**
+     * 监听下拉列表框的变化
+     * 从而改变页面的值
+     */
     function change() {
         vm.kdParam.kpType = $("#kpType").val();
         vm.kdParam.kpId = $("#kpId").val();

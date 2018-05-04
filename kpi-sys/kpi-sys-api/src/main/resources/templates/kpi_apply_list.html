@@ -22,18 +22,18 @@
             <div class="row">
                 <div class="col-sm-2 m-l-sm pull-left">
                     <!--<select class="form-control input-sm" style="font-size: 13px">-->
-                        <!--<option value="0">&#45;&#45;选择类型&#45;&#45;</option>-->
-                        <!--<option value="1">类型1</option>-->
-                        <!--<option value="2">类型2</option>-->
-                        <!--<option value="3">类型3</option>-->
-                        <!--<option value="4">类型4</option>-->
+                    <!--<option value="0">&#45;&#45;选择类型&#45;&#45;</option>-->
+                    <!--<option value="1">类型1</option>-->
+                    <!--<option value="2">类型2</option>-->
+                    <!--<option value="3">类型3</option>-->
+                    <!--<option value="4">类型4</option>-->
                     <!--</select>-->
                 </div>
                 <div class="col-sm-3 pull-right">
                     <!--<div class="input-group">-->
-                        <!--<input type="text" placeholder="请输入KPI关键字" class="input-sm form-control" v-model="searchField">-->
-                        <!--<span class="input-group-btn">-->
-                        <!--<button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>-->
+                    <!--<input type="text" placeholder="请输入KPI关键字" class="input-sm form-control" v-model="searchField">-->
+                    <!--<span class="input-group-btn">-->
+                    <!--<button type="button" class="btn btn-sm btn-primary" @click="search()"> 搜索</button>-->
                     <!--</span>-->
                     <!--</div>-->
                 </div>
@@ -210,9 +210,9 @@
                 "kc": {
                     "kcId": "",
                     "kcStandard": "",
-                    "kcDescription":"",
+                    "kcDescription": "",
                     "kp": {
-                        "kpName":""
+                        "kpName": ""
                     }
                 },
                 "kdScore": "",
@@ -236,13 +236,13 @@
 
             },
             page: function (param) {
-                var tmp = getParam(location+"", "type");
+                var tmp = getParam(location + "", "type");
                 if (tmp == "teach") {
                     param.kpType = 2;
                 } else if (tmp == "research") {
                     param.kpType = 1;
                 }
-                param.kuId = getParam(location.href,"kuId");
+                param.kuId = getParam(location.href, "kuId");
                 $.ajax({
                     type: 'POST',
                     url: '/sys/kd/pageByUser',
@@ -258,12 +258,15 @@
                     }
                 });
             },
+            /**
+             * 获取当前登录的user的信息
+             */
             initUser: function () {
                 $.ajax({
                     type: "POST",
                     url: "http://127.0.0.1:9301/sys/user/getUser",
                     data: {
-                        "userId": getParam(location.href+"", "userId")
+                        "userId": getParam(location.href + "", "userId")
                     },
                     success: function (res) {
                         if (res.code === "0") {
@@ -308,17 +311,29 @@
                 });
             }
         },
+        /**
+         * 初始化函数
+         * 根据传入的type参数获取不同的数据
+         * 设置不同的参数以及不同的返回地址
+         */
         created: function () {
-            this.titleText = decodeURI(getParam(location.href+"", "title"));
-            if (getParam(location.href+"", "type") == "teach") {
+            this.titleText = decodeURI(getParam(location.href + "", "title"));
+            if (getParam(location.href + "", "type") == "teach") {
                 this.backUrl = "kpi_teach.html";
-            } else if (getParam(location.href+"", "type") == "research") {
+            } else if (getParam(location.href + "", "type") == "research") {
                 this.backUrl = "kpi_research.html";
             }
             this.page(this.kdParam);
             this.initUser();
         }
     });
+
+    /**
+     * 根据传入url获取url中携带的参数
+     * @param href
+     * @param key
+     * @returns {*}
+     */
     function getParam(href, key) {
         var params = href.split("?")[1].split("&");
         for (var index = 0; index < params.length; index++) {

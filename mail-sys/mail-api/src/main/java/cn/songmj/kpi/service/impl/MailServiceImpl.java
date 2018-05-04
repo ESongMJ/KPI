@@ -27,7 +27,8 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public Mail save(MailParam mailParam) {
-        if (mailParam.getMailDate() == null || mailParam.getMailDate() == "") {
+        // 获取当前日期
+        if (mailParam.getMailDate() == null || "".equals(mailParam.getMailDate())) {
             mailParam.setMailDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()));
         }
         return mailFacade.save(mailParam);
