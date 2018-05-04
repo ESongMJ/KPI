@@ -12,9 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @time 下午 2:05
  **/
 @SpringBootApplication
-public class UserConsumerApp {
+public class MailConsumerApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserConsumerApp.class);
+        SpringApplication.run(MailConsumerApp.class);
     }
 }
