@@ -10,11 +10,11 @@ spring:
       password: Song0828_root
       driver-class-name: com.mysql.jdbc.Driver
       hikari:
-        max-lifetime: 600
-        validation-timeout: 300
-        idle-timeout: 600
+        max-lifetime: 60000
+        validation-timeout: 3000
+        idle-timeout: 60000
         login-timeout: 5
-        connection-timeout: 600
+        connection-timeout: 6000
 #server
 server:
   port: 9102

@@ -1,5 +1,7 @@
 package cn.songmj.kpi.param;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,15 +18,17 @@ import java.io.Serializable;
 @Setter
 @Getter
 public class BonusAuditParam extends PageParam implements Serializable {
-    private Integer baId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long baId;
     /**
      * 年终预报
      */
-    private Integer yebId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long yebId;
     /**
      * 审核结果
      */
-    private String baResult;
+    private Integer baResult;
     /**
      * 审核信息
      */

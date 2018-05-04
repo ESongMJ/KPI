@@ -6,6 +6,7 @@ import cn.songmj.kpi.mapper.YearEndBonusMapper;
 import cn.songmj.kpi.param.YearEndBonusParam;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 
@@ -45,6 +46,16 @@ public class YearEndBonusFacadeImpl extends ServiceImpl<YearEndBonusMapper, Year
         EntityWrapper<YearEndBonus> ew = bindQueryParam(yearEndBonusParam);
         List<YearEndBonus> list = baseMapper.selectList(ew);
         return list.stream().map(this::getParamByEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam, String type) {
+        Page<YearEndBonusParam> paramPage = new Page<>();
+        paramPage.setSize(yearEndBonusParam.getPageSize());
+        paramPage.setCurrent(yearEndBonusParam.getCurrentPage());
+        List<YearEndBonus> list = baseMapper.selectPageByType(paramPage, getEntityByParam(yearEndBonusParam), type);
+        paramPage.setRecords(list.stream().map(this::getParamByEntity).collect(Collectors.toList()));
+        return paramPage;
     }
 
     private YearEndBonus getEntityByParam(YearEndBonusParam yearEndBonusParam) {

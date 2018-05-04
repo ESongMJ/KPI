@@ -25,6 +25,7 @@ public class BonusAuditServiceImpl implements BonusAuditService {
     @Override
     public Integer save(BonusAuditParam bonusAuditParam) {
         if (bonusAuditParam.getBaId() == null || bonusAuditParam.getBaId() == -1) {
+            bonusAuditParam.setBaId(null);
             return bonusAuditFacade.insert(bonusAuditParam);
         }
         return bonusAuditFacade.updateById(bonusAuditParam);

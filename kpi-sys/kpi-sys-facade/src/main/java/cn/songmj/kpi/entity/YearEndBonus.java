@@ -28,6 +28,8 @@ public class YearEndBonus extends Model<YearEndBonus> implements Serializable {
     private String yebName;
     @TableField("user_id")
     private Long userId;
+    @TableField(exist = false)
+    private String userName;
     @TableField("ku_id")
     private Long kuId;
     /**

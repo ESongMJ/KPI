@@ -26,8 +26,8 @@ public class YearEndBonusServiceImpl implements YearEndBonusService {
     private YearEndBonusFacade yearEndBonusFacade;
 
     @Override
-    public Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam) {
-        return null;
+    public Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam, String type) {
+        return yearEndBonusFacade.page(yearEndBonusParam, type) ;
     }
 
     @Override

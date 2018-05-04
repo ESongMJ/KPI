@@ -185,9 +185,9 @@
                                 <td>{{yeb.yebAwardKpi}}</td>
                                 <td>{{yeb.yebMoney}}</td>
                                 <td>
-                                    <span v-if="yeb.yebStatus==1" class="label label-info">正在审核</span>
-                                    <span v-if="yeb.yebStatus==2" class="label label-success">审核通过</span>
-                                    <span v-if="yeb.yebStatus==3" class="label label-danger">驳回申请</span>
+                                    <span v-if="yeb.yebStatus==1" class="label label-success">正在审核</span>
+                                    <span v-if="yeb.yebStatus==2" class="label label-warning">驳回申请</span>
+                                    <span v-if="yeb.yebStatus==3" class="label label-primary">审核通过</span>
                                 </td>
                                 <td>
                                     <input v-if="yeb.yebStatus==3" type="button" class="btn btn-sm btn-info"
@@ -268,7 +268,7 @@
                     <hr id="yeb-audit-hr"/>
                     <table style="font-size: 14px" id="yeb-audit">
                         <tr>
-                            <td align="right" height="40px" width="60px"> 审核结果:</td>
+                            <td align="right" height="40px" width="74px"> 审核结果:</td>
                             <td>
                                 <select class="form-control m-l-md" style="width: 420px" v-model="modalBa.baResult" disabled>
                                     <option value="0">--选择结果--</option>

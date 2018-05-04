@@ -4,18 +4,19 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.songmj.kpi.entity.YearEndBonus">
-        <id column="yebId" property="yebId" />
-        <result column="yebName" property="yebName" />
-        <result column="userId" property="userId" />
+        <id column="yebId" property="yebId"/>
+        <result column="yebName" property="yebName"/>
+        <result column="userId" property="userId"/>
+        <result column="userName" property="userName"/>
         <result column="kuId" property="kuId"/>
-        <result column="yebMoney" property="yebMoney" />
-        <result column="yebTeachScore" property="yebTeachScore" />
-        <result column="yebResearchScore" property="yebResearchScore" />
-        <result column="yebBasicKpi" property="yebBasicKpi" />
-        <result column="yebAwardKpi" property="yebAwardKpi" />
-        <result column="yebReduceWorkload" property="yebReduceWorkload" />
-        <result column="yebReduceReason" property="yebReduceReason" />
-        <result column="yebStatus" property="yebStatus" />
+        <result column="yebMoney" property="yebMoney"/>
+        <result column="yebTeachScore" property="yebTeachScore"/>
+        <result column="yebResearchScore" property="yebResearchScore"/>
+        <result column="yebBasicKpi" property="yebBasicKpi"/>
+        <result column="yebAwardKpi" property="yebAwardKpi"/>
+        <result column="yebReduceWorkload" property="yebReduceWorkload"/>
+        <result column="yebReduceReason" property="yebReduceReason"/>
+        <result column="yebStatus" property="yebStatus"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -23,4 +24,38 @@
         yeb_id AS yebId, yeb_name AS yebName, user_id AS userId, yeb_money AS yebMoney, yeb_teach_score AS yebTeachScore, yeb_research_score AS yebResearchScore, yeb_basic_kpi AS yebBasicKpi, yeb_award_kpi AS yebAwardKpi, yeb_reduce_workload AS yebReduceWorkload, yeb_reduce_reaon AS yebReduceReaon, yeb_status AS yebStatus
     </sql>
 
+    <select id="selectPageByType" resultMap="BaseResultMap">
+        SELECT
+        yeb.yeb_id AS yebId,
+        u.user_id AS userId,
+        u.user_name AS userName,
+        yeb.ku_id AS kuId,
+        yeb.yeb_name AS yebName,
+        yeb.yeb_money AS yebMoney,
+        yeb.yeb_teach_score AS yebTeachScore,
+        yeb.yeb_research_score AS yebResearchScore,
+        yeb.yeb_basic_kpi AS yebBasicKpi,
+        yeb.yeb_award_kpi AS yebAwardKpi,
+        yeb.yeb_reduce_workload AS yebReduceWorkload,
+        yeb.yeb_reduce_reason AS yebReduceReason,
+        yeb.yeb_status AS yebStatus
+        from year_end_bonus yeb
+        LEFT JOIN kpi_of_user ku ON yeb.ku_id = ku.ku_id
+        LEFT JOIN kpi_form kf on ku.kf_id = kf.kf_id
+        LEFT JOIN `user` u on yeb.user_id = u.user_id
+        where kf.kf_id in (
+            SELECT kf_id FROM kpi_form
+            <!-- 当前查询请求是审核请求时只查询当前季度并且为过期的表单 -->
+            <if test="type == 'audit'">
+                WHERE TO_DAYS(NOW()) - TO_DAYS(kf_end_date) >= 0
+            </if>
+            ORDER BY kf_id DESC
+        )
+        <if test="yeb.yebName != null">
+            and yeb.yeb_name like concat('%', #{yeb.yebName}, '%')
+        </if>
+        <if test="yeb.yebStatus != null">
+            and yeb.yeb_status = #{yeb.yebStatus}
+        </if>
+    </select>
 </mapper>

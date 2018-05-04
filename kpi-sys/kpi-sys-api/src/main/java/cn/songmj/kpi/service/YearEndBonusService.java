@@ -18,9 +18,10 @@ public interface YearEndBonusService {
      * 分页查询
      *
      * @param yearEndBonusParam
+     * @param type
      * @return
      */
-    Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam);
+    Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam, String type);
     /**
      * 更新
      *

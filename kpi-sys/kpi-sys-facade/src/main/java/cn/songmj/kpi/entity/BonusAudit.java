@@ -22,17 +22,17 @@ import java.io.Serializable;
 @TableName("bonus_audit")
 public class BonusAudit extends Model<BonusAudit> implements Serializable {
     @TableId("ba_id")
-    private Integer baId;
+    private Long baId;
     /**
      * 年终预报
      */
     @TableField("yeb_id")
-    private Integer yebId;
+    private Long yebId;
     /**
      * 审核结果
      */
     @TableField("ba_result")
-    private String baResult;
+    private Integer baResult;
     /**
      * 审核信息
      */

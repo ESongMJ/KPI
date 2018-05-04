@@ -2,6 +2,7 @@ package cn.songmj.kpi.facade;
 
 import cn.songmj.kpi.entity.YearEndBonus;
 import cn.songmj.kpi.param.YearEndBonusParam;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.List;
@@ -38,4 +39,13 @@ public interface YearEndBonusFacade extends IService<YearEndBonus> {
      * @return
      */
     List<YearEndBonusParam> list(YearEndBonusParam yearEndBonusParam);
+
+    /**
+     * 分页查询
+     *
+     * @param yearEndBonusParam
+     * @param type 1.audit 只查询当前季度的审核  2.manage 查询所有季度的
+     * @return
+     */
+    Page<YearEndBonusParam> page(YearEndBonusParam yearEndBonusParam, String type);
 }

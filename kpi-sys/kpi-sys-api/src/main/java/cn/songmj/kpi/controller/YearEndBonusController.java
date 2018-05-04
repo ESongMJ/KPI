@@ -5,8 +5,10 @@ import cn.songmj.kpi.enums.StatusCode;
 import cn.songmj.kpi.param.YearEndBonusParam;
 import cn.songmj.kpi.result.Result;
 import cn.songmj.kpi.service.YearEndBonusService;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -35,6 +37,11 @@ public class YearEndBonusController extends BaseController {
     public Result list(YearEndBonusParam yearEndBonusParam) {
         List<YearEndBonusParam> paramList = yearEndBonusService.list(yearEndBonusParam);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), paramList);
+    }
+    @PostMapping("/page")
+    public Result page(YearEndBonusParam yearEndBonusParam, String type) {
+        Page<YearEndBonusParam> paramPage = yearEndBonusService.page(yearEndBonusParam, type);
+        return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), paramPage);
     }
 }
 

@@ -24,6 +24,7 @@ public class YearEndBonusParam extends PageParam implements Serializable{
     private String yebName;
     @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
+    private String userName;
     @JsonSerialize(using = ToStringSerializer.class)
     private Long kuId;
     /**
