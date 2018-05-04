@@ -29,6 +29,7 @@ public class RoleFacadeImpl extends ServiceImpl<RoleMapper, Role> implements Rol
     @Override
     public Page<RoleParam> page(RoleParam roleParam) {
         Page<Role> page = new Page<>();
+        // 绑定查询参数
         EntityWrapper<Role> ew = new EntityWrapper<>();
         if (roleParam.getRoleName() != null) {
             ew.or();
@@ -43,6 +44,7 @@ public class RoleFacadeImpl extends ServiceImpl<RoleMapper, Role> implements Rol
         List<Role> roleList = baseMapper.selectPage(page, ew);
         Page<RoleParam> paramPage = new Page<>();
         BeanUtils.copyProperties(page, paramPage);
+        // 转化数据格式
         paramPage.setRecords(roleList.stream().map(role -> {
             RoleParam param = new RoleParam();
             BeanUtils.copyProperties(role, param);
@@ -54,6 +56,7 @@ public class RoleFacadeImpl extends ServiceImpl<RoleMapper, Role> implements Rol
 
     @Override
     public List<RoleParam> list(RoleParam roleParam) {
+        // 绑定查询参数
         EntityWrapper<Role> ew = new EntityWrapper<>();
         if (roleParam.getRoleName() != null) {
             ew.or();

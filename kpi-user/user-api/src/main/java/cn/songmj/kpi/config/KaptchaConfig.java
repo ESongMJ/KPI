@@ -16,6 +16,10 @@ import java.util.Properties;
  **/
 @Component
 public class KaptchaConfig {
+    /**
+     * 验证码获取方法
+     * @return 返回一个验证码对象
+     */
     @Bean
     public DefaultKaptcha getDefaultKaptcha() {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();

@@ -29,6 +29,7 @@ public class NavFacadeImpl extends ServiceImpl<NavMapper, Nav> implements NavFac
     @Override
     public Page<NavParam> page(NavParam navParam) {
         Page<Nav> page = new Page<>();
+        // 绑定查询参数
         EntityWrapper<Nav> ew = new EntityWrapper<>();
         if (navParam.getNavName() != null) {
             ew.or().like("nav_name", navParam.getNavName());
@@ -41,6 +42,7 @@ public class NavFacadeImpl extends ServiceImpl<NavMapper, Nav> implements NavFac
         List<Nav> navList = baseMapper.selectPage(page, ew);
         Page<NavParam> paramPage = new Page<>();
         BeanUtils.copyProperties(page, paramPage);
+        // 转化数据格式
         paramPage.setRecords(navList.stream().map(nav1 -> {
             NavParam param = new NavParam();
             BeanUtils.copyProperties(nav1, param);

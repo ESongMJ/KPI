@@ -115,7 +115,7 @@
                 </div>
                 <div class="modal-body">
                     <table style="font-size: 14px">
-                        <tr>
+                        <tr style="display: none;">
                             <td align="right" height="40px" width="60px"> 编号:</td>
                             <td><input type="text" disabled class="form-control m-l-md" style="width: 420px"
                                        v-model="modalNav.navId"/>
@@ -232,6 +232,10 @@
                 this.navParam.navTips = this.searchField;
                 this.page(this.navParam);
             },
+            /**
+             * 分页查询
+             * @param param
+             */
             page: function (param) {
                 $.ajax({
                     type: 'POST',
@@ -248,6 +252,10 @@
                     }
                 });
             },
+            /**
+             * 列表查询版块
+             * 疑问：是否需要排除当前用户已经拥有的版块的权限？
+             */
             list: function () {
                 this.initParam();
                 this.navParam.navType = false;
@@ -265,6 +273,10 @@
                     }
                 });
             },
+            /**
+             * 由于删除是不可逆，所以会提示用户确认是否删除
+             * @param nav
+             */
             remove: function (nav) {
                 swal({
                     title: "你确定？",
@@ -309,6 +321,7 @@
                     success: function (res) {
                         if (res.code === "0") {
                             swal("保存成功", res.msg, "success");
+                            // 数据保存成功后刷新列表
                             vm.initParam();
                             vm.page(vm.navParam);
                             vm.list();

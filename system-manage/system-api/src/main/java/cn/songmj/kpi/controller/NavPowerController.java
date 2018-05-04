@@ -36,6 +36,7 @@ public class NavPowerController extends BaseController {
     }
     @PostMapping("/save")
     public Result save(NavPowerParam navPowerParam) {
+        // 检查对用用户是否已经拥有对当前版块的权限
         if (navPowerService.checkRepeat(navPowerParam)) {
             return view(StatusCode.FAIL.getCode(), "权限重复");
         }
@@ -51,9 +52,11 @@ public class NavPowerController extends BaseController {
     @PostMapping("/power")
     @CrossOrigin
     public Result getPower(Long roleId) {
+        // 假设角色id为空则指示用户没有被分配角色或者该角色没有分配权限
         if (roleId == null || roleId == -1L) {
             return view(StatusCode.FAIL.getCode(), "权限不足");
         }
+        // 否则返回权限列表
         List<NavParam> navParamList = navPowerService.getPower(roleId);
         return view(StatusCode.SUCCESS.getCode(), StatusCode.SUCCESS.getMsg(), navParamList);
     }

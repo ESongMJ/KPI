@@ -37,6 +37,7 @@ public class NavPowerFacadeImpl extends ServiceImpl<NavPowerMapper, NavPower> im
         npPage.setCurrent(navPowerParam.getCurrentPage());
         npPage.setRecords(baseMapper.selectJoinPage(npPage, np1));
         List<NavPower> npList = npPage.getRecords();
+        // 转化数据格式
         List<NavPowerParam> npParamList = npList.stream().map(np2 -> {
             NavPowerParam npParam = new NavPowerParam();
             BeanUtils.copyProperties(np2, npParam);
@@ -50,6 +51,7 @@ public class NavPowerFacadeImpl extends ServiceImpl<NavPowerMapper, NavPower> im
 
     @Override
     public List<NavPowerParam> list(NavPowerParam navPowerParam) {
+        // 绑定查询参数
         EntityWrapper<NavPower> ew = new EntityWrapper<>();
         if (navPowerParam.getRoleId() != null) {
             ew.eq("role_id", navPowerParam.getRoleId());
@@ -58,7 +60,7 @@ public class NavPowerFacadeImpl extends ServiceImpl<NavPowerMapper, NavPower> im
             ew.eq("nav_id", navPowerParam.getNavId());
         }
         List<NavPower> npList = baseMapper.selectList(ew);
-
+        // 转化数据格式
         return npList.stream().map(np -> {
             NavPowerParam npParam = new NavPowerParam();
             BeanUtils.copyProperties(np, npParam);
@@ -88,6 +90,7 @@ public class NavPowerFacadeImpl extends ServiceImpl<NavPowerMapper, NavPower> im
     @Override
     public List<NavParam> listNav(Long roleId) {
         List<Nav> navList = baseMapper.selectPower(roleId);
+        // 转化数据格式
         return navList.stream().map(nav -> {
             NavParam navParam = new NavParam();
             BeanUtils.copyProperties(nav, navParam);

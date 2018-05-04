@@ -31,6 +31,8 @@ public class LoginAuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String key = "user";
+        // 检查用户是否登录
+        // 过滤特殊请求（即不用登录即可使用）
         if (request.getSession().getAttribute(key) != null || checkLoginViews(request)) {
             return true;
         }
